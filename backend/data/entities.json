@@ -1,0 +1,20 @@
+{
+  "cities": {
+    "Karachi": ["karachi", "krachi", "karci", "khi"],
+    "Lahore": ["lahore", "lhr", "lahor", "lahre"],
+    "Islamabad": ["islamabad", "islmabad", "isl", "islamabd"],
+    "Rawalpindi": ["rawalpindi", "pindi", "rawl pindi"],
+    "Peshawar": ["peshawar", "peshwr"],
+    "Quetta": ["quetta", "qta"],
+    "Multan": ["multan", "mltn"],
+    "Faisalabad": ["faisalabad", "fsd"],
+    "Hyderabad": ["hyderabad", "hyd"]
+  },
+  "sports": {
+    "football": ["football", "soccer", "futbol", "foot ball"],
+    "cricket": ["cricket", "ckit"],
+    "basketball": ["basketball", "bball", "basket ball"],
+    "badminton": ["badminton", "bad minton"],
+    "tennis": ["tennis", "tenis"]
+  }
+}
