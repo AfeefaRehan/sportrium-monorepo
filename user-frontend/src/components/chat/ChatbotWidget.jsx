@@ -1,123 +1,112 @@
-// user-frontend/src/components/chat/ChatbotWidget.jsx
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/context/AuthContext.jsx";
-import { chatStore } from "./chatStore";
-import "@/styles/chatbot.css";
-
-/* Robot icon */
-function RobotHeadIcon({ size = 24 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden className="robot-icon">
-      <defs>
-        <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"  stopColor="var(--chat-blue)"/>
-          <stop offset="55%" stopColor="var(--chat-red)"/>
-          <stop offset="100%" stopColor="var(--chat-green)"/>
-        </linearGradient>
-      </defs>
-      <circle cx="32" cy="32" r="30" fill="url(#ringGrad)"/>
-      <circle cx="32" cy="32" r="24" fill="#ffffff"/>
-      <circle cx="32" cy="14" r="3" fill="url(#ringGrad)"/>
-      <rect x="31" y="16" width="2" height="6" rx="1" fill="url(#ringGrad)"/>
-      <rect x="18" y="24" width="28" height="20" rx="10" fill="url(#ringGrad)"/>
-      <rect x="22" y="28" width="20" height="12" rx="6" fill="#ffffff"/>
-      <circle cx="28" cy="34" r="2.5" fill="url(#ringGrad)"/>
-      <circle cx="38" cy="34" r="2.5" fill="url(#ringGrad)"/>
-      <path d="M29 38c1.8 2 4.2 2 6 0" stroke="url(#ringGrad)" strokeWidth="2" fill="none" strokeLinecap="round"/>
-    </svg>
-  );
-}
+// IMPORTANT: include the .jsx extension so Vite resolves it reliably
+import Chatbot from "./Chatbot.jsx"; 
 
 export default function ChatbotWidget() {
-  const { user } = useAuth();
-
-  // 🔒 Guests cannot use the chatbot — hide completely when logged out
-  if (!user) return null;
-
-  const [state, setState] = useState(chatStore.getSnapshot());
-  useEffect(() => chatStore.subscribe(() => setState(chatStore.getSnapshot())), []);
-
+  const [open, setOpen] = useState(false);
   const panelRef = useRef(null);
-  const listRef = useRef(null);
 
-  // Close on outside click
   useEffect(() => {
-    if (!state.open) return;
-    const onClick = (e) => {
-      if (!panelRef.current) return;
-      const inside = panelRef.current.contains(e.target);
-      const launcher = document.querySelector(".chat-launcher");
-      const onLauncher = launcher && launcher.contains(e.target);
-      if (!inside && !onLauncher) chatStore.setOpen(false);
-    };
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
-  }, [state.open]);
+    function onKey(e) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
-  // Close on scroll
   useEffect(() => {
-    if (!state.open) return;
-    const onScroll = () => chatStore.setOpen(false);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [state.open]);
-
-  // Auto scroll to bottom when messages change
-  useEffect(() => {
-    if (!listRef.current) return;
-    listRef.current.scrollTop = listRef.current.scrollHeight;
-  }, [state.messages]);
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    chatStore.send(user);
-  };
+    function onDocClick(e) {
+      if (!open) return;
+      if (panelRef.current && !panelRef.current.contains(e.target)) {
+        const btn = document.getElementById("sportrium-chatbot-toggle");
+        if (btn && btn.contains(e.target)) return;
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [open]);
 
   return (
     <>
-      {state.open && (
-        <div className="chat-panel" ref={panelRef} role="dialog" aria-label="Sportrium Assistant">
-          <div className="chat-header">
-            <div className="chat-header-left">
-              <div className="chat-avatar"><RobotHeadIcon size={22} /></div>
-              <div className="chat-title">
-                <strong>Sportrium Assistant</strong>
-                <span>Online · happy to help</span>
-              </div>
-            </div>
-            <button className="chat-close" onClick={() => chatStore.setOpen(false)} aria-label="Close">✕</button>
-          </div>
+      {/* Floating toggle button – layout ko touch nahi karta */}
+      <button
+        id="sportrium-chatbot-toggle"
+        aria-label="Open chat"
+        onClick={() => setOpen((v) => !v)}
+        style={S.fab}
+      >
+        {open ? "×" : "💬"}
+      </button>
 
-          <div ref={listRef} className="chat-body" role="log" aria-live="polite">
-            {state.messages.map((m) => (
-              <div key={m.id} className={`msg ${m.role}`}>{m.text}</div>
-            ))}
-            {state.loading && <div className="msg assistant">Typing…</div>}
-          </div>
-
-          <form className="chat-input-row" onSubmit={onSubmit}>
-            <input
-              className="chat-input"
-              placeholder="Ask about matches…"
-              value={state.input}
-              onChange={(e) => chatStore.setInput(e.target.value)}
-              disabled={state.loading}
-            />
-            <button className="chat-send" aria-label="Send" disabled={state.loading}>
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden>
-                <path d="M22 2L11 13" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                <path d="M22 2L15 22l-4-9-9-4 20-7z" fill="white" />
-              </svg>
+      {open && (
+        <div ref={panelRef} style={S.panel} role="dialog" aria-modal="true">
+          <div style={S.header}>
+            <strong>Sportrium Assistant</strong>
+            <button onClick={() => setOpen(false)} style={S.close}>
+              ×
             </button>
-          </form>
-
-          {state.error && <div className="err">{state.error}</div>}
+          </div>
+          <div style={S.body}>
+            {/* If you have an auth userId, pass it: <Chatbot userId={user?.id} /> */}
+            <Chatbot />
+          </div>
         </div>
       )}
-
-      <button className="chat-launcher" aria-label="Open chat" onClick={() => chatStore.setOpen(true)}>
-        <RobotHeadIcon size={28} />
-      </button>
     </>
   );
 }
+
+const S = {
+  fab: {
+    position: "fixed",
+    right: 20,
+    bottom: 20,
+    zIndex: 9999,
+    height: 52,
+    minWidth: 52,
+    padding: "0 14px",
+    borderRadius: 999,
+    border: "1px solid #ddd",
+    background: "#fff",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+    cursor: "pointer",
+    fontSize: 22,
+    lineHeight: "52px",
+  },
+  panel: {
+    position: "fixed",
+    right: 20,
+    bottom: 84,
+    width: 420,
+    maxWidth: "calc(100vw - 40px)",
+    maxHeight: "70vh",
+    display: "flex",
+    flexDirection: "column",
+    borderRadius: 16,
+    background: "#fff",
+    border: "1px solid #e6e6e6",
+    boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
+    zIndex: 9999,
+    overflow: "hidden",
+  },
+  header: {
+    padding: "10px 12px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderBottom: "1px solid #eee",
+  },
+  close: {
+    appearance: "none",
+    background: "transparent",
+    border: "none",
+    fontSize: 22,
+    cursor: "pointer",
+    lineHeight: 1,
+  },
+  body: {
+    padding: 12,
+    overflow: "auto",
+  },
+};

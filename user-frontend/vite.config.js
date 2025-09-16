@@ -9,4 +9,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  // keep defaults so the app doesn't "move"; dev runs on 5173 unless busy
+  server: {
+    strictPort: false,
+  },
 })
