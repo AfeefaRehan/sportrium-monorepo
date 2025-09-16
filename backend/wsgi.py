@@ -1,9 +1,7 @@
-# backend/wsgi.py
 import os
 from flask_cors import CORS
+from api import create_app  # existing app factory
 
-# your app factory stays the same
-from api import create_app
 
 def _allowed_origins():
     """
@@ -31,6 +29,7 @@ def _allowed_origins():
         })
     return list(origins)
 
+
 app = create_app()
 
 # CORS only for /api/*, allow creds + common methods/headers
@@ -40,12 +39,14 @@ CORS(
     supports_credentials=True,
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
+    # If your API returns pagination totals etc., expose them to the browser:
+    expose_headers=["X-Total-Count"],  # optional
     max_age=86400,
 )
 
-# ── Add /api/health and /api/chat without touching your existing blueprints ──
+# Attach /api/health and /api/chat without touching your existing blueprints
 try:
-    from patch_chat import patch_app  # new helper file below
+    from patch_chat import patch_app
     patch_app(app)
 except Exception as e:
     print(f"[wsgi] patch_chat not applied: {e}")
