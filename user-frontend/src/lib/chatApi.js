@@ -1,18 +1,21 @@
 // user-frontend/src/lib/chatApi.js
 export async function sendChat(message, user) {
-  const base = (import.meta.env.VITE_API_BASE || '').replace(/\/+$/, '');
-  const url = `${base}/chat`;
+  // 🔧 Normalize the user id coming from any auth provider shape
+  const userId =
+    user?.id ?? user?.uid ?? user?._id ?? user?.userId ?? user?.profileId ?? null;
 
-  const res = await fetch(url, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE}/chat`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    // IMPORTANT: do NOT send cookies; we pass just a minimal user id.
-    body: JSON.stringify({ message, user: user ? { id: user.id } : null }),
+    body: JSON.stringify({
+      message,
+      user: userId ? { id: String(userId) } : null,
+    }),
   });
 
   if (!res.ok) {
     const msg = await res.text().catch(() => 'Request failed');
     throw new Error(msg);
   }
-  return res.json(); // { intent, responses: [...] }
+  return res.json();
 }

@@ -34,22 +34,13 @@ export default function ChatbotWidget() {
   // 🔒 Guests cannot use the chatbot — hide completely when logged out
   if (!user) return null;
 
-  // subscribe to store
   const [state, setState] = useState(chatStore.getSnapshot());
-  useEffect(() => {
-    const unsub = chatStore.subscribe(() => setState(chatStore.getSnapshot()));
-    return unsub;
-  }, []);
+  useEffect(() => chatStore.subscribe(() => setState(chatStore.getSnapshot())), []);
 
   const panelRef = useRef(null);
   const listRef = useRef(null);
 
-  // greet on open
-  useEffect(() => {
-    if (state.open) chatStore.greet();
-  }, [state.open]);
-
-  // close on outside click
+  // Close on outside click
   useEffect(() => {
     if (!state.open) return;
     const onClick = (e) => {
@@ -63,7 +54,7 @@ export default function ChatbotWidget() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [state.open]);
 
-  // close on scroll
+  // Close on scroll
   useEffect(() => {
     if (!state.open) return;
     const onScroll = () => chatStore.setOpen(false);
@@ -71,7 +62,7 @@ export default function ChatbotWidget() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [state.open]);
 
-  // auto-scroll when messages change
+  // Auto scroll to bottom when messages change
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
@@ -79,7 +70,7 @@ export default function ChatbotWidget() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    chatStore.send(user); // ✅ user passed (server will get user.id)
+    chatStore.send(user);
   };
 
   return (
