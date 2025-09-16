@@ -26,14 +26,13 @@ const saved = localStorage.getItem("theme") || "light";
 document.documentElement.setAttribute("data-theme", saved);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <AuthProvider>
-      {/* ➕ NEW: wrap app (and notifications) with reminders */}
-      <RemindersProvider>
-        <NotificationsProvider>
-          <App />
-        </NotificationsProvider>
-      </RemindersProvider>
-    </AuthProvider>
-  </React.StrictMode>
+  // ⛔ Removed <React.StrictMode> to prevent dev double-invoke / duplicate effects
+  <AuthProvider>
+    {/* ➕ wrap app (and notifications) with reminders */}
+    <RemindersProvider>
+      <NotificationsProvider>
+        <App />
+      </NotificationsProvider>
+    </RemindersProvider>
+  </AuthProvider>
 );

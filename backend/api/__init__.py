@@ -18,6 +18,8 @@ from .push.routes import bp as push_bp
 from .follows.routes import bp as follows_bp
 from .auth.oauth import bp as oauth_bp
 from .reminders.scheduler import register_jobs
+from .assistant import bp as assistant_bp
+
 
 load_dotenv()
 
@@ -48,6 +50,7 @@ def create_app():
     app.register_blueprint(events_bp, url_prefix=prefix)
     app.register_blueprint(tournaments_bp, url_prefix=prefix)
     app.register_blueprint(reminders_bp, url_prefix=prefix)
+    app.register_blueprint(assistant_bp)
 
     app.register_blueprint(notifications_bp, url_prefix=f"{prefix}/notifications")
     app.register_blueprint(push_bp,           url_prefix=f"{prefix}/push")
