@@ -1,4 +1,4 @@
-﻿# Node / monorepo
+﻿# Monorepo node outputs
 **/node_modules/
 **/dist/
 **/build/
@@ -8,40 +8,29 @@
 **/.next/
 **/.nuxt/
 
-# env & secrets
+# Env & secrets
 .env
 .env.*
 **/.env
 **/.env.*
 
-# logs
+# Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
-# OS/editor junk
+# OS / editor junk
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
+
 # Python
 __pycache__/
 *.py[cod]
 
-# Node
-node_modules/
-
-# Envs / secrets
-*.env
-backend/.env
-user-frontend/.env
-admin-frontend/.env
-
-# Firebase / service accounts
+# Firebase / service accounts (ignore all JSON) …
 *.json
-!backend/assistant_rules.json   # keep this one
-
-# OS/IDE noise
-.DS_Store
-.vscode/
+# …except the assistant rules we DO want
+!backend/assistant_rules.json
