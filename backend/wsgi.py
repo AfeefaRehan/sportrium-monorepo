@@ -1,27 +1,16 @@
 import os
 from flask_cors import CORS
-from api import create_app  # existing app factory
-
+from api import create_app  # your existing app factory
 
 def _allowed_origins():
-    """
-    Build a robust list of allowed CORS origins from env.
-    Works with:
-      - CORS_ALLOW_ORIGINS (comma-separated)
-      - FRONTEND_ORIGIN, ADMIN_FRONTEND_ORIGIN, FRONTEND_APP_URL
-      - sensible localhost defaults if nothing set
-    """
     origins = set()
-
     csv = os.getenv("CORS_ALLOW_ORIGINS", "").strip()
     if csv:
         origins.update(o.strip() for o in csv.split(",") if o.strip())
-
     for var in ("FRONTEND_ORIGIN", "ADMIN_FRONTEND_ORIGIN", "FRONTEND_APP_URL"):
         v = os.getenv(var, "").strip()
         if v:
             origins.add(v)
-
     if not origins:
         origins.update({
             "http://localhost:5173", "http://127.0.0.1:5173",
@@ -29,22 +18,19 @@ def _allowed_origins():
         })
     return list(origins)
 
-
 app = create_app()
 
-# CORS only for /api/*, allow creds + common methods/headers
 CORS(
     app,
     resources={r"/api/*": {"origins": _allowed_origins()}},
     supports_credentials=True,
     methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
-    # If your API returns pagination totals etc., expose them to the browser:
-    expose_headers=["X-Total-Count"],  # optional
+    expose_headers=["X-Total-Count"],
     max_age=86400,
 )
 
-# Attach /api/health and /api/chat without touching your existing blueprints
+# Attach /api/health and /api/chat
 try:
     from patch_chat import patch_app
     patch_app(app)
