@@ -1,0 +1,72 @@
+/* White background page */
+.page-splash {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #ffffff; /* force white as requested */
+}
+
+/* Center row: logo on left, word on right */
+.splash-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 4vw, 32px);
+  padding-inline: 4vw;
+  will-change: opacity, transform;
+  z-index: 1;
+}
+
+/* Rolling logo */
+.logo-ball {
+  width: clamp(84px, 12vw, 150px);
+  height: auto;
+  will-change: transform;
+  filter: drop-shadow(0 8px 20px rgba(0,0,0,.12));
+}
+
+/* Title with brand gradient (blue -> green from your logo) */
+.brand-title {
+  margin: 0;
+  font-weight: 900;
+  line-height: 0.95;
+  font-size: clamp(3rem, 8.6vw, 7.2rem);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  /* Fallback color if gradient clip is unsupported */
+  color: #0d6c9e;
+
+  /* Gradient text using logo colors */
+  background: linear-gradient(90deg, #0d6c9e 0%, #2aab7c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-title .char {
+  display: inline-block; /* required for per-letter motion translate */
+}
+
+/* Exit (fade away) */
+.page-splash.exit .splash-content {
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+/* Responsive: stack vertically on very small screens */
+@media (max-width: 520px) {
+  .splash-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .splash-content { transition: none !important; }
+}

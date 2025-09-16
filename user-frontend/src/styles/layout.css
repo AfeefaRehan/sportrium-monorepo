@@ -1,0 +1,1039 @@
+/* GLOBAL */
+html, body, #root { height: 100%; }
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  overflow: hidden; /* app-shell is the scroll container */
+}
+* { box-sizing: border-box; }
+
+/* APP GRID */
+.app-shell{
+  display: grid;
+  grid-template-columns: var(--sidebar-w-closed) 1fr;
+  grid-template-rows: var(--header-h) 1fr auto;
+  height: 100dvh;
+  overflow-y: auto;
+  transition: grid-template-columns .22s ease;
+}
+.app-shell.shell--nav-open{ grid-template-columns: var(--sidebar-w-open) 1fr; }
+.app-shell.shell--nav-hidden{ grid-template-columns: 0 1fr !important; }
+
+/* SIDEBAR */
+.sidebar{
+  grid-column: 1 / 2;
+  grid-row: 1 / 3;
+  position: sticky; top: 0; height: 100dvh;
+  z-index: 1001;
+  background: var(--bg);
+  border-right: none;
+  box-shadow: inset -1px 0 0 rgba(0,0,0,.03), 2px 0 18px rgba(0,0,0,.06);
+  width: 100%; padding: 40px 10px 16px;
+  overflow: hidden; scrollbar-width: none;
+  transition: transform .22s ease;
+}
+.sidebar::-webkit-scrollbar{ width:0; height:0; }
+.sidebar.hidden{ transform: translateX(-110%); pointer-events:none; }
+.app-shell.shell--nav-hidden .sidebar{ display:none !important; }
+
+.sid-item{
+  display:flex; align-items:center; gap:14px;
+  padding:12px 12px; border-radius:14px;
+  text-decoration:none; color:var(--muted);
+  transition: background .15s ease, color .15s ease, transform .06s ease;
+}
+.sid-item:hover { background: var(--blue); color:#fff; transform: translateY(-1px); }
+.sid-item.active{ background: var(--blue); color:#fff; }
+.sid-icon{ width:30px; height:30px; flex:0 0 30px; }
+.sid-label{ white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .12s ease; }
+.app-shell.shell--nav-open .sid-label{ opacity:1; pointer-events:auto; }
+.sidnav-group{ margin-top:6px; }
+.sid-expand{
+  display:flex; align-items:center; gap:14px; width:100%;
+  border:1px dashed var(--border); background:transparent;
+  color:var(--muted); padding:10px 12px; border-radius:12px;
+  text-align:left; cursor:pointer;
+}
+.sid-expand:hover{ background: var(--blue); color:#fff; }
+.sid-sub{
+  display:grid; gap:6px; margin-top:10px;
+  max-height:0; overflow:hidden; transition:max-height .22s ease;
+}
+.sid-sub.open{ max-height:320px; }
+.sid-sub a{
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; border-radius:12px; text-decoration:none; color:var(--muted);
+}
+.sid-sub a:hover{ background:var(--surface); color:var(--text); }
+.sid-subicon{ width:18px; height:18px; }
+
+/* Dark polish */
+[data-theme="dark"] .sidebar { background: var(--surface); box-shadow: inset -1px 0 0 rgba(0,0,0,.10); }
+[data-theme="dark"] .sid-item, [data-theme="dark"] .sid-expand { color:#e8f0ff; }
+[data-theme="dark"] .sid-item:hover,
+[data-theme="dark"] .sid-item.active,
+[data-theme="dark"] .sid-expand:hover { background:#13223d; color:#fff; }
+[data-theme="dark"] .sid-icon, [data-theme="dark"] .sid-subicon { filter: invert(1) brightness(1.2); }
+[data-theme="dark"] .sid-sub a{ color:#cfe1ff; }
+[data-theme="dark"] .sid-sub a:hover{ background:#172a4e; color:#fff; }
+
+/* HEADER */
+.header{
+  grid-column: 2 / 3; grid-row: 1 / 2;
+  position: sticky; top: 0; z-index: 900;
+  height: var(--header-h);
+  background: #fff; /* light header */
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 0 clamp(16px, 3.2vw, 28px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  transition: transform .18s ease;
+}
+.header.hidden{ transform: translateY(-100%); }
+[data-theme="dark"] .header{
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+.brand{ display:inline-flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.2px; }
+.brand img{ height:34px; width:auto; }
+[data-theme="dark"] .brand span { color: #eef3ff; }
+
+.header-right{ display:inline-flex; align-items:center; gap:12px; }
+.icon-btn{
+  width:40px; height:40px; border-radius:12px; border:1px solid var(--border);
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--surface); color:var(--text);
+  transition: transform .08s ease, background .15s ease;
+}
+.icon-btn:hover{ transform: translateY(-1px); background: var(--bg); }
+
+/* BUTTONS (using tokens) */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:6px; padding:10px 16px; border-radius:12px;
+  font-weight:700; text-decoration:none; cursor:pointer;
+  border:1px solid var(--border); transition: all .15s ease;
+}
+.btn:hover{ transform: translateY(-1px); }
+
+.btn.primary{ background: var(--accent); color:#fff; border-color: transparent; }
+.btn.primary:hover{ filter: brightness(.96); }
+
+.btn.red{ background: var(--red); color:#fff; border-color: transparent; }
+.btn.red:hover{ background:#e0464a; filter: brightness(.98); }
+
+.btn.blue{ background: var(--blue); color:#fff; border-color: transparent; }
+.btn.blue:hover{ background:#fff; color:#111; box-shadow:0 6px 16px rgba(0,0,0,.15); }
+
+.btn.navy{ background: var(--navy); color:#fff; border-color: var(--navy); }
+.btn.navy:hover{ background:#122449; }
+
+.btn.white{
+  background:#fff; color:#0a1830; border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 0 0 rgba(0,0,0,0);
+}
+.btn.white:hover{ box-shadow:0 10px 24px rgba(0,0,0,.16); }
+
+.btn.ghost{ background:transparent; color:var(--text); border-color:var(--border); }
+.btn.ghost:hover{ background:var(--surface); }
+.btn.wide{ width:100%; }
+
+/* Dark hover variants */
+[data-theme="dark"] .btn.blue,
+[data-theme="dark"] .btn.navy{
+  background:#ffffff; color:#0a1830; border-color: transparent;
+}
+[data-theme="dark"] .btn.blue:hover,
+[data-theme="dark"] .btn.navy:hover{
+  background:#12325f; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+
+/* MAIN */
+.main{
+  grid-column: 2 / 3; grid-row: 2 / 3;
+  min-width: 0; padding-top: 8px;
+  height: auto; overflow: visible;
+}
+.page{
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 20px clamp(16px, 3.2vw, 28px) 40px;
+  height: auto; overflow: visible;
+}
+
+/* FOOTER */
+.footer{
+  grid-column: 1 / 3; grid-row: 3 / 4;
+  background: linear-gradient(180deg,#0a2a35,#081a22);
+  color:#dcecf5;
+}
+.footer-top{
+  max-width:1320px; margin:0 auto; padding:36px 28px 12px;
+  display:grid; grid-template-columns: 1fr 1fr; gap:28px;
+}
+.footer-card{
+  background: rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px; padding:22px; position:relative; overflow:hidden;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  max-width:520px;
+}
+.footer-logo{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.footer-logo img{ width:36px; height:36px; border-radius:8px; }
+.footer-social{ display:flex; gap:10px; opacity:.9; margin:10px 0 14px; }
+.footer-accent{ height:6px; background:#f2a007; border-radius:6px; margin-top:12px; }
+
+.footer-links-2{
+  display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:16px;
+}
+.footer-links-2 h5{ margin:0 0 10px 0; opacity:.9; }
+.footer-links-2 a{ display:block; color:#cfe1ff; text-decoration:none; padding:6px 0; }
+.footer-links-2 a:hover{ text-decoration:underline; }
+
+.subscribe{ margin-top:10px; }
+.subscribe label{ display:block; margin:0 0 8px 0; font-weight:600; }
+.subscribe-row{ display:flex; gap:10px; }
+.subscribe-row input{
+  flex:1 1 auto; height:52px; font-size:16px; padding:0 16px;
+  background:#fff; color:#111; border-radius:12px; border:1px solid rgba(255,255,255,.25);
+}
+.subscribe-row .btn{ height:52px; border-radius:12px; padding:0 18px; }
+
+.footer-bottom{
+  text-align:center; padding:12px 12px 18px;
+  background:#06121c; color:#a9bed1; font-size:14px;
+}
+
+/* HOME/SCHEDULE helpers */
+.home-hero{ display:grid; grid-template-columns:1.05fr 1fr; gap:28px; align-items:start; }
+.home-hero h1{ margin:0 0 10px 0; font-size:64px; line-height:1.05; font-weight:900; white-space:nowrap; }
+@media (max-width:1200px){ .home-hero h1{ white-space:normal; } }
+.hero-video{ border-radius:20px; overflow:hidden; background:#000; aspect-ratio:16/9; }
+.hero-video video{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.stats,.kpis{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.stat-card,.kpi{ background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:14px 16px; }
+.stat-num,.kpi .num{ font-size:28px; font-weight:800; color:var(--text); }
+.stat-label,.kpi .lbl{ color:var(--muted); font-size:12px; }
+
+.list-section{ display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:24px; }
+.tile-list li, .match-list li{
+  list-style:none; background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:14px 16px; margin:10px 0;
+}
+.match-list li{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.match-list li span{ font-weight:800; width:64px; text-align:right; }
+.match-list li a, .match-list li button{ white-space:nowrap; }
+
+/* Dark card depth */
+[data-theme="dark"] .tile-list li,
+[data-theme="dark"] .match-list li,
+[data-theme="dark"] .kpi,
+[data-theme="dark"] .stat-card{
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+}
+
+/* Utilities */
+header, .header{ bottom: auto !important; }
+.header, .footer, .sidebar, .main, .page { box-sizing: border-box; }
+
+.live-card .cta-row, .upcoming-card .cta-row{
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:10px;
+}
+.live-card .cta-row .btn, .upcoming-card .cta-row .btn{ flex:0 0 auto; width:auto; }
+/* Sidebar nav item */
+.sid-item{
+  display:flex; align-items:center; gap:14px;
+  padding:12px 12px; border-radius:14px;
+  /* NEW: space so hover blue doesn't merge with neighbors/edges */
+  margin: 6px 8px;              /* vertical 6px, horizontal 8px */
+  text-decoration:none; color:var(--muted);
+  transition: background .15s ease, color .15s ease, transform .06s ease;
+}
+.brand img{
+  height:70px; /* was 34px */
+  width:auto;
+}
+/* ==== OVERRIDES: bigger brand in header (put at END of layout.css) ==== */
+.header .brand{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+}
+
+.header .brand img{
+  /* logo bigger */
+  height:56px;         /* you can try 48–64px */
+  width:auto;
+}
+
+.header .brand span{
+  /* site name bigger + bolder */
+  font-size: clamp(24px, 2.8vw, 34px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: .2px;
+}
+@media (max-width: 480px){
+  .header .brand img { height: 44px; }
+  .header .brand span { font-size: clamp(20px, 6vw, 26px); }
+  :root { --header-h: 78px; } /* optional: mobile header thoda kam */
+}
+/* ===========================
+   Header actions: icons, menus
+   =========================== */
+
+.header-right { display:flex; align-items:center; gap:10px; }
+
+/* Icon buttons & avatar */
+.icon-btn,
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border, rgba(17,24,39,0.10));
+  background: var(--surface, rgba(255,255,255,0.6));
+  color: var(--text, inherit);
+  cursor: pointer;
+  transition: transform .08s ease, background .12s ease, border-color .12s ease;
+}
+[data-theme="dark"] .icon-btn,
+[data-theme="dark"] .avatar {
+  background: var(--surface, rgba(255,255,255,0.05));
+  border-color: var(--border, rgba(255,255,255,.12));
+}
+.icon-btn:hover,
+.avatar:hover { transform: translateY(-1px); }
+.icon-btn:active,
+.avatar:active { transform: translateY(0); }
+.icon-btn:focus-visible,
+.avatar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.35); /* bluish focus ring */
+}
+
+/* Badge on bell */
+.icon-btn { position: relative; }
+.icon-btn .badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 700;
+  background: var(--red, #e11d48);
+  color: #fff;
+  border: 2px solid var(--menu-bg, #fff);
+}
+
+/* ---- Menus ---- */
+.menu-wrap { position: relative; }
+
+/* Palette for menus (light/dark) */
+:root,
+[data-theme="light"] {
+  --menu-bg: #fff;
+  --menu-fg: #111827;
+  --menu-border: rgba(17,24,39,.10);
+  --menu-hover: rgba(17,24,39,.06);
+  --menu-shadow: 0 18px 40px rgba(0,0,0,.12);
+}
+[data-theme="dark"] {
+  --menu-bg: #0f1115;
+  --menu-fg: #e5e7eb;
+  --menu-border: rgba(255,255,255,.10);
+  --menu-hover: rgba(255,255,255,.08);
+  --menu-shadow: 0 22px 60px rgba(0,0,0,.55);
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 260px;
+  max-width: 320px;
+  background: var(--menu-bg);
+  color: var(--menu-fg);
+  border: 1px solid var(--menu-border);
+  border-radius: 14px;
+  box-shadow: var(--menu-shadow);
+  overflow: hidden;
+  z-index: 50;
+
+  /* Enter animation */
+  opacity: 0;
+  transform: translateY(-6px) scale(.98);
+  animation: menuIn .14s ease-out forwards;
+}
+@keyframes menuIn {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Little arrow */
+.menu::before {
+  content: "";
+  position: absolute;
+  right: 16px; /* aligns below icon */
+  top: -7px;
+  width: 14px;
+  height: 14px;
+  background: var(--menu-bg);
+  border-top: 1px solid var(--menu-border);
+  border-left: 1px solid var(--menu-border);
+  transform: rotate(45deg);
+}
+
+/* Notifications vs Profile menus can be tuned separately if needed */
+.menu--notifications { min-width: 280px; }
+.menu--profile { min-width: 220px; }
+
+.menu-header {
+  padding: 10px 12px;
+  font-weight: 700;
+  opacity: .92;
+  border-bottom: 1px solid var(--menu-border);
+}
+
+.menu-list { max-height: 260px; overflow: auto; }
+.menu-list::-webkit-scrollbar { width: 8px; }
+.menu-list::-webkit-scrollbar-thumb {
+  background: rgba(120,120,120,.35);
+  border-radius: 999px;
+}
+
+/* Items */
+.menu-item,
+.menu-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: transparent;
+  color: var(--menu-fg);
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+.menu-item:hover,
+.menu-action:hover { background: var(--menu-hover); }
+.menu-item:focus-visible,
+.menu-action:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px rgba(59,130,246,.35);
+  border-radius: 8px;
+}
+
+/* Subtle secondary text line if you add <small>…</small> later */
+.menu-item small { opacity: .7; display:block; line-height: 1.25; }
+
+/* Separator */
+.menu-sep {
+  margin: 6px 0;
+  border: 0;
+  border-top: 1px solid var(--menu-border);
+}
+
+/* Danger action (logout) */
+.menu-item.danger { color: var(--red, #ef4444); font-weight: 600; }
+
+/* Avatar with initials look a bit bolder */
+.avatar { font-weight: 700; }
+/* =========================
+   Header polish & actions
+   ========================= */
+
+/* hard-align header content vertically */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* brand row never drifts vertically */
+.header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.header .brand img { display: block; }
+
+/* right block = exact centering + spacing */
+.header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px; /* anchor height for perfect centering */
+}
+
+/* --- Icon buttons (theme, bell, avatar) — bigger & crisper --- */
+.icon-btn,
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;           /* stop baseline drift (emoji/img) */
+  font-size: 18px;          /* emoji size (theme icon) */
+  border: 1px solid var(--border, rgba(17,24,39,0.10));
+  background: var(--surface, rgba(255,255,255,0.7));
+  color: var(--text, inherit);
+  cursor: pointer;
+  transition: transform .08s ease, background .14s ease, border-color .14s ease, box-shadow .14s ease;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+.icon-btn img { width: 20px; height: 20px; display: block; } /* kill baseline gap */
+
+/* dark theme surface */
+[data-theme="dark"] .icon-btn,
+[data-theme="dark"] .avatar {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 6px 18px rgba(0,0,0,.24);
+}
+
+/* hover/focus states */
+.icon-btn:hover,
+.avatar:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.85);
+}
+[data-theme="dark"] .icon-btn:hover,
+[data-theme="dark"] .avatar:hover {
+  background: rgba(255,255,255,0.10);
+}
+.icon-btn:active,
+.avatar:active { transform: translateY(0); }
+.icon-btn:focus-visible,
+.avatar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.35);
+}
+
+/* badge positioning tuned to 44px size */
+.icon-btn { position: relative; }
+.icon-btn .badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 700;
+  background: var(--red, #e11d48);
+  color: #fff;
+  border: 2px solid var(--menu-bg, #fff);
+}
+
+/* menus: ensure they're optically aligned under the icons */
+.menu {
+  right: 0;
+  top: calc(100% + 12px);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.12);
+}
+[data-theme="dark"] .menu { box-shadow: 0 22px 60px rgba(0,0,0,.55); }
+
+/* little arrow centered to the icon group */
+.menu::before {
+  right: 20px; /* 44px button width → arrow looks centered under it */
+  top: -7px;
+  width: 14px; height: 14px;
+  background: var(--menu-bg, #fff);
+  border-top: 1px solid var(--menu-border, rgba(17,24,39,.10));
+  border-left: 1px solid var(--menu-border, rgba(17,24,39,.10));
+  transform: rotate(45deg);
+}
+
+/* profile/notifications menu padding & hover */
+.menu-header { padding: 12px 14px; font-weight: 700; }
+.menu-list { max-height: 260px; overflow: auto; }
+.menu-item, .menu-action {
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+.menu-item:hover, .menu-action:hover {
+  background: var(--menu-hover, rgba(17,24,39,.06));
+}
+.menu-item.danger { color: var(--red, #ef4444); font-weight: 600; }
+
+/* avatar initial a little bolder */
+.avatar { font-weight: 700; }
+
+/* responsive: slightly smaller on narrow screens */
+@media (max-width: 768px) {
+  .icon-btn, .avatar { width: 40px; height: 40px; }
+  .menu::before { right: 18px; }
+}
+/* default row (guest state) */
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* logged-in: vertical stack for bell + avatar */
+.header-actions--stack {
+  flex-direction: column;
+  align-items: flex-end; /* right edge align */
+  gap: 8px;
+}
+/* Header right: horizontal align */
+.header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+/* Actions container stays horizontal */
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+/* Safety: kill any old stack rule if present */
+.header-actions--stack {
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+/* Dark mode: make bell svg (loaded via <img>) white */
+[data-theme="dark"] .icon-btn img {
+  filter: invert(1) brightness(1.6);
+}
+/* ============ Sticky & Scroll-hide (force) ============ */
+
+/* Make header sticky so translateY hides it visually without layout jump */
+.header {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  background: var(--header-bg, var(--menu-bg, #fff)) !important;
+  transition: transform .25s ease, opacity .2s ease !important;
+  will-change: transform !important;
+  z-index: 30 !important;
+}
+.header.hidden {
+  transform: translateY(-110%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Ensure sidebar is sticky (or fixed) so it can slide away */
+.sidebar {
+  position: sticky !important;
+  top: 72px !important;   /* keep under header; adjust if your header is taller */
+  left: 0 !important;
+  transition: transform .25s ease, opacity .2s ease !important;
+  will-change: transform !important;
+  z-index: 35 !important;
+}
+.sidebar.hidden {
+  transform: translateX(-120%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Keep header-right items on one line */
+.header-right {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Dark bell icon white (for <img> SVGs) */
+[data-theme="dark"] .icon-btn img {
+  filter: invert(1) brightness(1.6) !important;
+}
+
+/* Hidden chrome shouldn't trap clicks */
+.header.hidden .icon-btn,
+.header.hidden .btn,
+.sidebar.hidden .sid-item { pointer-events: none !important; }
+/* Sidebar start from very top of viewport (header ke neeche nahi, top se) */
+.sidebar { top: 0 !important; }
+.header  { z-index: 1000 !important; } /* header upar rahe */
+/* Dark mode: header = exactly same bg as sidebar */
+[data-theme="dark"] .header {
+  background: var(--surface) !important;   /* same token sidebar uses */
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;             /* sidebar style ke saath match */
+}
+
+/* (optional) subtle divider line like sidebar's inset line */
+[data-theme="dark"] .header {
+  box-shadow: inset 0 -1px 0 rgba(0,0,0,.10) !important;
+}
+/* smaller avatar in header navbar */
+.header .avatar { width: 32px; height: 32px; }
+/* ========= Header actions (logged-in) ========= */
+/* Use your existing brand vars if present; fallbacks keep colors consistent */
+:root{
+  --brand-blue: var(--brand-blue, #2563eb);      /* site blue */
+  --brand-red:  var(--brand-red,  #ff565a);      /* site red  */
+  --brand-green:var(--brand-green,#16a34a);      /* reminders green */
+}
+
+/* Common chip/button look used in header actions */
+.topbar-actions .btn,
+.header-actions .btn,
+.header .btn-rail .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-weight: 700;
+  line-height: 1;
+  transition: filter .15s ease, transform .05s ease;
+}
+
+/* --- Reminders: green pill with white text in BOTH themes --- */
+button[aria-label="Reminders"],
+.btn-reminders,
+.action-reminders {
+  background: var(--brand-green);
+  color: #fff;
+  border-color: transparent;
+}
+button[aria-label="Reminders"]:hover,
+.btn-reminders:hover { filter: brightness(.95); }
+button[aria-label="Reminders"]:active,
+.btn-reminders:active { transform: translateY(1px); }
+
+/* --- Notifications: blue body, white icon/text --- */
+button[aria-label="Notifications"],
+.btn-notifs,
+.action-notifications {
+  background: var(--brand-blue);
+  color: #fff;
+  border-color: transparent;
+}
+button[aria-label="Notifications"]:hover,
+.btn-notifs:hover { filter: brightness(.95); }
+button[aria-label="Notifications"]:active,
+.btn-notifs:active { transform: translateY(1px); }
+
+/* --- Profile: red body, white icon --- */
+button[aria-label="Profile"],
+.btn-profile,
+.action-profile,
+.avatar-btn {
+  background: var(--brand-red);
+  color: #fff;
+  border-color: transparent;
+}
+button[aria-label="Profile"]:hover,
+.btn-profile:hover,
+.avatar-btn:hover { filter: brightness(.95); }
+button[aria-label="Profile"]:active,
+.btn-profile:active,
+.avatar-btn:active { transform: translateY(1px); }
+
+/* Ensure SVG icons render white inside these buttons */
+button[aria-label="Reminders"] svg,
+button[aria-label="Notifications"] svg,
+button[aria-label="Profile"] svg,
+.btn-reminders svg,
+.btn-notifs svg,
+.btn-profile svg,
+.action-reminders svg,
+.action-notifications svg,
+.action-profile svg,
+.avatar-btn svg {
+  color: #fff;
+  fill: currentColor;
+  stroke: currentColor;
+}
+/* ================= Header actions (logged-in) ================= */
+/* Brand colors (fallbacks keep consistency if your vars already exist) */
+:root{
+  --brand-blue:  var(--brand-blue,  #2563eb);
+  --brand-red:   var(--brand-red,   #ff565a);
+  --brand-green: var(--brand-green, #16a34a);
+}
+
+/* Use the same size as your light/dark toggle */
+.header,
+.topbar {
+  --hdr-btn-size: 40px;           /* match theme toggle size */
+  --hdr-btn-radius: 9999px;
+}
+
+/* Base shared button style in header */
+.header .btn,
+.topbar .btn,
+.header-actions .btn {
+  height: var(--hdr-btn-size);
+  border-radius: var(--hdr-btn-radius);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  line-height: 1;
+  transition: filter .15s ease, transform .05s ease;
+}
+
+/* Icon-only buttons (same square size as theme toggle) */
+.header .icon-btn,
+.topbar .icon-btn,
+.header-actions .icon-btn,
+button[aria-label="Notifications"],
+button[aria-label="Profile"] {
+  width: var(--hdr-btn-size);
+  height: var(--hdr-btn-size);
+  padding: 0;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+/* ---------------- Reminders (green pill) ---------------- */
+button[aria-label="Reminders"],
+.btn-reminders,
+.action-reminders {
+  background: var(--brand-green);
+  color: #fff;
+  border-color: transparent;
+  /* keep pill with text; if you use an icon inside, it will be white */
+}
+
+/* ---------------- Notifications (blue, white icon) ---------------- */
+button[aria-label="Notifications"],
+.btn-notifs,
+.action-notifications {
+  background: var(--brand-blue);
+  color: #fff;           /* icon/text goes white */
+  border-color: transparent;
+}
+
+/* ---------------- Profile (red, white icon) ---------------- */
+button[aria-label="Profile"],
+.btn-profile,
+.action-profile,
+.avatar-btn {
+  background: var(--brand-red);
+  color: #fff;           /* avatar/icon white */
+  border-color: transparent;
+}
+
+/* Icon color inside these buttons (SVG or font icons) */
+button[aria-label="Reminders"] svg,
+button[aria-label="Notifications"] svg,
+button[aria-label="Profile"] svg,
+.btn-reminders svg,
+.btn-notifs svg,
+.btn-profile svg,
+.action-reminders svg,
+.action-notifications svg,
+.action-profile svg,
+.avatar-btn svg {
+  color: #fff;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* Subtle interactions */
+button[aria-label="Reminders"]:hover,
+.btn-reminders:hover,
+button[aria-label="Notifications"]:hover,
+.btn-notifs:hover,
+button[aria-label="Profile"]:hover,
+.btn-profile:hover,
+.avatar-btn:hover {
+  filter: brightness(.96);
+}
+button[aria-label="Reminders"]:active,
+.btn-reminders:active,
+button[aria-label="Notifications"]:active,
+.btn-notifs:active,
+button[aria-label="Profile"]:active,
+.btn-profile:active,
+.avatar-btn:active {
+  transform: translateY(1px);
+}
+
+/* If you show a small unread badge on the icon buttons */
+.header .icon-btn .badge,
+.topbar  .icon-btn .badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: #fff;              /* white badge bubble */
+  color: var(--brand-blue);      /* blue number */
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 16px;
+  border: 1px solid rgba(0,0,0,.06);
+}
+
+/* Respect dark mode without changing colors you asked for */
+@media (prefers-color-scheme: dark) {
+  /* keep the same green/blue/red bodies + white text/icons */
+  /* nothing else needed */
+}
+/* =========================================================
+   Header actions (logged-in) — Reminders / Notifications / Profile
+   ========================================================= */
+
+/* Brand colors (fallbacks) */
+:root{
+  --brand-blue:  var(--brand-blue,  #2563eb); /* site blue */
+  --brand-red:   var(--brand-red,   #ff565a); /* site red  */
+  --brand-green: var(--brand-green, #16a34a); /* reminders green */
+}
+
+/* Use the same height as your light/dark toggle (usually 40px) */
+.app-header, .header, .topbar {
+  --hdr-btn-size: 40px;
+}
+
+/* Base shape for all header buttons */
+.app-header .btn,
+.header .btn,
+.topbar .btn,
+.app-header :is(button,a)[data-action],
+.header     :is(button,a)[data-action],
+.topbar     :is(button,a)[data-action]{
+  height: var(--hdr-btn-size);
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-weight: 800;
+  line-height: 1;
+  border: 1px solid transparent;
+  transition: filter .15s ease, transform .05s ease;
+}
+
+/* Square icon-only actions (bell/avatar etc.) */
+.app-header .icon-btn,
+.header .icon-btn,
+.topbar  .icon-btn,
+.app-header :is(button,a)[data-icon],
+.header     :is(button,a)[data-icon],
+.topbar     :is(button,a)[data-icon]{
+  width: var(--hdr-btn-size);
+  height: var(--hdr-btn-size);
+  padding: 0;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+/* ---------------- Reminders (green pill, white text) ---------------- */
+:where(.app-header,.header,.topbar)
+  :is(button,a)[data-action="reminders"],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[aria-label*="remind" i],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[title*="remind" i],
+:where(.app-header,.header,.topbar)
+  a[href*="reminder" i]{
+  background: var(--brand-green) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* ---------------- Notifications (blue body, white icon) -------------- */
+:where(.app-header,.header,.topbar)
+  :is(button,a)[data-action="notifications"],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[aria-label*="notif" i],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[title*="notif" i],
+:where(.app-header,.header,.topbar)
+  a[href*="notif" i]{
+  background: var(--brand-blue) !important;
+  color: #fff !important; /* icon/text */
+  border-color: transparent !important;
+}
+
+/* ---------------- Profile (red body, white icon) --------------------- */
+:where(.app-header,.header,.topbar)
+  :is(button,a)[data-action="profile"],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[aria-label*="profile" i],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[title*="profile" i],
+:where(.app-header,.header,.topbar)
+  a[href*="profile" i],
+:where(.app-header,.header,.topbar)
+  .avatar-btn{
+  background: var(--brand-red) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* Make any SVG/icon inside those buttons white */
+:where(.app-header,.header,.topbar)
+  :is(
+    :is(button,a)[aria-label*="remind" i],
+    :is(button,a)[aria-label*="notif" i],
+    :is(button,a)[aria-label*="profile" i],
+    :is(button,a)[data-action],
+    .btn, .icon-btn, .avatar-btn
+  ) svg{
+  color: #fff !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Small unread badge (optional) */
+:where(.app-header,.header,.topbar) .icon-btn .badge{
+  position: absolute;
+  top: -4px; right: -4px;
+  min-width: 16px; height: 16px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--brand-blue);
+  border: 1px solid rgba(0,0,0,.06);
+  font-size: 11px; line-height: 16px; font-weight: 800;
+}
+
+/* Hover/active feedback */
+:where(.app-header,.header,.topbar)
+  :is(
+    :is(button,a)[aria-label*="remind" i],
+    :is(button,a)[aria-label*="notif" i],
+    :is(button,a)[aria-label*="profile" i],
+    :is(button,a)[data-action]
+  ):hover{ filter: brightness(.96); }
+:where(.app-header,.header,.topbar)
+  :is(
+    :is(button,a)[aria-label*="remind" i],
+    :is(button,a)[aria-label*="notif" i],
+    :is(button,a)[aria-label*="profile" i],
+    :is(button,a)[data-action]
+  ):active{ transform: translateY(1px); }
+
+/* Works the same in dark mode — we keep the same green/blue/red + white */

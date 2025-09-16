@@ -1,0 +1,1 @@
+# Badminton — training basics\nFootwork ladders, shadow swings, multi-shuttle feeding, game rotations. No medical advice provided.\n

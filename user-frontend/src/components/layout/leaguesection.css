@@ -1,0 +1,98 @@
+/* =========================
+   LeagueSection (cards grid)
+   ========================= */
+
+.ls-head h3{
+  margin:0 0 12px;
+  font-size:20px;
+  font-weight:900;
+  color:var(--text);
+}
+
+/* Grid */
+.ls-grid{
+  display:grid;
+  gap:14px;
+  grid-template-columns: repeat(12, minmax(0,1fr));
+}
+@media (max-width: 1200px){ .ls-grid{ grid-template-columns: repeat(8, 1fr); } }
+@media (max-width: 980px){  .ls-grid{ grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 640px){  .ls-grid{ grid-template-columns: repeat(1, 1fr); } }
+
+/* Card */
+.ls-card{
+  grid-column: span 3 / span 3;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 120px auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.ls-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.14);
+  border-color: color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+@media (max-width: 980px){ .ls-card{ grid-column: span 2 / span 2; } }
+@media (max-width: 640px){ .ls-card{ grid-column: span 1 / span 1; } }
+
+/* Media/top */
+.ls-top{
+  position:relative;
+  background:#0b172b;                 /* safe fallback behind image */
+}
+.ls-top img,
+.ls-fallback{
+  width:100%; height:100%;
+  object-fit:cover; display:block;
+  background:linear-gradient(180deg,#0b172b,#08101f);
+  filter:saturate(1.05);
+}
+
+/* Badge/pill */
+.pill{
+  position:absolute; left:10px; top:10px;
+  padding:6px 10px; border-radius:999px;
+  font-size:12px; font-weight:900;
+  background: rgba(255,255,255,.95);
+  color:#0b172b;
+}
+
+/* Body */
+.ls-body{
+  display:grid; gap:8px; padding:12px;
+}
+.teams{ font-weight:900; letter-spacing:.2px; color:var(--text); }
+.score{ font-weight:900; font-size:18px; color:var(--text); }
+.meta{ color:var(--muted); font-size:12px; }
+
+/* Actions row — uses global button styles */
+.actions{
+  display:flex; gap:8px; margin-top:4px;
+}
+
+/* Dark-mode subtle depth (tokens already handle colors) */
+@media (prefers-color-scheme: dark){
+  .ls-card{
+    box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  }
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .ls-card{ transition: none; }
+  .ls-card:hover{ transform:none; box-shadow:none; }
+}
+/* keep action buttons tidy */
+.ls-card .actions{ display:flex; gap:8px; flex-wrap:wrap; }
+/* league cards in dark */
+[data-theme="dark"] .league-section .ls-card{
+  background: var(--live-surface);
+  border-color: var(--live-stroke);
+}
+[data-theme="dark"] .league-section .ls-card .teams{ color: var(--live-white); }
+[data-theme="dark"] .league-section .ls-card .meta{ color: var(--live-muted); }

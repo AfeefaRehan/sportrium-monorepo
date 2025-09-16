@@ -1,0 +1,32 @@
+[
+  {
+    "id": "m-001",
+    "dateISO": "2025-09-18",
+    "timeLocal": "18:30",
+    "league": "City Cup",
+    "sport": "football",
+    "city": "Karachi",
+    "venue": "KU Ground",
+    "teams": [
+      "Karachi United",
+      "Korangi FC"
+    ],
+    "status": "upcoming",
+    "entryFee": "PKR 200"
+  },
+  {
+    "id": "m-002",
+    "dateISO": "2025-09-19",
+    "timeLocal": "15:00",
+    "league": "Inter Uni (ODI)",
+    "sport": "cricket",
+    "city": "Lahore",
+    "venue": "LL Stadium",
+    "teams": [
+      "Lahore Lions",
+      "Model Town"
+    ],
+    "status": "upcoming",
+    "entryFee": "Free"
+  }
+]

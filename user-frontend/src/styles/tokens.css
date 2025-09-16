@@ -1,0 +1,59 @@
+/* Layout tokens (used by layout.css) */
+:root{
+--header-h: 88px; 
+  --sidebar-w-closed: 84px;
+  --sidebar-w-open: 260px;
+  --page-max: 1240px;
+}
+
+/* LIGHT (default) */
+:root,
+[data-theme="light"]{
+  --bg:#ffffff;
+  --surface:#f6f8fb;
+  --surface-2:#eef2f8;
+  --text:#0d1b2a;
+  --muted:#6b7280;
+  --border: rgba(13,27,42,.10);
+
+  --navy:#0a1830;
+  --navy-700:#0e2244;
+  --navy-600:#12325f;
+  --blue:#1f4cff;
+  --red:#ff4d4f;
+  --accent:#ff5a5f;
+  --card-radius:18px;
+
+  color-scheme: light;
+  scrollbar-color: rgba(2,6,23,.18) transparent;
+}
+
+/* DARK */
+[data-theme="dark"]{
+  --bg:#0c1222;
+  --surface:#121a2d;
+  --surface-2:#0f172a;
+  --text:#eaf0ff;
+  --muted:#9aa7c7;
+  --border: rgba(255,255,255,.12);
+
+  --navy:#161b22;
+  --navy-700:#13223d;
+  --navy-600:#12325f;
+  --blue:#2f72ff;
+  --red:#ff4842;
+  --accent:#ff565a;
+
+  color-scheme: dark;
+  scrollbar-color: rgba(154,167,199,.35) transparent;
+}
+
+/* Apply base colors globally */
+html, body, #root{
+  background: var(--bg);
+  color: var(--text);
+}
+:root{
+  /* your home-page red */
+  --brand-red: #E11D48; /* <-- change to your exact home red if different */
+}

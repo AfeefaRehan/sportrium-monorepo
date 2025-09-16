@@ -1,0 +1,178 @@
+/* Horizontal "Upcoming" carousel with Explore link */
+
+.upcoming-carousel{
+  margin: 26px 0 8px;
+}
+
+.upcoming-carousel h3{
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.carousel-track{
+  position: relative;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 260px);
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 8px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.carousel-track::-webkit-scrollbar{ height: 10px; }
+.carousel-track::-webkit-scrollbar-thumb{
+  background: rgba(120,132,158,.35);
+  border-radius: 10px;
+}
+
+.carousel-card{
+  scroll-snap-align: start;
+  background: var(--surface, #f6f8fb);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 14px;
+  padding: 14px;
+  min-height: 96px;
+  display: grid;
+  gap: 6px;
+  box-shadow: 0 6px 14px rgba(0,0,0,.06);
+  transition: transform .08s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.carousel-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  border-color: rgba(0,0,0,.08);
+}
+
+.carousel-card .sport{
+  font-size: 12px; font-weight: 800; opacity:.7;
+}
+.carousel-card .teams{
+  font-size: 15px; font-weight: 800;
+}
+.carousel-card .time{
+  font-size: 13px; color: var(--muted, #6b7280);
+}
+
+/* Explore link row (we reuse your .btn styles) */
+.upcoming-carousel .btn.navy{
+  margin-top: 10px;
+}
+
+/* Dark mode */
+[data-theme="dark"] .carousel-card{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.08);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+[data-theme="dark"] .carousel-card:hover{
+  border-color: rgba(255,255,255,.16);
+  box-shadow: 0 12px 28px rgba(0,0,0,.45);
+}
+.upcoming-carousel{ display:grid; gap:10px; }
+.upcoming-carousel h3{ margin:0; font-size:20px; font-weight:800; }
+.carousel-track{
+  display:grid; grid-auto-flow:column; grid-auto-columns:minmax(220px, 260px);
+  gap:12px; overflow-x:auto; padding:10px 8px; scroll-snap-type:x mandatory;
+}
+.carousel-card{
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:14px; padding:14px; scroll-snap-align:start;
+  display:grid; gap:6px;
+}
+.carousel-card .sport{ font-size:12px; color:var(--muted); font-weight:700; }
+.carousel-card .teams{ font-weight:800; }
+.carousel-card .time{ font-weight:900; }
+/* carousel.css */
+.carousel-track{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:minmax(300px, 400px); /* bigger cards */
+  gap:16px;
+  overflow-x:auto;
+  padding:14px;
+  scroll-snap-type:x mandatory;
+}
+
+.carousel-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  scroll-snap-align:start;
+  display:grid;
+  gap:10px;
+  font-size:16px; /* bigger text */
+}
+.carousel-card .sport{ font-size:14px; color:var(--muted); }
+.carousel-card .teams{ font-size:18px; font-weight:800; }
+.carousel-card .time{ font-size:16px; font-weight:900; }
+/* --- normalize slide sizing --- */
+.score-carousel{
+  overflow: hidden; /* your arrows manage scroll; keeps edges crisp */
+}
+
+.score-track{
+  display: flex !important;
+  gap: 24px !important;
+  will-change: transform;
+}
+
+/* Each slide is a fixed logical width so last two never squash */
+.score-slide,
+.score-card{
+  flex: 0 0 340px !important;   /* <- the width; adjust to your taste */
+  max-width: 340px !important;
+}
+
+/* Consistent card internals so footer buttons align */
+.score-card{
+  display: flex !important;
+  flex-direction: column !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  background: var(--card, #fff) !important;
+  border: 1px solid var(--border, #e9eef4) !important;
+}
+
+.score-card .media{
+  height: 160px !important;
+  background: #0b1a2b !important; /* your dark banner */
+}
+
+.score-card .body{
+  padding: 14px 16px 16px !important;
+  display: grid !important;
+  grid-template-columns: 1fr auto auto !important; /* title | watch | remind */
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+/* The green live dot in top-right keeps consistent */
+.score-card .live-dot{
+  position: absolute !important;
+  right: 12px !important;
+  top: 12px !important;
+}
+
+/* Buttons inside cards */
+.score-card .btn.red{
+  padding: 8px 14px !important;
+  font-weight: 800 !important;
+}
+.score-card .btn.navy,
+.score-card .btn.secondary{
+  padding: 8px 12px !important;
+}
+
+/* small screens: cards a little narrower so they don't overflow */
+@media (max-width: 680px){
+  .score-slide,
+  .score-card{
+    flex-basis: 300px !important;
+    max-width: 300px !important;
+  }
+  .score-card .media{ height: 140px !important; }
+}

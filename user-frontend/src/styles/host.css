@@ -1,0 +1,801 @@
+/* ====== Page base ====== */
+.host-page{ display:flex; flex-direction:column; gap:18px; }
+
+/* ====== HERO ====== */
+.host-hero{ position:relative; border-radius:22px; overflow:hidden; aspect-ratio: 16 / 6; background:#000; }
+@media (max-width:700px){ .host-hero{ aspect-ratio: 16 / 9; } }
+.host-video{ width:100%; height:100%; object-fit:cover; filter:saturate(1.1) contrast(1.05) brightness(.9); }
+:root[data-theme="light"] .host-video{ filter:saturate(1.05) contrast(1.05) brightness(.98); }
+.host-veil{ position:absolute; inset:0;
+  background: radial-gradient(1200px 400px at 10% 0%, rgba(59,130,246,.35), transparent 60%),
+              linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.15) 35%, rgba(0,0,0,.5));
+}
+.host-hero-content{ position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; gap:10px; padding:24px; color:#fff; }
+.host-title{ font-size:clamp(24px, 3vw, 36px); font-weight:900; letter-spacing:.3px; }
+.host-sub{ max-width:780px; opacity:.9; }
+.host-hero-cta{ display:flex; gap:10px; margin-top:6px; }
+.btn.xl{ height:44px; padding:0 18px; border-radius:12px; font-size:15px; }
+
+/* ====== Toolbar / stats ====== */
+.host-toolbar{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.stat-b{ background: var(--team-card); border:1px solid rgba(2,6,23,.08); padding:10px 12px; border-radius:14px; min-width:160px; }
+.stat-b .k{ font-size:12px; color: var(--team-muted); }
+.stat-b .v{ font-weight:800; font-size:18px; }
+.host-toolbar .spacer{ flex:1 1 auto; }
+.chip-row{ display:flex; gap:8px; }
+.chip{ padding:8px 12px; border-radius:999px; background:rgba(37,99,235,.16); border:1px solid rgba(37,99,235,.35); color:#dbeafe; font-weight:700; }
+:root[data-theme="light"] .chip{ background:#eaf2ff; border-color:#c7d7fe; color:#1e3a8a; }
+.chip.active{ background:#ef4444; border-color:#ef4444; color:#fff; }
+
+/* ====== Cards grid ====== */
+.host-grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:14px; }
+.host-card{
+  grid-column: span 12;
+  background: var(--team-card); border:1px solid rgba(2,6,23,.08); border-radius:18px; padding:16px;
+  transform: translateY(6px); opacity:0; animation: pop .5s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes pop{ to{ transform:none; opacity:1; } }
+@media (min-width:680px){ .host-card{ grid-column: span 6; } }
+@media (min-width:1024px){ .host-card{ grid-column: span 4; } }
+
+.hc-hed{ display:flex; gap:8px; align-items:center; justify-content:space-between; }
+.badge{ font-size:12px; padding:6px 8px; border-radius:8px; border:1px solid rgba(2,6,23,.08); background:rgba(2,6,23,.05); }
+.badge.sport.cricket{ background:rgba(34,197,94,.12); border-color:rgba(34,197,94,.35); }
+.badge.sport.football{ background:rgba(37,99,235,.12); border-color:rgba(37,99,235,.35); }
+.badge.sport.basketball{ background:rgba(249,115,22,.12); border-color:rgba(249,115,22,.35); }
+.pill{ font-size:12px; background:rgba(2,6,23,.05); border:1px solid rgba(2,6,23,.08); padding:6px 8px; border-radius:999px; }
+.hc-title{ font-weight:900; margin-top:6px; }
+.hc-sub{ color: var(--team-muted); font-size:13px; margin:2px 0 8px; }
+.hc-meta{ display:flex; gap:6px; flex-wrap:wrap; }
+.tag{ font-size:12px; padding:6px 8px; border-radius:8px; background:rgba(2,6,23,.05); border:1px solid rgba(2,6,23,.08); }
+.hc-actions{ display:flex; gap:8px; margin-top:10px; }
+
+/* ====== Modal (reuse tokens) ====== */
+.modal-wrap{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background: rgba(2,6,23,.6); z-index:9999; }
+.modal{ width:min(960px, 94vw); background: var(--team-card); color: var(--team-text);
+  border:1px solid rgba(2,6,23,.12); border-radius:18px; overflow:hidden; }
+.modal-hd{ display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid rgba(2,6,23,.08); }
+.modal-ttl{ font-weight:900; font-size:20px; }
+.modal-bd{ padding:14px 16px 16px; }
+.close{ background:transparent; border:none; font-size:22px; cursor:pointer; color: var(--team-text); }
+.tc-list{ margin:10px 0 12px 16px; display:grid; gap:8px; }
+.note{ background: rgba(2,6,23,.05); border:1px solid rgba(2,6,23,.08); padding:10px 12px; border-radius:10px; }
+.check{ display:flex; gap:10px; align-items:center; margin-top:6px; }
+.actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:12px; }
+
+/* ====== New Event form ====== */
+.host-new{ display:flex; flex-direction:column; gap:16px; }
+.hn-hero{ display:flex; gap:12px; align-items:center; }
+.hn-hero img{ width:32px; height:32px; }
+.hn-hero h1{ font-weight:900; margin-bottom:2px; }
+
+.hn-form{ display:flex; flex-direction:column; gap:14px; }
+.card{ background: var(--team-card); border:1px solid rgba(2,6,23,.1); border-radius:16px; padding:14px; }
+.card-title{ font-weight:900; margin-bottom:10px; }
+.grid{ display:grid; gap:12px; grid-template-columns: repeat(12, 1fr); }
+.field{ display:flex; flex-direction:column; gap:6px; grid-column: span 12; }
+@media (min-width:720px){
+  .field{ grid-column: span 6; }
+}
+label{ font-size:12px; color: var(--team-muted); }
+input, select, textarea{
+  background: var(--team-card); color: var(--team-text);
+  border:1px solid rgba(2,6,23,.15); border-radius:10px; padding:10px 12px; font:inherit;
+}
+textarea{ resize:vertical; }
+
+.seg{ display:flex; gap:8px; }
+.seg-btn{ padding:8px 12px; border-radius:10px; border:1px solid rgba(2,6,23,.12); background:transparent; cursor:pointer; font-weight:700; }
+.seg-btn.on{ background: rgba(59,130,246,.15); border-color: rgba(59,130,246,.45); color:#dbeafe; }
+:root[data-theme="light"] .seg-btn.on{ background: #eaf2ff; border-color:#c7d7fe; color:#1e3a8a; }
+
+.fee-box{
+  display:grid; grid-template-columns: repeat(12, 1fr); gap:8px; padding:10px; margin:8px 0 4px;
+  background: rgba(2,6,23,.04); border:1px solid rgba(2,6,23,.08); border-radius:12px;
+}
+.fee-box > div{ grid-column: span 6; display:flex; align-items:center; justify-content:space-between; }
+.fee-box .hr{ grid-column: 1 / -1; height:1px; background: rgba(2,6,23,.08); }
+.muted{ color: var(--team-muted); font-size:12px; margin-top:6px; }
+
+.form-actions{ display:flex; justify-content:flex-end; gap:10px; }
+
+/* ====== Buttons (reuse your theme) ====== */
+.btn{ display:inline-flex; align-items:center; justify-content:center; height:36px; padding:0 12px;
+  border-radius:10px; border:none; font-weight:800; cursor:pointer; text-decoration:none; }
+.btn.primary{ background: var(--team-ring); color:#fff; }
+.btn.ghost{ background: transparent; border:1px solid rgba(2,6,23,.12); color: var(--team-text); }
+.btn:disabled{ opacity:.6; cursor:not-allowed; }
+/* ===== Sections on /host ===== */
+.host-section{ margin-top: 18px; }
+.section-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.section-title{ font-weight:900; font-size:18px; }
+.empty{ padding:14px; border:1px dashed rgba(2,6,23,.18); border-radius:12px; opacity:.8; }
+
+/* ===== Event details page ===== */
+.event-page{ display:flex; flex-direction:column; gap:14px; }
+.event-hero{
+  display:grid; grid-template-columns: 1fr 320px; gap:12px;
+  background: var(--team-card); border:1px solid rgba(2,6,23,.1); padding:14px; border-radius:18px;
+}
+@media (max-width:900px){ .event-hero{ grid-template-columns: 1fr; } .hero-right{ order:-1; } }
+
+.hero-right .mini-vid{ width:100%; height:200px; object-fit:cover; border-radius:12px; }
+.ev-title{ font-weight:900; font-size:clamp(20px, 2.4vw, 28px); margin:4px 0; }
+.ev-sub{ color: var(--team-muted); }
+.ev-meta{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+
+.ev-grid{
+  display:grid; grid-template-columns: 1fr 360px; gap:14px;
+}
+@media (max-width:1000px){ .ev-grid{ grid-template-columns: 1fr; } }
+.side{ display:flex; flex-direction:column; gap:14px; }
+.mapwrap{ position:relative; width:100%; height:240px; border-radius:12px; overflow:hidden; }
+.mapwrap iframe{ width:100%; height:100%; }
+
+.schedule{ display:grid; gap:8px; margin-top:4px; }
+.schedule .round{ font-weight:800; }
+.schedule li{ display:flex; gap:8px; }
+
+.policies{ margin-left:18px; display:grid; gap:6px; }
+.deadline{ margin-top:8px; }
+
+.reg-form{ display:flex; flex-direction:column; gap:8px; }
+.more{ display:grid; gap:8px; }
+.more-item{ display:flex; gap:8px; align-items:center; text-decoration:none; padding:8px; border-radius:10px; border:1px solid rgba(2,6,23,.08); }
+.more-item:hover{ background: rgba(2,6,23,.04); }
+.more-item .emoji{ width:22px; text-align:center; }
+/* ==== Enhanced register card ==== */
+.reg-card { overflow: hidden; }
+.reg-head { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
+.reg-meta { display:flex; gap:6px; flex-wrap:wrap; }
+.pill.soft{
+  background: rgba(2,6,23,.05);
+  border:1px solid rgba(2,6,23,.08);
+  color: var(--team-text);
+  padding:6px 10px; border-radius:999px; font-size:12px;
+}
+
+.subhead{
+  font-weight:900; margin-top:8px; margin-bottom:6px;
+  font-size:13px; letter-spacing:.2px;
+  opacity:.9;
+}
+
+.grid2{ display:grid; gap:10px; grid-template-columns: 1fr 1fr; }
+@media (max-width:620px){ .grid2{ grid-template-columns: 1fr; } }
+
+.reg-form .field input,
+.reg-form .field select,
+.reg-form .field textarea{
+  transition: border-color .15s ease, box-shadow .15s ease, transform .06s ease;
+}
+.reg-form .field input:focus,
+.reg-form .field select:focus,
+.reg-form .field textarea:focus{
+  outline:none;
+  border-color: rgba(59,130,246,.55);
+  box-shadow: 0 0 0 4px rgba(59,130,246,.18);
+}
+.reg-form .field input:hover,
+.reg-form .field select:hover,
+.reg-form .field textarea:hover{
+  transform: translateY(-1px);
+}
+
+.pillset{ display:flex; gap:8px; flex-wrap:wrap; }
+.pill-opt{
+  border:1px solid rgba(2,6,23,.12);
+  background:transparent;
+  padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700;
+  transition: background .15s, border-color .15s, transform .06s;
+}
+.pill-opt:hover{ transform: translateY(-1px); }
+.pill-opt.on{
+  background: rgba(59,130,246,.16);
+  border-color: rgba(59,130,246,.45);
+  color: #dbeafe;
+}
+:root[data-theme="light"] .pill-opt.on{
+  background: #eaf2ff; border-color:#c7d7fe; color:#1e3a8a;
+}
+
+.btn.big{ height:42px; font-size:15px; border-radius:12px; }
+
+.fade-in{ animation: fadein .35s ease both; }
+@keyframes fadein { from{ opacity:0; transform: translateY(4px); } to{ opacity:1; transform:none; } }
+
+.slide-in{ animation: slidein .35s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes slidein { from{ opacity:0; transform: translateY(6px) scale(.99); } to{ opacity:1; transform:none; } }
+
+.help{ font-size:11px; color: var(--team-muted); }
+/* ===== Fix overlaps / spacing ===== */
+.reg-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.reg-meta{ display:flex; gap:6px; flex-wrap:wrap; }
+
+/* ===== Stack container on left (multiple cards neatly) ===== */
+.stack{ display:flex; flex-direction:column; gap:14px; }
+
+/* ===== Organizer row ===== */
+.org-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px; }
+.org-left{ display:flex; align-items:center; gap:10px; }
+.org-avatar{ width:44px; height:44px; border-radius:12px; object-fit:cover; background:#11182710; display:grid; place-items:center; font-weight:900; }
+.org-avatar.initials{ color:var(--team-text); }
+.org-name{ font-weight:900; display:flex; align-items:center; gap:6px; }
+.verify{ background:#22c55e; color:#fff; font-size:11px; padding:2px 6px; border-radius:999px; }
+.org-type{ font-size:12px; color:var(--team-muted); }
+.org-contact{ display:flex; gap:6px; flex-wrap:wrap; }
+
+/* ===== About block ===== */
+.about-block{ display:flex; flex-direction:column; gap:8px; }
+.about-line{ display:flex; gap:8px; align-items:center; }
+.about-line .k{ font-size:12px; color:var(--team-muted); font-weight:800; padding:4px 8px; border-radius:999px; background:rgba(2,6,23,.05); }
+.about-line .v{ font-weight:700; }
+.about-text{ margin:0; line-height:1.6; }
+
+/* ===== Timeline ===== */
+.timeline{ position:relative; padding-left:18px; display:grid; gap:12px; }
+.tl-item{ position:relative; display:flex; gap:10px; }
+.dot{ position:absolute; left:-10px; top:6px; width:10px; height:10px; border-radius:50%; background:var(--team-ring); box-shadow:0 0 0 4px rgba(59,130,246,.15); }
+.tl-body{ display:flex; flex-direction:column; }
+.tl-title{ font-weight:900; }
+.tl-sub{ color:var(--team-muted); }
+
+/* ===== Rules grid ===== */
+.rules-grid{ display:grid; gap:12px; grid-template-columns: repeat(3,1fr); }
+@media (max-width:900px){ .rules-grid{ grid-template-columns:1fr; } }
+.bullets{ margin-left:18px; display:grid; gap:6px; }
+.bullets.bad li{ color:#ef4444; }
+.subhead{ font-weight:900; margin:8px 0 4px; }
+.subhead.bad{ color:#ef4444; }
+
+/* Minor polish */
+.card .card-title{ margin-bottom:6px; }  /* remove big white gaps */
+/* ====== HOTFIX: rare text/pill overlap + extra spacing ====== */
+
+/* 1) Make each card its own paint island to avoid ghost text while animating */
+.card { contain: layout paint; backface-visibility: hidden; transform: translateZ(0); }
+
+/* 2) Organizer contact chips never escape their row */
+.org-row { flex-wrap: wrap; }
+.org-contact {
+  display:flex; gap:6px; flex-wrap:wrap; align-items:center;
+  position: relative; /* ensure normal flow */
+}
+.org-contact .pill, .org-contact .pill.soft {
+  display:inline-flex; align-items:center; white-space:nowrap;
+  max-width:100%; overflow:hidden; text-overflow:ellipsis;
+  position: relative; /* kill any inherited absolute */
+}
+
+/* 3) Headings render cleanly (no doubled paint) */
+.card-title, .section-title, .reg-head h3 {
+  line-height: 1.2;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 4) Registration card header can wrap without overlay */
+.reg-head { flex-wrap: wrap; position: relative; z-index: 1; }
+
+/* 5) Tighter defaults on paragraphs to remove big blank gaps */
+.stack p, .card p { margin: 0.25rem 0; }
+
+/* 6) Timeline & badges—no jitter while sliding in */
+.timeline, .pill, .pill.soft, .pill-opt, .tag, .badge { transform: translateZ(0); }
+@media (max-width: 560px){
+  .org-contact { width: 100%; }
+}
+/* --- Register card header: never overlap the title --- */
+.reg-head{
+  display: grid !important;
+  grid-template-columns: 1fr;        /* title full width */
+  grid-auto-rows: min-content;
+  row-gap: 6px;
+  align-items: start;
+  position: relative; z-index: 1;
+}
+
+.reg-head .card-title{               /* keep it tight */
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* meta pills always below the title, wrap nicely */
+.reg-head .reg-meta{
+  margin-top: 2px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* pills: compact + never float/overpaint */
+.reg-head .reg-meta .pill,
+.reg-head .reg-meta .pill.soft{
+  position: static;                  /* ensure normal flow */
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* kill any tiny lifts that could cause ghost painting in header */
+.reg-head *, .reg-head .reg-meta *{
+  transform: none !important;
+}
+/* Host cards: fix any overlap + add organizer strip */
+.host-card{
+  contain: layout paint;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.hc-hed{
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:8px; margin-bottom:6px;
+}
+
+.hc-host{ display:flex; align-items:center; gap:10px; margin-top:2px; }
+.hc-ava{
+  width:36px; height:36px; border-radius:10px; object-fit:cover;
+  background:#0b13241a; display:grid; place-items:center; font-weight:900;
+}
+.hc-ava.initials{ color: var(--team-text); }
+.hc-host-meta .name{ font-weight:800; display:flex; align-items:center; gap:6px; }
+.hc-host-meta .type{ font-size:12px; color: var(--team-muted); }
+.verify{ background:#22c55e; color:#fff; font-size:11px; padding:1px 6px; border-radius:999px; }
+
+.hc-title{ margin-top:6px; font-weight:900; }
+.hc-sub{ color: var(--team-muted); }
+.hc-meta{ display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+.hc-actions{ display:flex; gap:10px; margin-top:12px; }
+
+/* Make pills/badges paint cleanly on all GPUs */
+.badge, .pill, .tag { transform: translateZ(0); }
+/* ====== MEDIA CARD LAYOUT (big photo cards) ====== */
+.media-grid{
+  display:grid;
+  gap:16px;
+  grid-template-columns: repeat(12, 1fr);
+}
+@media (max-width:1100px){ .media-grid{ grid-template-columns: repeat(8,1fr); } }
+@media (max-width:720px){ .media-grid{ grid-template-columns: repeat(4,1fr); } }
+
+/* 6-col cards on desktop, 8-col grid → 4-col on tablet, 2-col on mobile */
+.media-card{
+  grid-column: span 6;
+  position:relative;
+  border-radius:18px;
+  overflow:hidden;
+  min-height: 260px;
+  background:#0b1324;
+  box-shadow: 0 12px 24px rgba(2,6,23,.18);
+  contain: layout paint; backface-visibility: hidden; transform: translateZ(0);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+@media (max-width:1100px){ .media-card{ grid-column: span 8; } }
+@media (max-width:720px){ .media-card{ grid-column: span 4; } }
+.media-card:hover{ transform: translateY(-4px); box-shadow: 0 16px 32px rgba(2,6,23,.22); }
+
+.media-img{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover;
+}
+.media-fallback{
+  display:grid; place-items:center; font-size:56px; color:#fff2;
+  background: linear-gradient(135deg, #1e293b, #0b1324);
+}
+
+.media-overlay{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,.55) 100%);
+  pointer-events:none;
+}
+
+/* Top row */
+.media-top{
+  position:absolute; top:12px; left:12px; right:12px;
+  display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;
+}
+.pill.light{ background:rgba(255,255,255,.18); color:#fff; border:1px solid rgba(255,255,255,.25); }
+
+/* Organizer strip */
+.media-host{
+  position:absolute; left:12px; bottom:108px; display:flex; align-items:center; gap:10px;
+}
+.media-ava{
+  width:40px; height:40px; border-radius:12px; background:#fff2; object-fit:cover;
+  display:grid; place-items:center; color:#fff; font-weight:900;
+}
+.media-ava.initials{ backdrop-filter:saturate(150%) blur(2px); }
+.host-meta .name{ color:#fff; font-weight:900; display:flex; gap:6px; align-items:center; }
+.host-meta .type{ color:#fff9; font-size:12px; }
+.verify{ background:#22c55e; color:#fff; font-size:11px; padding:0 6px; border-radius:999px; }
+
+/* Bottom block */
+.media-bottom{
+  position:absolute; left:12px; right:12px; bottom:12px;
+  display:flex; flex-direction:column; gap:8px;
+  color:#fff;
+}
+.media-title{ font-size:20px; font-weight:900; margin:0; text-shadow:0 2px 10px rgba(0,0,0,.35); }
+.media-sub{ font-size:13px; color:#ffffff; text-shadow:0 1px 6px rgba(0,0,0,.35); }
+
+.media-tags{ display:flex; gap:6px; flex-wrap:wrap; }
+.tag.light{
+  background: rgba(255,255,255,.16);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.28);
+}
+
+/* CTA */
+.media-cta{ display:flex; gap:10px; flex-wrap:wrap; }
+.btn.white{
+  background:#fff; color:#0b1324; border:1px solid #fff;
+}
+:root[data-theme="light"] .media-card{ background:#0b1324; } /* keep same look in both modes */
+/* --- Media card overlap fix: stack everything inside .media-bottom --- */
+
+/* Make the card a bit taller so the bottom stack breathes */
+.media-card{ min-height: 320px; }
+
+/* Bottom overlay: single column stack (host + title + tags + cta) */
+.media-bottom{
+  position: absolute;
+  left: 12px; right: 12px; bottom: 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 3;
+}
+
+/* Host strip now lives INSIDE the bottom stack (no absolute positioning) */
+.media-host{
+  position: static !important;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 2px;
+}
+
+/* Keep clear z-ordering for safety */
+.media-top{ z-index: 4; }
+.media-overlay{ z-index: 1; }
+.media-img{ z-index: 0; }
+
+/* Extra: prevent chips from colliding on small widths */
+.media-top{ gap: 8px; align-items: center; flex-wrap: wrap; }
+
+/* Text is crisp; no double paint */
+.media-title{ line-height: 1.25; text-shadow: 0 2px 10px rgba(0,0,0,.35); }
+/* City chip: always top-right, above image/overlay */
+.media-city{
+  position:absolute;
+  top:12px;
+  right:12px;
+  z-index:5;              /* higher than overlay/badge */
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+}
+
+/* media-top ab sirf left badge ke liye */
+.media-top{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:auto;             /* prevent stretching across */
+  display:flex;
+  gap:8px;
+  z-index:4;
+}
+/* City chip: always top-right, never stretch */
+.media-city{
+  position:absolute;
+  top:12px;
+  right:12px;
+  z-index:6;
+  display:inline-flex !important;
+  align-items:center;
+  white-space:nowrap;
+  width:auto !important;
+}
+
+/* Sport badge on the left only */
+.media-top{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:auto;                 /* stop it from spanning */
+  display:flex;
+  gap:8px;
+  z-index:5;
+}
+
+/* Make sure all pills are inline-sized (no full-width bars) */
+.pill, .pill.light, .tag, .badge{
+  display:inline-flex !important;
+  width:auto !important;
+  max-width:80vw;
+  align-items:center;
+  gap:6px;
+}
+/* City chip: always top-right, no stretch */
+.media-city{
+  position:absolute;
+  top:12px;
+  right:12px;
+  left:auto !important;
+  z-index:6;
+  display:inline-flex !important;
+  align-items:center;
+  white-space:nowrap;
+  width:auto !important;
+  inline-size:max-content;
+}
+
+/* Sport badge only on left */
+.media-top{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:auto !important;   /* stop spanning across the card */
+  display:flex;
+  gap:8px;
+  z-index:5;
+}
+
+/* Scope: prevent any pill from becoming full-width inside a media card */
+.media-card .pill,
+.media-card .pill.light,
+.media-card .tag,
+.media-card .badge{
+  display:inline-flex !important;
+  width:auto !important;
+  max-width: 80vw;
+  align-items:center;
+  gap:6px;
+}
+
+/* Ensure the card is the positioning context */
+.media-card{ position:relative; }
+/* Terms link + checkbox row */
+.agree-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+.agree-row input[type="checkbox"]{
+  inline-size: 18px; block-size: 18px;
+}
+
+.inline-link{
+  color: var(--link, #2563eb);
+  text-decoration: underline;
+  font-weight: 600;
+}
+.inline-link:hover{ text-decoration: none; }
+
+/* Action buttons row */
+.form-actions{
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+/* --- New event page hero --- */
+.hn-hero{
+  display:flex;
+  align-items:center;           /* icon & heading vertically equal */
+  gap:12px;
+  margin: 8px 0 20px;
+}
+
+.hn-icon{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;                /* fixed box so size stable */
+  object-fit:contain;
+}
+
+.hn-headings h1{
+  margin:0;                     /* remove default top gap */
+  line-height:1.2;
+}
+
+.hn-headings p{
+  margin:6px 0 0;
+  opacity:.85;
+  font-size:14px;
+}
+
+/* smaller screens */
+@media (max-width: 600px){
+  .hn-icon{ width:24px; height:24px; }
+  .hn-headings h1{ font-size:22px; }
+}
+/* Map picker box */
+.map-pick{
+  width: 100%;
+  height: 360px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+}
+
+/* layout helpers used above */
+.grid-2{
+  display:grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 16px;
+}
+.coords-row{
+  display:flex;
+  gap:10px;
+}
+.coords-row input{
+  width:100%;
+}
+.hint{
+  margin:8px 0;
+  opacity:.75;
+  font-size: 13px;
+}
+
+/* hero alignment (from earlier step) */
+.hn-hero{
+  display:flex; align-items:center; gap:12px; margin:8px 0 20px;
+}
+.hn-icon{ width:28px; height:28px; flex:0 0 28px; object-fit:contain; }
+.hn-headings h1{ margin:0; line-height:1.2; }
+.hn-headings p{ margin:6px 0 0; opacity:.85; font-size:14px; }
+
+@media (max-width: 900px){
+  .grid-2{ grid-template-columns: 1fr; }
+  .map-pick{ height: 300px; }
+}
+/* small size helper (if not already in your base styles) */
+.btn.small { padding: 8px 12px; font-size: 13px; border-radius: 10px; }
+
+/* red variant */
+.btn.danger{ background:#ef4444; color:#fff; }
+.btn.danger:hover{ background:#dc2626; transform: translateY(-1px); }
+.btn.danger:disabled{ opacity:.6; cursor:not-allowed; }
+/* ---------- Host hero readability & sizing ---------- */
+.host-hero{
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.host-video{
+  width: 100%;
+  height: min(48vh, 420px);
+  object-fit: cover;
+  display: block;
+}
+
+/* darker veil so white text pops in light & dark modes */
+.host-veil{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,.55) 0%,
+    rgba(0,0,0,.35) 40%,
+    rgba(0,0,0,.65) 100%
+  );
+}
+
+.host-hero-content{
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  color: #fff;                 /* force white in both themes */
+}
+
+.host-title{
+  margin: 0 0 8px;
+  color: #fff;                 /* force white */
+  font-weight: 800;
+  letter-spacing: .2px;
+  line-height: 1.1;
+  font-size: clamp(32px, 5vw, 54px);   /* ⬅️ bigger */
+  text-shadow: 0 6px 24px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.45);
+}
+
+.host-sub{
+  margin: 0 0 16px;
+  max-width: 680px;
+  color: rgba(255,255,255,.95);        /* near-white */
+  font-size: clamp(14px, 1.6vw, 18px);
+  text-shadow: 0 2px 6px rgba(0,0,0,.45);
+}
+
+/* CTA buttons on hero over video */
+.host-hero-cta .btn{ margin-right: 12px; }
+.host-hero .btn.ghost{
+  color:#fff;
+  border-color: rgba(255,255,255,.7);
+  background: rgba(255,255,255,.12);
+}
+.host-hero .btn.ghost:hover{
+  background: rgba(255,255,255,.18);
+  border-color:#fff;
+}
+/* ---------- FINAL OVERRIDES FOR HOST HERO ---------- */
+.host-hero{
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* keep the veil darker so white text always pops */
+.host-veil{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,.55) 0%,
+    rgba(0,0,0,.35) 40%,
+    rgba(0,0,0,.70) 100%);
+}
+
+.host-hero-content{
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+}
+
+/* ⬇️ Force white + bigger no matter what (wins against prior rules) */
+.host-hero .host-hero-content .host-title{
+  color:#fff !important;
+  font-weight:800;
+  letter-spacing:.2px;
+  line-height:1.1;
+  font-size: clamp(34px, 5.2vw, 56px) !important;
+  margin:0 0 8px;
+  text-shadow: 0 6px 24px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.45);
+}
+
+.host-hero .host-hero-content .host-sub{
+  color: rgba(255,255,255,.96) !important;
+  font-size: clamp(14px, 1.6vw, 18px);
+  margin:0 0 16px;
+  text-shadow: 0 2px 6px rgba(0,0,0,.45);
+}
+
+.host-hero-cta .btn{ margin-right:12px; }
+.host-hero .btn.ghost{
+  color:#fff;
+  border-color: rgba(255,255,255,.7);
+  background: rgba(255,255,255,.12);
+}
+.host-hero .btn.ghost:hover{
+  background: rgba(255,255,255,.18);
+  border-color:#fff;
+}
+/* Darker blue just for the hero buttons */
+.host-hero .btn.primary{
+  background: #1d4ed8;        /* a touch darker */
+  border-color: #1d4ed8;
+  color: #fff;
+}
+.host-hero .btn.primary:hover{
+  background: #1b46c6;        /* hover a bit darker */
+  border-color: #1b46c6;
+  transform: translateY(-1px);
+}
+.host-hero .btn.primary:active{
+  background: #183eaf;        /* press */
+  border-color: #183eaf;
+  transform: none;
+}
+.host-hero .btn.primary:focus-visible{
+  box-shadow: 0 0 0 3px rgba(29,78,216,.35);
+  outline: none;
+}

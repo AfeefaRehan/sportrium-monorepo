@@ -1,0 +1,106 @@
+/* =========================
+   Shelf (section + title)
+   ========================= */
+.shelf{
+  margin: 28px 0;
+  display: grid;
+  gap: 10px;
+}
+
+.shelf > h3{
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* =========================
+   Horizontal scroller used by <Shelf />
+   ========================= */
+.shelf-scroll{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 280px);
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+}
+
+.shelf-scroll > *{
+  scroll-snap-align: start;
+}
+
+/* Optional scrollbar styling (non-intrusive) */
+.shelf-scroll::-webkit-scrollbar{ height: 8px; }
+.shelf-scroll::-webkit-scrollbar-thumb{
+  background: rgba(120,132,158,.35);
+  border-radius: 8px;
+}
+
+/* =========================
+   Grid variants (kept for other shelves/usage)
+   ========================= */
+.shelf-content{
+  display: grid;
+  gap: 16px;
+}
+
+.score-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+/* =========================
+   Score card (kept for reuse)
+   ========================= */
+.score-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  position: relative;
+}
+
+.score-card .league{
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.score-card .teams{
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.score-card .score{
+  font-size: 14px;
+  color: var(--text);
+}
+
+.status-dot{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--blue);
+}
+
+.status-dot.status-upcoming{
+  background: var(--muted);
+}
+
+.remind-wrap{ margin-top: 8px; }
+
+/* =========================
+   Dark mode depth
+   ========================= */
+[data-theme="dark"] .score-card{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}

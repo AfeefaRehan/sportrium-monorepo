@@ -1,0 +1,1 @@
+# What is this site?\nSportrium makes community sports simple: one place to browse fixtures, watch streams, join or host events, and handle tickets.\n

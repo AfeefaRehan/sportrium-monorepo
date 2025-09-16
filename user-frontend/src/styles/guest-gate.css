@@ -1,0 +1,154 @@
+/* ─────────────────────────────────────────────
+   Scroll lock while GuestGate is visible
+   ───────────────────────────────────────────── */
+html.guest-no-scroll,
+body.guest-no-scroll,
+#root.guest-no-scroll,
+.app-shell.guest-no-scroll {
+  overflow-y: hidden !important;
+}
+
+/* Allow scroll on very small viewports */
+@media (max-width: 768px), (max-height: 720px){
+  html.guest-no-scroll,
+  body.guest-no-scroll,
+  #root.guest-no-scroll,
+  .app-shell.guest-no-scroll {
+    overflow-y: auto !important;
+  }
+}
+
+/* Hide footer under the gate (prevents extra height) */
+.app-shell.guest-mode .footer { display: none !important; }
+
+/* ─────────────────────────────────────────────
+   Gate layout & sizing
+   ───────────────────────────────────────────── */
+.guest-gate{
+  min-height: calc(100dvh - var(--app-header-h, 72px));
+  display: grid !important;
+  place-items: center !important;
+  padding: clamp(16px, 3vw, 32px);
+  width: 100%;
+  overflow: hidden;
+}
+
+.guest-card{
+  width: min(820px, 92vw);
+  margin-inline: auto;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.guest-icon{
+  font-size: clamp(40px, 5.6vw, 64px);
+  line-height: 1;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.guest-title{
+  font-size: clamp(36px, 4.4vw, 54px);
+  line-height: 1.15;
+  margin: 6px 0 12px;
+}
+
+.guest-text{ font-size: 1.08rem; }
+
+.guest-actions{
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.guest-gate .btn{
+  padding: 12px 24px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease !important;
+  will-change: transform, box-shadow;
+  cursor: pointer;
+}
+
+/* ─────────────────────────────────────────────
+   Palette fallbacks
+   ───────────────────────────────────────────── */
+:root{
+  --brand-blue: #2563eb;
+  --brand-blue-hover: #1d4ed8;
+  --btn-primary-bg: #ff5a5f;
+  --btn-primary-hover-bg: #e74d52; /* darker red */
+}
+
+/* ─────────────────────────────────────────────
+   Log in (red)
+   ───────────────────────────────────────────── */
+.guest-gate .btn.primary{
+  background: var(--btn-primary-bg) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06) !important;
+}
+.guest-gate .btn.primary:hover{
+  background: var(--btn-primary-hover-bg) !important; /* darker red */
+  color: #111 !important;                              /* black text */
+  transform: translateY(-1px) !important;
+  box-shadow:
+    0 8px 24px rgba(231,77,82,.30),
+    inset 0 1px 0 rgba(255,255,255,.22) !important;
+}
+.guest-gate .btn.primary:active{
+  transform: translateY(0) !important;
+  box-shadow: 0 4px 12px rgba(231,77,82,.25) !important;
+}
+
+/* ─────────────────────────────────────────────
+   Create account (blue)
+   ───────────────────────────────────────────── */
+.guest-gate .btn.ghost{
+  background: var(--brand-blue) !important;
+  color: #fff !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06) !important;
+}
+.guest-gate .btn.ghost:hover{
+  background: #fff !important;                            /* white body */
+  color: #111 !important;                                 /* black text */
+  border-color: var(--brand-blue) !important;             /* blue outline */
+  transform: translateY(-1px) !important;
+  box-shadow:
+    0 8px 24px rgba(37,99,235,.25),
+    inset 0 1px 0 rgba(255,255,255,.22) !important;
+}
+
+/* Disabled still readable (if you disable it anywhere) */
+.guest-gate .btn.ghost:disabled{
+  background: color-mix(in srgb, var(--brand-blue) 60%, #000) !important;
+  color: rgba(255,255,255,.85) !important;
+  opacity: .75 !important;
+  transform: none !important;
+}
+
+/* ─────────────────────────────────────────────
+   Dark mode safety (works for .dark or .theme-dark)
+   ───────────────────────────────────────────── */
+.dark .guest-gate .btn.ghost,
+.theme-dark .guest-gate .btn.ghost{
+  background: var(--brand-blue) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+.dark .guest-gate .btn.ghost:hover,
+.theme-dark .guest-gate .btn.ghost:hover{
+  background: #fff !important;
+  color: #111 !important;
+  border-color: var(--brand-blue) !important;
+}
+
+.dark .guest-gate .btn.primary:hover,
+.theme-dark .guest-gate .btn.primary:hover{
+  background: var(--btn-primary-hover-bg) !important;
+  color: #111 !important;
+}

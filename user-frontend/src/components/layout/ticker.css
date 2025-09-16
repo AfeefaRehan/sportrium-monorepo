@@ -1,0 +1,70 @@
+/* =========================
+   Ticker (marquee-style)
+   ========================= */
+.ticker{
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 0;
+  margin: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+
+  /* subtle edge fade so text doesn’t hard-cut at bounds */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+}
+
+/* Moving track */
+.ticker-track{
+  display: inline-block;
+  padding-left: 100%;                 /* allows the strip to enter from the right */
+  animation: ticker-scroll 20s linear infinite;
+}
+
+/* Pause on hover (nice for readability) */
+.ticker:hover .ticker-track{
+  animation-play-state: paused;
+}
+
+/* Items */
+.ticker-item{
+  display: inline-block;
+  margin: 0 28px;
+  color: var(--muted);
+  opacity: .95;
+}
+.ticker-item.live{
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* Animation */
+@keyframes ticker-scroll{
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+/* Dark mode surface + border */
+[data-theme="dark"] .ticker{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.10);
+  color: #eee;
+}
+
+/* Optional alt style (kept from your file, for decorative uses) */
+.ticker-strip{
+  background: linear-gradient(90deg, rgba(30,78,216,.08), transparent);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 8px;
+}
+
+/* Reduced motion: stop scrolling, keep content visible */
+@media (prefers-reduced-motion: reduce){
+  .ticker-track{ animation: none; padding-left: 0; }
+}

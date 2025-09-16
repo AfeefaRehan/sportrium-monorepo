@@ -1,0 +1,65 @@
+/* =========================
+   Match rail (horizontal)
+   ========================= */
+.match-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr);
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;                  /* Firefox */
+}
+.match-rail::-webkit-scrollbar { height: 8px; }   /* WebKit */
+.match-rail::-webkit-scrollbar-thumb {
+  background: rgba(120,132,158,.35);
+  border-radius: 8px;
+}
+
+/* =========================
+   Match card
+   ========================= */
+.match-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+  scroll-snap-align: start;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.match-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.14);
+  border-color: color-mix(in srgb, var(--border) 50%, transparent);
+}
+
+/* Content */
+.match-card .teams {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 800;
+}
+.match-card .teams span { opacity: .6; font-weight: 600; }
+.match-card .score { font-weight: 900; }
+.match-card .meta { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.match-card .actions { display: flex; gap: 8px; }
+
+/* =========================
+   Dark mode depth
+   ========================= */
+[data-theme="dark"] .match-card {
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .match-card { transition: none; }
+  .match-card:hover { transform: none; box-shadow: none; }
+}

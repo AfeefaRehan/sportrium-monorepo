@@ -1,0 +1,354 @@
+/* ===== Big header ===== */
+.contact-header{
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 20px 16px 6px;
+}
+.contact-header h1{
+  font-size: clamp(32px, 4.2vw, 44px);
+  margin: 0 0 4px;
+}
+.contact-header .lead{
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ===== Layout wrappers ===== */
+.contact-page{
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 16px 48px;
+}
+.top-grid{
+  display: grid;
+  grid-template-columns: 1.15fr .85fr; /* left form | right map */
+  gap: 24px;
+  margin-top: 16px;
+}
+
+/* ===== Cards ===== */
+.contact-card, .map-card{
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(13,27,42,.06);
+}
+
+/* ===== Form ===== */
+.contact-form{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.contact-form .full{ grid-column: 1 / -1; }
+.contact-form label{ font-weight: 600; font-size: 14px; }
+.contact-form input, .contact-form textarea, .contact-form select{
+  width: 100%;
+  height: 44px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--surface-2);
+  background: #fff;
+}
+.contact-form textarea{ min-height: 120px; resize: vertical; }
+
+.form-status{ margin-left: 10px; font-size: 14px; }
+.form-status.ok{ color: #1a7f37; }
+.form-status.err{ color: #b42318; }
+
+.alt-contact{ margin-top: 10px; color: var(--muted); }
+
+/* ===== Map ===== */
+.map-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 12px; }
+.map-head h3{ margin: 0; }
+.map-wrap{
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--surface-2);
+  aspect-ratio: 16 / 9;
+}
+
+/* ===== Info grid (lower blocks) ===== */
+.info-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 20px;
+}
+.mini-card{
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 6px 18px rgba(13,27,42,.05);
+}
+.mini-card h4{ margin: 0 0 6px; }
+.mini-card p{ margin: 0; }
+.mini-card .icn{
+  height: 36px; width: 36px; flex: 0 0 36px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--surface-2);
+  font-size: 18px;
+}
+
+.hours{ list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+
+.socials .social-row{
+  display:flex; flex-wrap:wrap; gap:10px;
+}
+.socials .social-row a{
+  font-size: 14px; font-weight: 600;
+  background:#fff; border:1px dashed var(--surface-2);
+  padding:6px 10px; border-radius:999px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px){
+  .top-grid{ grid-template-columns: 1fr; }
+  .info-grid{ grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 640px){
+  .contact-form{ grid-template-columns: 1fr; }
+  .info-grid{ grid-template-columns: 1fr; }
+}
+/* ===== Info grid (lower blocks) — 4 cards ===== */
+.info-grid{
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+.info-grid--4{
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.mini-card{
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 6px 18px rgba(13,27,42,.05);
+}
+.mini-card h4{ margin: 0 0 6px; }
+.mini-card p{ margin: 0; }
+
+.mini-card .icn{
+  height: 36px; width: 36px; flex: 0 0 36px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--surface-2);
+  font-size: 18px;
+}
+
+/* Chips / buttons inside cards */
+.chip{
+  display:inline-block;
+  margin-top:8px;
+  font-size: 14px; font-weight: 600;
+  background:#fff; border:1px dashed var(--surface-2);
+  padding:6px 10px; border-radius:999px;
+}
+
+/* Hours list (two columns: day | time) */
+.hours-list{ list-style:none; padding:0; margin:0; display:grid; gap:6px; }
+.hours-list li{ display:flex; justify-content:space-between; gap:12px; }
+.hours-list li span:first-child{ color:var(--muted); min-width:48px; }
+
+/* Social icons row */
+.social-icons{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+.social-icons .si{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:14px; font-weight:600;
+  background:#fff; border:1px dashed var(--surface-2);
+  padding:6px 10px; border-radius:999px;
+}
+
+/* Mini map card uses a vertical layout */
+.mini-card.mini-map{
+  flex-direction: column;
+}
+.mini-card.mini-map .mapthumb{
+  overflow:hidden; border-radius:10px; border:1px solid var(--surface-2);
+  width:100%; aspect-ratio: 16/10;
+}
+
+/* Responsive: 4 → 2 → 1 columns */
+@media (max-width: 1200px){
+  .info-grid--4{ grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 1024px){
+  .info-grid--4{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px){
+  .info-grid--4{ grid-template-columns: 1fr; }
+}
+/* Theme-aware chips & social badges (page-scoped) */
+:root .chip,
+:root .social-icons .si{
+  /* Light theme remains white chips, use dark text for contrast */
+  color: var(--ink);
+}
+
+/* Dark mode: make chips darker and text light for readability */
+[data-theme="dark"] .chip,
+[data-theme="dark"] .social-icons .si{
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border-color: rgba(154,167,199,.35);
+}
+
+/* (optional) make the mini cards a hair darker in dark mode for depth */
+[data-theme="dark"] .mini-card{
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+/* ===== Info grid (lower blocks) — 3 cards, centered & responsive ===== */
+.info-grid{
+  max-width: var(--page-max);
+  margin: 20px auto 0;          /* centers the whole row */
+  display: grid;
+  gap: 16px;
+  align-items: stretch;          /* same height feel */
+}
+
+/* Desktop: 3 equal columns filling the row */
+.info-grid--3{
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+}
+
+/* Tablet: 2 columns */
+@media (max-width: 1024px){
+  .info-grid--3{
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+  }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 640px){
+  .info-grid--3{
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Card baseline — keep existing look but make sure they stretch evenly */
+.mini-card{
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: 0 6px 18px rgba(13,27,42,.05);
+  height: 100%;                  /* make each card fill its grid track */
+}
+.mini-card h4{ margin: 0 0 6px; }
+.mini-card p{ margin: 0; }
+
+.mini-card .icn{
+  height: 36px; width: 36px; flex: 0 0 36px;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--surface-2);
+  font-size: 18px;
+}
+
+/* Chips & socials (unchanged from before, keep your dark-mode fixes) */
+.chip{
+  display:inline-block; margin-top:8px;
+  font-size:14px; font-weight:600;
+  background:#fff; border:1px dashed var(--surface-2);
+  padding:6px 10px; border-radius:999px;
+}
+.social-icons{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+.social-icons .si{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:14px; font-weight:600;
+  background:#fff; border:1px dashed var(--surface-2);
+  padding:6px 10px; border-radius:999px;
+}
+
+/* Dark mode readability (keep if you already added) */
+:root .chip,
+:root .social-icons .si{ color: var(--ink); }
+[data-theme="dark"] .chip,
+[data-theme="dark"] .social-icons .si{
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border-color: rgba(154,167,199,.35);
+}
+/* ====== Contact HERO (page-scoped) ====== */
+.contact-hero{
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(13,27,42,.06);
+  margin-bottom: 16px;
+}
+
+.hero-grid{
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.hero-copy h1{
+  margin: .25rem 0 .5rem;
+  font-size: clamp(28px, 4.6vw, 40px);
+}
+
+.hero-copy .lead{
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+
+.hero-points{
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.hero-media{
+  min-height: 240px;
+  border: 1px solid var(--surface-2);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Responsive */
+@media (max-width: 1024px){
+  .hero-grid{ grid-template-columns: 1fr; }
+  .hero-media{ min-height: 200px; }
+}
+/* === Dark mode: make hero text readable === */
+[data-theme="dark"] .contact-hero .hero-copy h1{
+  color: var(--text);              /* strong light text */
+}
+
+[data-theme="dark"] .contact-hero .hero-copy .lead{
+  color: rgba(255,255,255,.85);    /* brighter paragraph */
+}
+
+[data-theme="dark"] .contact-hero .hero-points{
+  color: var(--text);              /* bullet list color */
+}
+
+/* (optional) if the bullets still feel faint on your theme, uncomment: */
+/*
+[data-theme="dark"] .contact-hero .hero-points li { opacity: .95; }
+*/

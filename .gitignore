@@ -1,0 +1,27 @@
+﻿# Node / monorepo
+**/node_modules/
+**/dist/
+**/build/
+**/.cache/
+**/coverage/
+**/.vite/
+**/.next/
+**/.nuxt/
+
+# env & secrets
+.env
+.env.*
+**/.env
+**/.env.*
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

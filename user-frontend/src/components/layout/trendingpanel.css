@@ -1,0 +1,123 @@
+/* :root{
+  --cream:#F4F1DE; --coral:#E07A5F; --navy:#3D405B; --sage:#81B29A; --sand:#F2CC8F;
+
+  /* token fallbacks (use your global layout tokens if present) */
+  /* --surface: #fff;
+  --text:#1a1f2b;
+  --muted:#667085;
+  --border:#e7e8ee;
+}
+
+[data-theme="dark"]{
+  --surface:#121724;
+  --text:#f6f7fb;
+  --muted:#a5afc0;
+  --border:#23283a;
+} */ */
+
+/* =========================
+   Panel
+   ========================= */
+.trending-panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:12px;
+  display:grid;
+  gap:10px;
+  height:100%;
+  min-height:220px;
+}
+
+.tp-head{
+  font-weight:900;
+  letter-spacing:.2px;
+  color:var(--text);
+}
+
+/* =========================
+   List
+   ========================= */
+.tp-list{
+  display:grid;
+  gap:10px;
+  max-height:480px;
+  overflow:auto;
+  padding-right:4px;
+  scrollbar-width: thin; /* Firefox */
+}
+
+.tp-list::-webkit-scrollbar{ width:8px; }
+.tp-list::-webkit-scrollbar-thumb{
+  background: color-mix(in srgb, var(--border) 85%, transparent);
+  border-radius: 8px;
+}
+
+/* =========================
+   Item
+   ========================= */
+.tp-item{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  text-decoration:none;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background: rgba(0,0,0,.02);
+  color: var(--text);
+
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, outline-color .12s ease;
+}
+
+[data-theme="dark"] .tp-item{
+  background: rgba(255,255,255,.04);
+}
+
+.tp-item:hover{
+  background:#fff;
+  outline:2px solid var(--sand, #F2CC8F);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.10);
+}
+
+[data-theme="dark"] .tp-item:hover{
+  background: rgba(255,255,255,.06);
+  box-shadow: 0 10px 24px rgba(0,0,0,.30);
+}
+
+/* Keyboard focus */
+.tp-item:focus-visible{
+  outline:2px solid var(--sand, #F2CC8F);
+  outline-offset:2px;
+}
+
+/* Thumbnail / fallback */
+.tp-item img,
+.tp-img-fallback{
+  width:76px;
+  height:56px;
+  object-fit:cover;
+  border-radius:8px;
+  background:linear-gradient(180deg,#0b172b,#101a2e);
+  flex:0 0 76px;
+}
+
+/* Meta */
+.tp-meta h4{
+  margin:0;
+  font-size:14px;
+  font-weight:800;
+  color:var(--text);
+}
+.tp-meta p{
+  margin:2px 0 0;
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .tp-item{ transition: none; }
+  .tp-item:hover{ transform:none; box-shadow:none; }
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "karachi-dome",
+    "name": "Karachi Dome",
+    "city": "Karachi",
+    "photo": "/assets/cities/karachi.jpg",
+    "capacity": 12000,
+    "surface": "Turf",
+    "indoor": false,
+    "sports": ["Cricket","Football","Basketball"]
+  },
+  {
+    "id": "national-stadium",
+    "name": "National Stadium",
+    "city": "Karachi",
+    "photo": "/assets/news6.jpg",
+    "capacity": 34000,
+    "surface": "Grass",
+    "indoor": false,
+    "sports": ["Cricket","Football"]
+  },
+  {
+    "id": "sea-view-arena",
+    "name": "Sea View Arena",
+    "city": "Karachi",
+    "photo": "/assets/news5.jpg",
+    "capacity": 5000,
+    "surface": "Hardcourt",
+    "indoor": true,
+    "sports": ["Basketball","Tennis"]
+  },
+  {
+    "id": "lahore-sports-complex",
+    "name": "Lahore Sports Complex",
+    "city": "Lahore",
+    "photo": "/assets/cities/lahore.jpg",
+    "capacity": 15000,
+    "surface": "Grass",
+    "indoor": false,
+    "sports": ["Football","Cricket"]
+  },
+  {
+    "id": "gaddafi-ground",
+    "name": "Gaddafi Ground",
+    "city": "Lahore",
+    "photo": "/assets/news1.jpg",
+    "capacity": 27000,
+    "surface": "Grass",
+    "indoor": false,
+    "sports": ["Cricket"]
+  },
+  {
+    "id": "islamabad-arena",
+    "name": "Islamabad Arena",
+    "city": "Islamabad",
+    "photo": "/assets/cities/islamabad.jpg",
+    "capacity": 9000,
+    "surface": "Hardcourt",
+    "indoor": true,
+    "sports": ["Basketball","Tennis","Football"]
+  },
+  {
+    "id": "fast-uni-grounds",
+    "name": "FAST University Grounds",
+    "city": "Islamabad",
+    "photo": "/assets/news3.jpg",
+    "capacity": 4000,
+    "surface": "Grass",
+    "indoor": false,
+    "sports": ["Cricket","Football"]
+  },
+  {
+    "id": "peshawar-club-ground",
+    "name": "Peshawar Club Ground",
+    "city": "Peshawar",
+    "photo": "/assets/cities/peshawar.jpg",
+    "capacity": 6000,
+    "surface": "Turf",
+    "indoor": false,
+    "sports": ["Cricket","Football","Tennis"]
+  }
+]

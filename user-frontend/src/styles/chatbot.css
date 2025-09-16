@@ -1,0 +1,305 @@
+/* src/styles/chatbot.css */
+
+/* ===== Brand tokens (falls back if your tokens aren't present) ===== */
+:root{
+  --chat-blue:  var(--blue, #2563eb);
+  --chat-red:   var(--brand-red, #ef4444);
+  --chat-green: var(--brand-green, #22c55e);
+
+  --chat-bg: #ffffff;
+  --chat-surface: #f8fafc;
+  --chat-border: #e6eaf2;
+  --chat-text: #0f172a;
+  --chat-muted: #64748b;
+  --chat-shadow: 0 18px 48px rgba(2,6,23,.16);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --chat-bg: #0b1220;
+    --chat-surface: #0f172a;
+    --chat-border: #1f2a44;
+    --chat-text: #e5e7eb;
+    --chat-muted: #9aa6b2;
+    --chat-shadow: 0 18px 48px rgba(0,0,0,.55);
+  }
+}
+[data-theme="dark"]{
+  --chat-bg: #0b1220;
+  --chat-surface: #0f172a;
+  --chat-border: #1f2a44;
+  --chat-text: #e5e7eb;
+  --chat-muted: #9aa6b2;
+  --chat-shadow: 0 18px 48px rgba(0,0,0,.55);
+}
+
+/* ===== Panel ===== */
+.chat-panel{
+  position: fixed;
+  right: 18px;
+  bottom: 96px;
+  width: 480px;             /* wider */
+  max-height: 72vh;         /* taller */
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--chat-bg);
+  border: 1px solid var(--chat-border);
+  border-radius: 18px;
+  box-shadow: var(--chat-shadow);
+  overflow: hidden;
+  z-index: 60;
+}
+@media (max-width: 720px){
+  .chat-panel{
+    inset: auto 10px 90px 10px;
+    width: auto;
+    max-height: 70vh;
+    border-radius: 16px;
+  }
+}
+
+/* Header with gradient bar (blue→red→green) */
+.chat-header{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px 12px 14px;
+  background:
+    linear-gradient(135deg, color-mix(in oklab, var(--chat-blue) 28%, transparent), transparent),
+    linear-gradient(315deg, color-mix(in oklab, var(--chat-red) 22%, transparent), transparent),
+    var(--chat-bg);
+  border-bottom: 1px solid var(--chat-border);
+}
+.chat-header-left{ display:flex; align-items:center; gap:10px; }
+.chat-avatar{
+  width: 34px; height: 34px; border-radius: 999px;
+  background: #fff;
+  display: grid; place-items: center;
+  border: 2px solid color-mix(in oklab, var(--chat-blue) 50%, var(--chat-red) 50%);
+  box-shadow: 0 4px 10px rgba(2,6,23,.12);
+}
+.chat-title{ line-height: 1.1; }
+.chat-title strong{ font-weight: 800; color: var(--chat-text); }
+.chat-title span{ display:block; font-size: 12px; color: var(--chat-muted); }
+
+.chat-close{
+  border: 0; background: transparent; cursor: pointer;
+  font-size: 16px; line-height: 1; color: var(--chat-muted);
+  width: 32px; height: 32px; border-radius: 8px;
+}
+.chat-close:hover{ background: var(--chat-surface); }
+
+/* Body */
+.chat-body{
+  background: var(--chat-bg);
+  padding: 14px;
+  overflow: auto;
+}
+
+/* Messages */
+.msg{
+  width: fit-content;
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  margin: 6px 0;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.msg.bot{
+  color: #fff;
+  background: linear-gradient(90deg, var(--chat-blue), var(--chat-red), var(--chat-green));
+  background-size: 200% 200%;
+  animation: bubbleFlow 6s ease infinite;
+  border: 1px solid transparent;
+  box-shadow: 0 8px 20px rgba(37,99,235,.15);
+}
+@keyframes bubbleFlow{
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100%{ background-position: 0% 50%; }
+}
+
+.msg.user{
+  margin-left: auto;
+  color: var(--chat-text);
+  background: var(--chat-surface);
+  border: 1px solid var(--chat-border);
+}
+
+/* Input row */
+.chat-input-row{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid var(--chat-border);
+  background: var(--chat-bg);
+}
+.chat-input{
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--chat-border);
+  background: var(--chat-surface);
+  padding: 0 12px;
+  color: var(--chat-text);
+}
+.chat-input:focus{ outline: none; box-shadow: 0 0 0 3px color-mix(in oklab, var(--chat-blue) 25%, transparent); }
+
+.chat-send{
+  width: 44px; height: 44px; border-radius: 12px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--chat-blue), var(--chat-red) 60%, var(--chat-green));
+  display: grid; place-items: center;
+  box-shadow: 0 8px 18px rgba(37,99,235,.25);
+}
+.chat-send:hover{ filter: brightness(1.05); }
+
+/* ===== Floating launcher ===== */
+.chat-launcher{
+  position: fixed;
+  right: 18px; bottom: 18px;
+  width: 62px; height: 62px;
+  border-radius: 999px;
+  border: none; cursor: pointer;
+  background:
+    radial-gradient(65% 65% at 30% 30%, rgba(255,255,255,.35), rgba(255,255,255,0)),
+    linear-gradient(135deg, var(--chat-blue), var(--chat-red) 55%, var(--chat-green));
+  display: grid; place-items: center;
+  box-shadow: 0 14px 28px rgba(2,6,23,.25), inset 0 0 0 2px rgba(255,255,255,.15);
+  z-index: 55;
+}
+.chat-launcher .robot-icon{ filter: drop-shadow(0 2px 4px rgba(0,0,0,.15)); }
+.chat-launcher:active{ transform: translateY(1px); }
+/* Neater default spacing for the chat ----------------------------------- */
+.cb-feed{
+  /* more room between messages and extra bottom padding above the input */
+  gap: 16px;                 /* was smaller */
+  padding: 18px 18px 28px;   /* ↑ bottom from ~16 → 28 */
+}
+
+.cb-msg{
+  /* slightly roomier bubbles */
+  padding: 12px 14px;        /* was tighter */
+  line-height: 1.28;
+  margin: 0;                 /* remove any collapsed margins */
+}
+
+/* A little more air around the input row */
+.cb-inputbar{
+  padding: 16px;             /* was smaller */
+  gap: 10px;
+}
+
+/* Keep the text field comfortable and consistent */
+.cb-input{
+  padding: 12px 14px;
+}
+
+/* Optional: slightly larger send button to match the spacing */
+.cb-send{
+  width: 42px;
+  height: 42px;
+}
+/* === User bubble: brand blue → green, readable on light/dark === */
+:root{
+  /* fallbacks keep it safe if a token is missing */
+  --cb-blue: var(--blue, #2563eb);
+  --cb-green: var(--green, #16a34a);
+}
+
+.cb-window .cb-msg.user .bubble{
+  background: linear-gradient(135deg,
+              color-mix(in oklab, var(--cb-blue) 88%, transparent) 0%,
+              color-mix(in oklab, var(--cb-green) 88%, transparent) 100%);
+  color: #fff;
+  border-color: transparent;
+  box-shadow:
+    0 6px 18px rgba(2,6,23,.15),
+    inset 0 0 0 1px rgba(255,255,255,.15);
+  text-shadow: 0 1px 0 rgba(0,0,0,.15);
+}
+
+/* little tail matches the bubble */
+.cb-window .cb-msg.user .bubble::after{
+  background: linear-gradient(135deg,
+              color-mix(in oklab, var(--cb-blue) 88%, transparent) 0%,
+              color-mix(in oklab, var(--cb-green) 88%, transparent) 100%);
+}
+
+/* tighten layout and keep a neat gap above the input */
+.cb-window .cb-body{ padding-bottom: 92px; }
+.cb-window .cb-input{ margin-top: 10px; }
+:root{
+  /* ...jo bhi pehle hai... */
+  --user-bubble-start: color-mix(in oklab, var(--chat-blue) 92%, transparent);
+  --user-bubble-end:   color-mix(in oklab, var(--chat-green) 92%, transparent);
+}
+/* more breathing room in feed + input */
+.chat-body{
+  padding: 18px 18px 30px;   /* bottom ↑ for input row clearance */
+}
+.msg{
+  position: relative;
+  margin: 10px 0;            /* gap between bubbles */
+  padding: 12px 14px;        /* room inside bubble */
+  border-radius: 14px;
+  line-height: 1.32;
+}
+.chat-input-row{
+  padding: 16px;             /* a bit roomier */
+  gap: 10px;
+}
+/* BEFORE:
+.msg.user{
+  margin-left: auto;
+  color: var(--chat-text);
+  background: var(--chat-surface);
+  border: 1px solid var(--chat-border);
+}
+*/
+
+/* AFTER: */
+.msg.user{
+  margin-left: auto;
+  color: #fff;
+  background: linear-gradient(135deg, var(--user-bubble-start), var(--user-bubble-end));
+  border: 1px solid transparent;
+  box-shadow:
+    0 6px 18px rgba(2,6,23,.15),
+    inset 0 0 0 1px rgba(255,255,255,.12);
+  text-shadow: 0 1px 0 rgba(0,0,0,.18);
+}
+
+/* optional cute “tail” on user bubble (right side) */
+.msg.user::after{
+  content: "";
+  position: absolute;
+  right: -6px; bottom: 10px;
+  width: 10px; height: 10px;
+  background: inherit;
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+@media (prefers-color-scheme: dark){
+  .msg.user{
+    text-shadow: none; /* dark bg par zyada crisp */
+    box-shadow: 0 8px 20px rgba(0,0,0,.35);
+  }
+}
+[data-theme="dark"] .msg.user{
+  text-shadow: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+/* make disabled state obvious in logout mode */
+.chat-input[disabled]{
+  opacity:.6;
+  cursor:not-allowed;
+  background: var(--chat-surface);
+}
+.chat-send:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  box-shadow:none;
+  filter:none;
+}

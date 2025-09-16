@@ -1,0 +1,121 @@
+/* Overlay */
+.lm-overlay{
+  position: fixed; inset: 0; background: rgba(0,0,0,.45);
+  display: grid; place-items: center; z-index: 1000;
+}
+
+/* Enter animation */
+@keyframes spinIn {
+  from { transform: rotate(-180deg) scale(.6); opacity: 0; }
+  to   { transform: rotate(0)      scale(1);   opacity: 1; }
+}
+
+/* Card */
+.lm-card{
+  width: min(780px, 96vw);
+  background: var(--surface, #121a2d);                 /* navy fallback, not white */
+  color: var(--text, #eaf0ff);
+  border: 1px solid var(--border, rgba(255,255,255,.08));
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+  animation: spinIn .45s ease both;
+  position: relative;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce){
+  .lm-card{ animation: none; }
+}
+
+/* Close button */
+.lm-close{
+  position:absolute; right:16px; top:10px;
+  font-size:28px; line-height:1;
+  background:transparent; border:none; cursor:pointer;
+  color: var(--text, #eaf0ff);
+  border-radius: 10px;
+}
+.lm-close:focus-visible{
+  outline: 2px solid #fff; outline-offset: 2px;
+}
+
+/* Header */
+.lm-head{ display:grid; gap:4px; margin: 6px 0 10px; }
+.lm-league{ color: var(--muted, #9aa7c7); font-weight: 700; }
+.lm-teams{ font-size: 18px; font-weight: 900; color: var(--text, #eaf0ff); }
+.lm-score{ font-weight: 900; font-size: 24px; color: var(--text, #eaf0ff); }
+
+/* Lineup / table */
+.lm-title{ font-weight: 800; margin: 10px 0 8px; color: var(--text, #eaf0ff); }
+
+/* set --cols from JSX to match number of columns (2/3/5) */
+.lm-table{
+  display:grid; gap:6px;
+  --cols: 5; /* fallback */
+}
+
+.lm-row{
+  display:grid;
+  grid-template-columns: repeat(var(--cols), minmax(0,1fr));
+  gap: 8px;
+  align-items:center;
+}
+
+.lm-row-head{
+  font-weight: 800;
+  color: var(--text, #eaf0ff);
+  background: rgba(255,255,255,.04);
+  padding: 6px 8px;
+  border-radius: 10px;
+}
+
+.lm-row:not(.lm-row-head){
+  color: var(--text, #eaf0ff);
+  padding: 4px 8px;
+  border-radius: 10px;
+}
+.lm-row:not(.lm-row-head):nth-child(odd){
+  background: rgba(255,255,255,.02);
+}
+
+@media (max-width: 680px){
+  /* On small screens, keep it readable—use min 3 columns, sport can still set fewer via --cols */
+  .lm-row{
+    grid-template-columns: repeat(max(var(--cols), 3), minmax(0,1fr));
+  }
+}
+
+/* Actions */
+.lm-actions{
+  display:flex; gap:10px; justify-content:flex-end; margin-top: 14px;
+}
+/* Brand green for 'Followed' button */
+:root{ --brand-green: #2aab7c; } /* tweak to your exact logo green if needed */
+
+.lm-actions .lm-follow{
+  background: #f5f7ff;
+  color: var(--ink, #0b1221);
+  border: 1px solid rgba(0,0,0,.08);
+}
+.lm-actions .lm-follow.is-following{
+  background: var(--brand-green);
+  color: #fff;
+  border: 2px solid var(--brand-green);
+}
+
+/* keep Buy button red using your existing class name */
+.lm-actions .btn.btn-watch{
+  background: var(--red, #ff4d4f);
+  color: #fff;
+}
+/* Green state for Follow */
+.lm-actions .lm-follow.is-following {
+  background: var(--brand-green, #2bb673) !important; /* your logo green */
+  color: #fff !important;
+  border-color: transparent !important;
+}
+.lm-actions .lm-follow.is-following:hover {
+  filter: brightness(.96);
+}
+

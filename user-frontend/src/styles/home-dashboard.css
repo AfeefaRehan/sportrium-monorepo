@@ -1,0 +1,642 @@
+/* src/styles/home-dashboard.css
+   - Keeps your video palette
+   - Readable in light & dark
+   - Upcoming carousel + **bigger Quick Actions tiles (always 2 columns desktop)**
+*/
+
+.dash-home{
+  max-width: var(--page-max, 1160px);
+  margin: 0 auto;
+  padding: 16px clamp(16px, 3.2vw, 28px) 40px;
+  display: grid;
+  gap: 18px;
+}
+
+/* ===== HERO ===== */
+.dash-hero{
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: 16px;
+  align-items: stretch;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.hero-media{ position: relative; }
+.hero-video{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(1.05) contrast(1.02) brightness(.9);
+}
+.hero-scrim{
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.45), rgba(0,0,0,.10) 46%, rgba(0,0,0,0)),
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,0) 40%);
+  pointer-events:none;
+}
+.hero-copy{
+  position: relative;
+  padding: clamp(14px, 3vw, 22px);
+  display: grid;
+  align-content: center;
+  gap: 12px;
+}
+.hero-copy h1{
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(26px, 4.8vw, 44px);
+  color: var(--text);
+}
+.name-red{ color: var(--red); margin-left: 6px; }
+.hero-copy .lead{
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(14px, 1.8vw, 18px);
+  line-height: 1.55;
+}
+.hero-actions{ display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-copy .tip{ margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+
+/* ===== panels ===== */
+.primary-row{
+  display: grid;
+  grid-template-columns: .65fr 1.35fr; /* Quick actions column bigger */
+  gap: 16px;
+}
+.panel{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.panel-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 10px;
+}
+.panel-head h2{
+  margin: 0; font-size: 18px; font-weight: 900; color: var(--text);
+}
+.panel-head .link{ font-weight:700; color: var(--blue); }
+.link-inline{ color: var(--blue); font-weight: 800; }
+
+/* grids + rails */
+.grid-2{
+  display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;
+}
+.hscroll{
+  display: grid; grid-auto-flow: column; grid-auto-columns: min(300px, 84%);
+  gap: 12px; overflow-x: auto; padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+}
+.hscroll > *{ scroll-snap-align: start; }
+
+/* ===== Quick actions (ALWAYS 2 big tiles on desktop) ===== */
+.actions{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr)); /* force 2 cols on desktop */
+  gap: 18px;
+}
+@media (max-width: 900px){
+  .actions{ grid-template-columns: 1fr; } /* 1 col on small screens */
+}
+.action{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 22px;
+  min-height: 140px;                /* larger tile height */
+  background: var(--surface-2, rgba(0,0,0,.02));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-weight: 700;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+}
+.action:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.08);
+  border-color: color-mix(in oklab, var(--border), var(--blue) 35%);
+  background: color-mix(in oklab, var(--surface-2), #ffffff 6%);
+}
+.action:active{ transform: translateY(0); }
+.action:focus-visible{
+  outline: 3px solid color-mix(in oklab, var(--blue), #ffffff 30%);
+  outline-offset: 2px;
+}
+.a-title{ color: var(--text); font-size: 18px; }
+.a-sub{ color: var(--muted); font-weight: 600; font-size: 14px; }
+.shortcuts{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+.chip{
+  height: 28px; padding: 0 12px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  display:inline-flex; align-items:center; font-weight:800;
+}
+
+/* match card */
+.match-card{
+  display: grid; gap: 8px;
+  padding: 12px;
+  border:1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(0,0,0,.04);
+}
+.m-top{ display:flex; align-items:center; justify-content:space-between; color: var(--muted); font-weight:700; }
+.tag{
+  display:inline-flex; align-items:center; gap:6px; padding: 3px 8px; border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 12px; font-weight: 800;
+}
+.tag.live{ background: var(--red); color:#fff; border-color: transparent; }
+.m-title{ margin: 0; font-size: 16px; font-weight: 900; color: var(--text); }
+.m-meta{ margin: 0; color: var(--muted); font-weight: 600; }
+.m-actions{ display:flex; gap: 8px; margin-top: 2px; }
+
+/* empty state */
+.empty{
+  display:grid; place-items:center; gap:10px; min-height:140px;
+  border:1px dashed var(--border); border-radius: 12px; background: var(--surface);
+}
+.empty p{ margin: 6px 0 0; color: var(--muted); font-weight:700; text-align:center; }
+
+/* ===== Dark-mode polish ===== */
+[data-theme="dark"] .dash-hero{ background: var(--surface); }
+[data-theme="dark"] .hero-video{ filter: saturate(1.1) contrast(1.05) brightness(.75); }
+[data-theme="dark"] .action:hover{ box-shadow: 0 10px 22px rgba(0,0,0,.28); }
+[data-theme="dark"] .match-card{ background: var(--surface-2); box-shadow: 0 6px 18px rgba(0,0,0,.22); }
+
+/* ===== Responsiveness ===== */
+@media (max-width: 1100px){
+  .dash-hero{ grid-template-columns: 1fr; }
+  .hero-media{ height: 240px; }
+  .primary-row{ grid-template-columns: 1fr; }
+}
+@media (max-width: 700px){
+  .grid-2{ grid-template-columns: 1fr; }
+  .hero-actions .btn{ min-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-video{ animation: none; filter: none; }
+}
+/* -------- Quick actions: EVEN grid + equal heights -------- */
+.actions{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr)); /* even widths */
+  gap: 16px;
+  align-items: stretch;            /* make every item same row height */
+}
+
+.actions > *{ min-width: 0; }      /* prevent text from forcing overflow */
+
+.action{
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;         /* center content vertically */
+  gap: 6px;
+  padding: 18px;
+  height: 100%;                    /* fill row height => equal tiles */
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2, rgba(0,0,0,.02));
+  transition: transform .15s, box-shadow .15s, background .15s, border-color .15s;
+}
+
+.a-title{ color: var(--text); font-size: 17px; font-weight: 800; }
+.a-sub{   color: var(--muted); font-size: 14px; font-weight: 600; }
+
+/* Responsive breakpoints */
+@media (max-width: 1200px){
+  .actions{ grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+}
+@media (max-width: 680px){
+  .actions{ grid-template-columns: 1fr; }
+}
+/* ==== QUICK ACTIONS — even, full-width grid ==== */
+.panel .actions{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 equal columns across the row */
+  gap: 16px;
+  width: 100%;
+  max-width: none;        /* kill any accidental constraints */
+  margin: 0;              /* remove inherited margins */
+  justify-content: stretch;
+  justify-items: stretch;
+  align-items: stretch;
+}
+
+.panel .actions > .action{
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-2, rgba(0,0,0,.02));
+}
+
+.panel .actions .a-title{ font-size: 17px; font-weight: 800; color: var(--text); }
+.panel .actions .a-sub{   font-size: 14px; font-weight: 600; color: var(--muted); }
+
+/* Responsive: collapse evenly without leftover gaps */
+@media (max-width: 1200px){
+  .panel .actions{ grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 680px){
+  .panel .actions{ grid-template-columns: 1fr; }
+}
+/* ===== Tiny toast for "Added to reminders" ===== */
+.toast{
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 30px rgba(0,0,0,.12);
+  color: var(--text);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.toast.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast .tick{
+  display:inline-grid;
+  place-items:center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--green, #2ecc71);
+  color: #fff;
+  font-weight: 900;
+  font-size: 14px;
+}
+[data-theme="dark"] .toast{
+  background: var(--surface-2);
+  box-shadow: 0 16px 36px rgba(0,0,0,.35);
+}
+/* ===== stack Upcoming and Quick actions as separate sections ===== */
+.primary-row{
+  display: grid;
+  grid-template-columns: 1fr;   /* was two columns; now full-width stacked */
+  gap: 22px;                    /* more breathing space between sections */
+}
+
+/* Optional (looks roomier on wide screens): make quick-action tiles comfortable */
+.actions{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr)); /* even three tiles */
+  gap: 16px;
+}
+@media (max-width: 1200px){
+  .actions{ grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+}
+@media (max-width: 700px){
+  .actions{ grid-template-columns: 1fr; }
+}
+/* ===== welcome tweaks ===== */
+.welcome{ font-weight: 900; font-size: clamp(28px, 4.2vw, 40px); margin: 0 0 6px; }
+.name-accent{ color: var(--red, #ff4d4f); }
+
+/* user picks (city + sports) */
+.picks-row{
+  display:flex; flex-wrap:wrap; gap:10px;
+  margin: 8px 0 14px;
+}
+.chip{
+  display:inline-flex; align-items:center; gap:8px;
+  padding: 8px 12px; border-radius: 999px;
+  background: var(--surface-2, rgba(0,0,0,.04));
+  border: 1px solid var(--border, rgba(0,0,0,.12));
+  font-weight: 700; font-size: 13px; color: var(--text, #0b1221);
+  text-decoration: none;
+}
+.chip .chip-ic{ font-size: 14px; opacity:.9; }
+.chip.ghost{
+  background: transparent;
+}
+.chip.ghost:hover{
+  background: var(--surface-2, rgba(0,0,0,.04));
+}
+
+/* ===== quick actions – elevated cards ===== */
+.actions.actions--elevated{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 900px){
+  .actions.actions--elevated{ grid-template-columns: 1fr; }
+}
+.action{
+  position: relative;
+  display:flex; align-items:center; gap:14px;
+  padding: 18px 18px;
+  min-height: 110px;
+  border-radius: 16px;
+  text-decoration: none;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, rgba(0,0,0,.12));
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+  transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.action:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.10);
+  border-color: rgba(0,0,0,.16);
+}
+.a-icon{
+  width: 44px; height: 44px; border-radius: 12px;
+  display:grid; place-items:center; flex: 0 0 44px;
+  color: #fff;
+}
+.card-a .a-icon{ background: var(--red, #ff4d4f); }
+.card-b .a-icon{ background: var(--blue, #1f4cff); }
+.card-c .a-icon{ background: var(--ink, #0b1221); }
+
+.a-text{ display:flex; flex-direction:column; }
+.a-title{ font-weight: 900; font-size: 16px; color: var(--text, #0b1221); }
+.a-sub{ font-size: 13px; color: var(--muted, rgba(0,0,0,.65)); }
+
+/* keep your existing panel look; just ensure spacing works nicely */
+.panel{ background: var(--surface, #fff); border: 1px solid var(--border, rgba(0,0,0,.12)); border-radius: 14px; padding: 14px; }
+.panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 10px; }
+.panel-head h2{ margin:0; font-size:18px; font-weight:900; }
+.link{ color: var(--blue, #1f4cff); text-decoration:none; font-weight:700; }
+.link:hover{ text-decoration: underline; }
+/* ------- mini profile strip ------- */
+.welcome-badge{
+  display:flex; align-items:center; gap:10px;
+  margin: 6px 0 4px;
+}
+.welcome-badge .avatar{
+  width:36px; height:36px; border-radius:50%;
+  display:grid; place-items:center; font-weight:900;
+  background: var(--blue, #1f4cff); color:#fff;
+  box-shadow: 0 6px 14px rgba(31,76,255,.25);
+}
+.welcome-badge .wb-text{ line-height:1.1; }
+.welcome-badge .wb-hi{ font-size:12px; color: var(--muted, rgba(0,0,0,.6)); }
+.welcome-badge .wb-name{ font-size:14px; font-weight:900; }
+
+/* ------- stat row ------- */
+.stat-grid{
+  margin: 14px 0 16px;
+  display:grid; gap: 12px;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+}
+@media (max-width: 900px){
+  .stat-grid{ grid-template-columns: 1fr; }
+}
+.stat-card{
+  position:relative; overflow:hidden;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, rgba(0,0,0,.12));
+  border-radius: 16px; padding: 16px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+}
+.stat-card .s-num{
+  font-weight: 900; font-size: 28px;
+}
+.stat-card .s-label{
+  margin-top: 2px; color: var(--muted, rgba(0,0,0,.6)); font-size: 13px;
+}
+.stat-card .s-link{
+  position:absolute; right: 12px; bottom: 12px;
+  font-weight: 700; text-decoration:none; color: var(--blue, #1f4cff);
+}
+
+.s-a::after,.s-b::after,.s-c::after{
+  content:""; position:absolute; inset:auto -20% -30% auto; width:160px; height:160px; border-radius:50%;
+  opacity:.10; filter: blur(8px);
+}
+.s-a::after{ background: var(--red, #ff4d4f); }
+.s-b::after{ background: var(--blue, #1f4cff); }
+.s-c::after{ background: var(--ink, #0b1221); }
+
+/* (keep your earlier .welcome, .name-accent, .picks-row, .chip, .actions, .panel, etc.) */
+/* Bigger "Welcome {name}" */
+.big-welcome{
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.05;
+  margin: 0 0 8px;
+}
+.name-accent{
+  color: var(--red, #ff4d4f);
+  font-weight: 900;
+}
+
+/* Reduce extra space before hero buttons */
+.hero-actions{
+  display: flex;
+  gap: 10px;          /* was larger; tightened */
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 10px;   /* bring buttons closer to chips */
+}
+.hero-actions .btn{ padding-inline: 14px 16px; }
+
+/* Matches rail */
+.match-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 12px;
+}
+@media (max-width: 1000px){ .match-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 640px){ .match-grid{ grid-template-columns: 1fr; } }
+
+.match-card{
+  display:block;
+  border: 1px solid var(--border, rgba(0,0,0,.12));
+  border-radius: 14px;
+  padding: 12px;
+  background: var(--surface, #fff);
+  text-decoration:none;
+  color: inherit;
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+  transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.match-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.10);
+  border-color: rgba(0,0,0,.18);
+}
+.mc-head{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size: 12px; color: var(--muted, rgba(0,0,0,.6));
+  margin-bottom: 6px;
+}
+.mc-title{
+  font-weight: 900; font-size: 16px; margin-bottom: 6px;
+}
+.mc-meta{
+  display:flex; gap: 12px; font-size: 13px; color: var(--muted, rgba(0,0,0,.65));
+}
+
+.matches-skel{
+  padding: 20px; border: 1px dashed var(--border, rgba(0,0,0,.2));
+  border-radius: 12px; color: var(--muted, rgba(0,0,0,.65));
+}
+/* Bigger, nicer Welcome */
+.big-welcome{
+  font-size: clamp(36px, 5.6vw, 56px);
+  line-height: 1.02;
+  margin: 0 0 6px;
+}
+.name-accent{ color: var(--red, #ff4d4f); font-weight: 900; }
+
+/* Ensure video never blocks clicks on buttons */
+.hero-media, .hero-video, .hero-scrim{ pointer-events: none; }
+
+/* Tighten hero action spacing more */
+.hero-actions{
+  display:flex; gap: 8px; align-items:center; flex-wrap:wrap;
+  margin-top: 6px;
+}
+.hero-actions .btn{ padding-inline: 12px 14px; }
+
+/* Matches grid kept from before (unchanged) */
+/* Make sure the hero media NEVER eats clicks (was causing “buttons not working”) */
+.hero-media, .hero-video, .hero-scrim { pointer-events: none; }
+/* Ensure hero media never blocks clicks */
+.hero-media, .hero-video, .hero-scrim { pointer-events: none; }
+
+/* Tight hero actions */
+.hero-actions{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:6px; }
+.hero-actions .btn{ padding-inline:12px 14px; }
+
+/* Segmented filter for matches */
+.seg{ display:flex; gap:6px; align-items:center; }
+.seg-btn{
+  appearance:none; border:1px solid var(--border, rgba(0,0,0,.15));
+  background: var(--surface, #fff);
+  padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 12px;
+}
+.seg-btn.active{ background: var(--blue, #1f4cff); color:#fff; border-color: transparent; }
+
+/* Matches badges */
+.mc-badge{
+  position:absolute; top:10px; right:10px; font-size:10px; font-weight:900;
+  padding:4px 8px; border-radius:999px; color:#fff;
+}
+.match-card{ position:relative; }
+
+/* Live/upcoming styles */
+.mc-badge.live{ background: var(--red, #ff4d4f); box-shadow:0 0 0 6px rgba(255,77,79,.14); }
+.mc-badge.up{ background: var(--blue, #1f4cff); box-shadow:0 0 0 6px rgba(31,76,255,.14); }
+
+/* Keep the existing .match-grid, .match-card, .mc-head, etc. */
+/* CTA row: remove extra lead-in space and keep buttons left-justified */
+.dash-hero .hero-copy{ padding-left: 0; }
+@media (min-width: 1024px){ .dash-hero .hero-copy{ padding-left: 8px; } }
+
+.hero-actions{
+  display:flex;
+  justify-content:flex-start;   /* left-justify */
+  align-items:center;
+  gap:8px;                      /* tighter gap between buttons */
+  margin-top:4px;               /* reduced top spacing */
+}
+.hero-actions .btn{ padding: 9px 12px; } /* smaller button padding */
+
+/* Make sure media never blocks clicks */
+.hero-media, .hero-video, .hero-scrim { pointer-events: none; }
+
+/* Segmented control + badges kept from earlier drops */
+/* --- Anchor hero content to the LEFT --- */
+.dash-hero .hero-copy{
+  /* make the copy column control its children */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;      /* <— left align everything */
+  text-align: left;
+  padding-left: 0;              /* kill any left padding that pushes content right */
+}
+
+/* the chips + CTA row should hug the left edge */
+.dash-hero .picks-row{ align-self: flex-start; }
+.dash-hero .hero-actions{
+  align-self: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 4px;
+  margin-left: 0;               /* ensure no auto margins push it right */
+}
+.dash-hero .hero-actions .btn{ margin-left: 0; }
+
+/* if a parent grid centers items, override that for the copy column */
+@supports (justify-items: start){
+  .dash-hero{ justify-items: start; }
+}
+/* 
+keep the video from stealing clicks */
+/* .hero-media, .hero-video, .hero-scrim{ pointer-events: none; } */
+/* --- HERO: make sure the video always shows --- */
+.dash-hero{
+  display: grid;
+  grid-template-columns: minmax(320px, 1.1fr) minmax(360px, 1fr);
+  gap: 24px;
+  align-items: center;
+  justify-items: stretch;        /* don't squeeze the left column */
+}
+
+.hero-media{
+  position: relative;
+  min-height: 340px;             /* visible height */
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;              /* fallback if video can't load */
+  pointer-events: auto;          /* container should allow events */
+}
+
+.hero-video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;             /* fill nicely */
+  display: block;
+  pointer-events: none;          /* video itself shouldn't steal clicks */
+}
+
+.hero-scrim{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0,0,0,.10), rgba(0,0,0,.10));
+  pointer-events: none;
+}
+
+/* keep copy + buttons hugging the left edge (from earlier) */
+.dash-hero .hero-copy{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding-left: 0;
+}
+.dash-hero .picks-row{ align-self: flex-start; }
+.dash-hero .hero-actions{
+  align-self: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Responsive: stack on small screens and keep video visible */
+@media (max-width: 900px){
+  .dash-hero{ grid-template-columns: 1fr; }
+  .hero-media{ min-height: 220px; }
+}

@@ -1,0 +1,440 @@
+/* src/styles/home-dashboard.css
+   Drop-in styles for the logged-in home (DashboardHome.jsx).
+   - Keeps your video palette (uses /media/home-hero.mp4)
+   - Fully responsive
+   - Readable in both light and dark themes using your CSS variables
+*/
+
+.dash-home{
+  max-width: var(--page-max, 1160px);
+  margin: 0 auto;
+  padding: 16px clamp(16px, 3.2vw, 28px) 40px;
+  display: grid;
+  gap: 18px;
+}
+
+/* ===== HERO ===== */
+.dash-hero{
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+  gap: 16px;
+  align-items: stretch;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+/* media side */
+.hero-media{ position: relative; }
+.hero-video{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(1.05) contrast(1.02) brightness(.9);
+}
+/* scrim ensures text readability on both themes */
+.hero-scrim{
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.45), rgba(0,0,0,.10) 46%, rgba(0,0,0,0)),
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,0) 40%);
+  pointer-events:none;
+}
+
+/* copy side */
+.hero-copy{
+  position: relative;
+  padding: clamp(14px, 3vw, 22px);
+  display: grid;
+  align-content: center;
+  gap: 12px;
+}
+.hero-copy h1{
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(26px, 4.8vw, 44px);
+  color: var(--text);
+}
+.hero-copy .lead{
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(14px, 1.8vw, 18px);
+  line-height: 1.55;
+}
+.hero-actions{
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.hero-copy .tip{ margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+
+/* ===== panels ===== */
+.primary-row{
+  display: grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap: 16px;
+}
+.panel{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+.panel-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 8px;
+}
+.panel-head h2{
+  margin: 0; font-size: 18px; font-weight: 900; color: var(--text);
+}
+.panel-head .link{ font-weight:700; color: var(--blue); }
+
+/* grid cards + rails */
+.grid-2{
+  display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;
+}
+.hscroll{
+  display: grid; grid-auto-flow: column; grid-auto-columns: min(280px, 84%);
+  gap: 12px; overflow-x: auto; padding-bottom: 4px;
+  scroll-snap-type: x mandatory;
+}
+.hscroll > *{ scroll-snap-align: start; }
+
+/* quick actions */
+.actions{ display: grid; gap: 10px; }
+.action{
+  display: grid; gap: 2px; padding: 10px 12px;
+  background: var(--surface-2, rgba(0,0,0,.02));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-weight: 700;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.action:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+}
+.action .a-title{ color: var(--text); }
+.action .a-sub{ color: var(--muted); font-weight: 600; font-size: 13px; }
+.shortcuts{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 10px; }
+.chip{
+  height: 28px; padding: 0 12px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  display:inline-flex; align-items:center; font-weight:800;
+}
+
+/* match card */
+.match-card{
+  display: grid; gap: 8px;
+  padding: 12px;
+  border:1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(0,0,0,.04);
+}
+.m-top{ display:flex; align-items:center; justify-content:space-between; color: var(--muted); font-weight:700; }
+.tag{
+  display:inline-flex; align-items:center; gap:6px; padding: 3px 8px; border-radius:999px;
+  border:1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 12px; font-weight: 800;
+}
+.tag.live{ background: var(--red); color:#fff; border-color: transparent; }
+.m-title{ margin: 0; font-size: 16px; font-weight: 900; color: var(--text); }
+.m-meta{ margin: 0; color: var(--muted); font-weight: 600; }
+.m-actions{ display:flex; gap: 8px; margin-top: 2px; }
+
+/* empty state */
+.empty{
+  display:grid; place-items:center; gap:10px; min-height:140px;
+  border:1px dashed var(--border); border-radius: 12px; background: var(--surface);
+}
+.empty p{ margin: 6px 0 0; color: var(--muted); font-weight:700; }
+
+/* ===== Dark-mode polish ===== */
+[data-theme="dark"] .dash-hero{ background: var(--surface); }
+[data-theme="dark"] .hero-video{ filter: saturate(1.1) contrast(1.05) brightness(.75); }
+[data-theme="dark"] .action:hover{ box-shadow: 0 10px 22px rgba(0,0,0,.28); }
+[data-theme="dark"] .match-card{ background: var(--surface-2); box-shadow: 0 6px 18px rgba(0,0,0,.22); }
+
+/* ===== Responsiveness ===== */
+@media (max-width: 1100px){
+  .dash-hero{ grid-template-columns: 1fr; }
+  .hero-media{ height: 240px; }
+  .primary-row{ grid-template-columns: 1fr; }
+}
+@media (max-width: 700px){
+  .grid-2{ grid-template-columns: 1fr; }
+  .hero-actions .btn{ min-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce){
+  .hero-video{ animation: none; filter: none; }
+}
+/* ================= Header actions (logged-in) ================= */
+/* Brand colors (fallbacks keep consistency if your vars already exist) */
+:root{
+  --brand-blue:  var(--brand-blue,  #2563eb);
+  --brand-red:   var(--brand-red,   #ff565a);
+  --brand-green: var(--brand-green, #16a34a);
+}
+
+/* Use the same size as your light/dark toggle */
+.header,
+.topbar {
+  --hdr-btn-size: 40px;           /* match theme toggle size */
+  --hdr-btn-radius: 9999px;
+}
+
+/* Base shared button style in header */
+.header .btn,
+.topbar .btn,
+.header-actions .btn {
+  height: var(--hdr-btn-size);
+  border-radius: var(--hdr-btn-radius);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  line-height: 1;
+  transition: filter .15s ease, transform .05s ease;
+}
+
+/* Icon-only buttons (same square size as theme toggle) */
+.header .icon-btn,
+.topbar .icon-btn,
+.header-actions .icon-btn,
+button[aria-label="Notifications"],
+button[aria-label="Profile"] {
+  width: var(--hdr-btn-size);
+  height: var(--hdr-btn-size);
+  padding: 0;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+/* ---------------- Reminders (green pill) ---------------- */
+button[aria-label="Reminders"],
+.btn-reminders,
+.action-reminders {
+  background: var(--brand-green);
+  color: #fff;
+  border-color: transparent;
+  /* keep pill with text; if you use an icon inside, it will be white */
+}
+
+/* ---------------- Notifications (blue, white icon) ---------------- */
+button[aria-label="Notifications"],
+.btn-notifs,
+.action-notifications {
+  background: var(--brand-blue);
+  color: #fff;           /* icon/text goes white */
+  border-color: transparent;
+}
+
+/* ---------------- Profile (red, white icon) ---------------- */
+button[aria-label="Profile"],
+.btn-profile,
+.action-profile,
+.avatar-btn {
+  background: var(--brand-red);
+  color: #fff;           /* avatar/icon white */
+  border-color: transparent;
+}
+
+/* Icon color inside these buttons (SVG or font icons) */
+button[aria-label="Reminders"] svg,
+button[aria-label="Notifications"] svg,
+button[aria-label="Profile"] svg,
+.btn-reminders svg,
+.btn-notifs svg,
+.btn-profile svg,
+.action-reminders svg,
+.action-notifications svg,
+.action-profile svg,
+.avatar-btn svg {
+  color: #fff;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* Subtle interactions */
+button[aria-label="Reminders"]:hover,
+.btn-reminders:hover,
+button[aria-label="Notifications"]:hover,
+.btn-notifs:hover,
+button[aria-label="Profile"]:hover,
+.btn-profile:hover,
+.avatar-btn:hover {
+  filter: brightness(.96);
+}
+button[aria-label="Reminders"]:active,
+.btn-reminders:active,
+button[aria-label="Notifications"]:active,
+.btn-notifs:active,
+button[aria-label="Profile"]:active,
+.btn-profile:active,
+.avatar-btn:active {
+  transform: translateY(1px);
+}
+
+/* If you show a small unread badge on the icon buttons */
+.header .icon-btn .badge,
+.topbar  .icon-btn .badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: #fff;              /* white badge bubble */
+  color: var(--brand-blue);      /* blue number */
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 16px;
+  border: 1px solid rgba(0,0,0,.06);
+}
+
+/* Respect dark mode without changing colors you asked for */
+@media (prefers-color-scheme: dark) {
+  /* keep the same green/blue/red bodies + white text/icons */
+  /* nothing else needed */
+}
+/* =========================================================
+   Header actions (logged-in) — Reminders / Notifications / Profile
+   ========================================================= */
+
+/* Brand colors (fallbacks) */
+:root{
+  --brand-blue:  var(--brand-blue,  #2563eb); /* site blue */
+  --brand-red:   var(--brand-red,   #ff565a); /* site red  */
+  --brand-green: var(--brand-green, #16a34a); /* reminders green */
+}
+
+/* Use the same height as your light/dark toggle (usually 40px) */
+.app-header, .header, .topbar {
+  --hdr-btn-size: 40px;
+}
+
+/* Base shape for all header buttons */
+.app-header .btn,
+.header .btn,
+.topbar .btn,
+.app-header :is(button,a)[data-action],
+.header     :is(button,a)[data-action],
+.topbar     :is(button,a)[data-action]{
+  height: var(--hdr-btn-size);
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-weight: 800;
+  line-height: 1;
+  border: 1px solid transparent;
+  transition: filter .15s ease, transform .05s ease;
+}
+
+/* Square icon-only actions (bell/avatar etc.) */
+.app-header .icon-btn,
+.header .icon-btn,
+.topbar  .icon-btn,
+.app-header :is(button,a)[data-icon],
+.header     :is(button,a)[data-icon],
+.topbar     :is(button,a)[data-icon]{
+  width: var(--hdr-btn-size);
+  height: var(--hdr-btn-size);
+  padding: 0;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+/* ---------------- Reminders (green pill, white text) ---------------- */
+:where(.app-header,.header,.topbar)
+  :is(button,a)[data-action="reminders"],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[aria-label*="remind" i],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[title*="remind" i],
+:where(.app-header,.header,.topbar)
+  a[href*="reminder" i]{
+  background: var(--brand-green) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* ---------------- Notifications (blue body, white icon) -------------- */
+:where(.app-header,.header,.topbar)
+  :is(button,a)[data-action="notifications"],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[aria-label*="notif" i],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[title*="notif" i],
+:where(.app-header,.header,.topbar)
+  a[href*="notif" i]{
+  background: var(--brand-blue) !important;
+  color: #fff !important; /* icon/text */
+  border-color: transparent !important;
+}
+
+/* ---------------- Profile (red body, white icon) --------------------- */
+:where(.app-header,.header,.topbar)
+  :is(button,a)[data-action="profile"],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[aria-label*="profile" i],
+:where(.app-header,.header,.topbar)
+  :is(button,a)[title*="profile" i],
+:where(.app-header,.header,.topbar)
+  a[href*="profile" i],
+:where(.app-header,.header,.topbar)
+  .avatar-btn{
+  background: var(--brand-red) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* Make any SVG/icon inside those buttons white */
+:where(.app-header,.header,.topbar)
+  :is(
+    :is(button,a)[aria-label*="remind" i],
+    :is(button,a)[aria-label*="notif" i],
+    :is(button,a)[aria-label*="profile" i],
+    :is(button,a)[data-action],
+    .btn, .icon-btn, .avatar-btn
+  ) svg{
+  color: #fff !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Small unread badge (optional) */
+:where(.app-header,.header,.topbar) .icon-btn .badge{
+  position: absolute;
+  top: -4px; right: -4px;
+  min-width: 16px; height: 16px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--brand-blue);
+  border: 1px solid rgba(0,0,0,.06);
+  font-size: 11px; line-height: 16px; font-weight: 800;
+}
+
+/* Hover/active feedback */
+:where(.app-header,.header,.topbar)
+  :is(
+    :is(button,a)[aria-label*="remind" i],
+    :is(button,a)[aria-label*="notif" i],
+    :is(button,a)[aria-label*="profile" i],
+    :is(button,a)[data-action]
+  ):hover{ filter: brightness(.96); }
+:where(.app-header,.header,.topbar)
+  :is(
+    :is(button,a)[aria-label*="remind" i],
+    :is(button,a)[aria-label*="notif" i],
+    :is(button,a)[aria-label*="profile" i],
+    :is(button,a)[data-action]
+  ):active{ transform: translateY(1px); }
+
+/* Works the same in dark mode — we keep the same green/blue/red + white */

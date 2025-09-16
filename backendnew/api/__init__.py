@@ -1,0 +1,59 @@
+import os
+from flask import Flask, jsonify
+from dotenv import load_dotenv
+from .config import Config
+from .extensions import init_extensions, init_firebase, scheduler
+
+# blueprints
+from .blueprints.auth import bp as auth_bp
+from .blueprints.users import bp as users_bp
+from .blueprints.teams import bp as teams_bp
+from .blueprints.events import bp as events_bp
+from .blueprints.tournaments import bp as tournaments_bp
+from .blueprints.reminders import bp as reminders_bp
+
+# NEW blueprints (notifications, push-tokens, user-follows, oauth)
+from .notifications.routes import bp as notifications_bp
+from .push.routes import bp as push_bp
+from .follows.routes import bp as follows_bp
+from .auth.oauth import bp as oauth_bp
+from .reminders.scheduler import register_jobs
+
+load_dotenv()
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
+
+    # init extensions (db, migrate, bcrypt, jwt, cors, mail)
+    init_extensions(app)
+    # init firebase (safe no-op if not configured)
+    init_firebase(app)
+
+    # healthcheck
+    @app.get("/health")
+    def health():
+        return jsonify({"ok": True}), 200
+
+    prefix = app.config.get("API_PREFIX", "/api").rstrip("/")
+    # mount blueprints
+    app.register_blueprint(auth_bp, url_prefix=f"{prefix}/auth")
+    app.register_blueprint(oauth_bp, url_prefix=f"{prefix}/auth/oauth")
+
+    app.register_blueprint(users_bp, url_prefix=prefix)
+    # follow endpoints live under the same /users prefix
+    app.register_blueprint(follows_bp, url_prefix=f"{prefix}/users")
+
+    app.register_blueprint(teams_bp, url_prefix=prefix)
+    app.register_blueprint(events_bp, url_prefix=prefix)
+    app.register_blueprint(tournaments_bp, url_prefix=prefix)
+    app.register_blueprint(reminders_bp, url_prefix=prefix)
+
+    app.register_blueprint(notifications_bp, url_prefix=f"{prefix}/notifications")
+    app.register_blueprint(push_bp,           url_prefix=f"{prefix}/push")
+
+    # scheduler jobs (reminders, etc.) and start the scheduler
+    register_jobs(app)
+    scheduler.start()
+
+    return app

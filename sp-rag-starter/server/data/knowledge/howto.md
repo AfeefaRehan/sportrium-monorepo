@@ -1,0 +1,1 @@
+# How to use Sportrium\n1) Go to **Schedule** and pick your **city**, **sport**, and **date**.\n2) Use **Remind me** to get a nudge before kick‑off, or **Buy tickets** where available.\n3) Create your **team** from the Create tab and apply to **tournaments**.\n

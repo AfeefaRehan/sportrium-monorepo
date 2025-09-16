@@ -1,0 +1,374 @@
+.services-page{
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+
+/* ---------- HERO ---------- */
+.services-hero{
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(13,27,42,.06);
+  margin-bottom: 16px;
+}
+.hero-grid{
+  display: grid;
+  grid-template-columns: 1.1fr .9fr; /* text | media */
+  gap: 16px;
+  align-items: center;
+}
+.hero-copy h1{
+  margin: .25rem 0 .5rem;
+  font-size: clamp(28px, 4.6vw, 40px);
+}
+.hero-copy .lead{ color: var(--muted); margin: 0 0 10px; }
+.hero-points{ display:grid; gap:6px; margin: 8px 0 0; }
+.cta-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+
+/* media with reserved height so it never "flinches" */
+.media{
+  position: relative;
+  border: 1px solid var(--surface-2);
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  min-height: 280px;
+  background: #0c1b33;
+}
+.fit{ display:block; width:100%; height:100%; object-fit: cover; }
+
+/* optional tint to change perceived bg color of the video */
+.tinted .tint{
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(47,114,255,.15), rgba(147,51,234,.18));
+  mix-blend-mode: overlay;
+  pointer-events:none;
+}
+
+/* ---------- SECTION HEAD ---------- */
+.section-head{ text-align:center; margin: 20px 0 10px; }
+.eyebrow{ font-weight:700; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color: var(--muted); }
+.section-head h2{ margin: 6px 0; font-size: clamp(20px,3.6vw,28px); }
+.muted{ color: var(--muted); }
+
+/* ---------- SERVICES GRID ---------- */
+.svc-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.svc-card{
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(13,27,42,.06);
+  contain: layout paint; /* hover won't reflow siblings */
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+.svc-card:hover{ box-shadow: 0 16px 40px rgba(13,27,42,.16); transform: translateY(-2px); }
+.svc-card .icn{
+  height:36px; width:36px; display:grid; place-items:center;
+  border-radius:10px; background:#fff; border:1px solid var(--surface-2);
+  font-size:18px; margin-bottom:8px;
+}
+.svc-card h3{ margin: 0 0 6px; }
+.svc-card ul{ padding-left: 18px; margin: 6px 0 12px; }
+
+/* ghost action inside card */
+.btn.ghost{
+  background: #fff;
+  border: 1px dashed var(--surface-2);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ---------- SECONDARY VIDEO BAND ---------- */
+.video-band{
+  margin-top: 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  box-shadow: 0 8px 24px rgba(13,27,42,.06);
+}
+.band-inner{
+  display:grid; grid-template-columns: .9fr 1.1fr; gap: 12px; align-items: center;
+  padding: 16px;
+}
+.band-copy h3{ margin: 0 0 6px; }
+.band-media{
+  position: relative; border:1px solid var(--surface-2); border-radius: 12px; overflow: hidden;
+  aspect-ratio: 16/9; min-height: 260px; background:#0c1b33;
+}
+
+/* ---------- HOW IT WORKS ---------- */
+.howto{ margin-top: 16px; }
+.steps{
+  display:grid; grid-template-columns: repeat(3,1fr); gap: 12px; list-style:none; padding:0; margin:0;
+}
+.step{
+  background: var(--surface);
+  border:1px solid var(--surface-2);
+  border-radius: 14px; padding: 14px;
+  box-shadow:0 8px 24px rgba(13,27,42,.06);
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+.step:hover{ box-shadow:0 16px 40px rgba(13,27,42,.16); transform: translateY(-2px); }
+.bubble{
+  height:28px; width:28px; border-radius:999px; display:inline-grid; place-items:center;
+  background: var(--blue); color:#fff; font-weight:800; margin-bottom:6px;
+}
+
+/* ---------- CTA FINAL ---------- */
+.cta-row-final{
+  margin-top: 18px;
+  background: linear-gradient(135deg, var(--navy-700), var(--blue));
+  color:#fff; border-radius: 16px; padding: 16px; text-align:center;
+}
+.cta-row-final .actions{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+.btn.outline{ background: transparent; color:#fff; border:1px solid rgba(255,255,255,.6); }
+.btn.red{ background:#ff4d4f; color:#fff; border:1px solid transparent; }
+.btn.red:hover{ background:#e63b3d; }
+
+/* ---------- LOGIN GATE ---------- */
+.gate{
+  position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  display:grid; place-items:center; z-index: 50;
+}
+.gate-card{
+  background: var(--surface); color: var(--ink);
+  border: 1px solid var(--surface-2);
+  border-radius: 16px; padding: 18px; width: min(560px, 92vw);
+  box-shadow: 0 24px 60px rgba(13,27,42,.45);
+  position: relative;
+}
+.gate-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top: 10px; }
+.gate-close{
+  position:absolute; top:8px; right:10px; width:28px; height:28px; border-radius:999px;
+  border:1px solid var(--surface-2); background:#fff; cursor:pointer; font-size:18px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1024px){
+  .hero-grid{ grid-template-columns: 1fr; }
+  .media{ min-height: 220px; }
+  .svc-grid{ grid-template-columns: 1fr 1fr; }
+  .band-inner{ grid-template-columns: 1fr; }
+  .steps{ grid-template-columns: 1fr; }
+}
+@media (max-width: 640px){
+  .svc-grid{ grid-template-columns: 1fr; }
+}
+
+/* ---------- DARK MODE POLISH ---------- */
+/* keep text readable on white-ish surfaces in dark */
+[data-theme="dark"] .svc-card .icn{ background: rgba(255,255,255,.08); color: var(--text); }
+[data-theme="dark"] .btn.ghost{ background: rgba(255,255,255,.06); color: var(--text); border-color: rgba(154,167,199,.35); }
+.focus-left { transform-origin: 20% 50%; }
+.focus-top  { transform-origin: 50% 20%; }
+/* Zooming & focus for videos */
+.fit{ display:block; width:100%; height:100%; object-fit:cover; }
+
+.zoomed{
+  transform: scale(1.18);               /* <— zoom strength */
+  transform-origin: 50% 50%;
+  transition: transform .3s ease;
+  will-change: transform;
+}
+
+/* Focus the right side (hero person/animation is usually right) */
+.focus-right{ transform-origin: 80% 50%; }
+
+/* Focus the center for the band video */
+.focus-center{ transform-origin: 50% 50%; }
+
+/* Keep overflow clipped (already present on .media/.band-media) */
+.media, .band-media{
+  position: relative;
+  border: 1px solid var(--surface-2);
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  min-height: 280px;
+  background: #0c1b33;
+}
+
+/* Tint stays the same; tweak colors if you want a different hue */
+.tinted .tint{
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(47,114,255,.15), rgba(147,51,234,.18));
+  mix-blend-mode: overlay;
+  pointer-events:none;
+}
+
+/* Dark mode hero text visibility */
+[data-theme="dark"] .services-hero .hero-copy h1{ color: var(--text); }
+[data-theme="dark"] .services-hero .hero-copy .lead{ color: rgba(255,255,255,.85); }
+[data-theme="dark"] .services-hero .hero-points{ color: var(--text); }
+/* ===== FAQ band ===== */
+.faq-band{
+  margin-top: 18px;
+  background: var(--surface);
+  border: 1px solid var(--surface-2);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(13,27,42,.06);
+  padding: 16px;
+}
+.faq-grid{
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;   /* left = animation, right = accordion */
+  gap: 14px;
+  align-items: stretch;
+}
+
+/* left animation area */
+.faq-anim{
+  border: 1px dashed var(--surface-2);
+  border-radius: 14px;
+  overflow: hidden;
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(47,114,255,.06), rgba(147,51,234,.06));
+}
+.anim-placeholder{
+  text-align: center;
+  line-height: 1.2;
+  color: var(--muted);
+}
+.anim-placeholder span{ display:block; font-weight:800; color: var(--ink); }
+[data-theme="dark"] .anim-placeholder span{ color: var(--text); }
+
+/* right accordion */
+.section-head.tight{ margin: 0 0 8px; }
+.accordion{ display: grid; gap: 8px; }
+
+.faq-card{
+  background: #fff;
+  border: 1px solid var(--surface-2);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(13,27,42,.06);
+}
+.faq-card summary{
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 44px 14px 14px;
+  font-weight: 700;
+  position: relative;
+  outline: none;
+}
+.faq-card summary::-webkit-details-marker{ display:none; }
+.faq-card summary::after{
+  content: "▾";
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%) rotate(0deg);
+  transition: transform .2s ease;
+  opacity: .8;
+}
+.faq-card[open] summary::after{ transform: translateY(-50%) rotate(180deg); }
+.faq-body{
+  padding: 0 14px 14px 14px;
+  color: var(--ink);
+}
+
+/* dark mode polish */
+[data-theme="dark"] .faq-card{ background: rgba(255,255,255,.06); color: var(--text); border-color: rgba(154,167,199,.35); }
+[data-theme="dark"] .faq-body{ color: var(--text); }
+
+/* action row under accordion */
+.faq-cta{
+  display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;
+}
+
+/* responsive */
+@media (max-width: 1024px){
+  .faq-grid{ grid-template-columns: 1fr; }
+  .faq-anim{ min-height: 220px; }
+}
+
+/* (already added earlier, but repeating for clarity) dark hero copy */
+[data-theme="dark"] .services-hero .hero-copy h1{ color: var(--text); }
+[data-theme="dark"] .services-hero .hero-copy .lead{ color: rgba(255,255,255,.85); }
+[data-theme="dark"] .services-hero .hero-points{ color: var(--text); }
+/* Left FAQ animation box with media */
+.faq-anim.with-media{ border-style: solid; background: var(--surface); }
+
+.faq-video{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16/10;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--surface-2);
+  background: #0c1b33; /* fallback while the first frame loads */
+}
+
+/* Make media fill and allow a gentle zoom */
+.fit{ display:block; width:100%; height:100%; object-fit:cover; }
+.zoomed{ transform: scale(1.16); transform-origin: 50% 50%; will-change: transform; }
+
+/* Focus helpers — pick one via class on <video> */
+.focus-center{ transform-origin: 50% 50%; }
+.focus-right { transform-origin: 80% 50%; }
+.focus-left  { transform-origin: 20% 50%; }
+.focus-top   { transform-origin: 50% 20%; }
+.focus-bottom{ transform-origin: 50% 80%; }
+
+/* Optional color tint over the video to match palette */
+.faq-video .tint{
+  position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(47,114,255,.12), rgba(147,51,234,.14));
+  mix-blend-mode: overlay;
+  pointer-events:none;
+}
+/* Make the left FAQ animation fully fill its card */
+.faq-anim{ padding: 0; }                   /* remove inner padding */
+.faq-anim.with-media{ border-style: solid; background: var(--surface); }
+
+.faq-video{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;                        /* adjust if you want taller/shorter */
+  aspect-ratio: auto;                       /* override earlier aspect-ratio */
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--surface-2);
+  background: #0c1b33;                      /* fallback while first frame loads */
+}
+
+/* make video/img/iframe cover the box */
+.faq-video > video,
+.faq-video > img,
+.faq-video > iframe{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                         /* KEY: fills the box */
+}
+
+/* Lottie component sizing */
+.faq-anim lottie-player{
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* optional palette tint */
+.faq-video .tint{
+  position:absolute; inset:0;
+  pointer-events:none;
+  mix-blend-mode: overlay;
+  background: linear-gradient(135deg, rgba(47,114,255,.12), rgba(147,51,234,.14));
+}
+
+/* keep your zoom helpers */
+.fit{ width:100%; height:100%; object-fit:cover; display:block; }
+.zoomed{ transform: scale(1.16); will-change: transform; }
+.focus-center{ transform-origin: 50% 50%; }
+.focus-right { transform-origin: 80% 50%; }
+.focus-left  { transform-origin: 20% 50%; }

@@ -1,0 +1,83 @@
+/* =====================================
+   Sport Chips – Live page filter pills
+   Uses global tokens from layout.css
+   ===================================== */
+
+:root{
+  --chip-bg: var(--surface, #f6f8fb);
+  --chip-fg: var(--text, #0d1b2a);
+  --chip-br: var(--border, #e5e7eb);
+  --chip-bg-hover: rgba(0,0,0,.04);
+  --chip-active-bg: var(--blue, #103a8a);
+  --chip-active-fg: #fff;
+}
+
+/* Container */
+.sport-chips{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin:8px 0 14px;
+}
+
+/* Chip */
+.chip{
+  appearance:none;
+  border:1px solid var(--chip-br);
+  background:var(--chip-bg);
+  color:var(--chip-fg);
+  font-weight:700;
+  font-size:14px;
+  padding:8px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  transition: background .15s ease, color .15s ease, transform .06s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.chip:hover{
+  background:var(--chip-bg-hover);
+  transform:translateY(-1px);
+}
+
+.chip:focus-visible{
+  outline:2px solid color-mix(in srgb, var(--chip-active-bg) 75%, white);
+  outline-offset:2px;
+}
+
+/* Active */
+.chip.active{
+  background:var(--chip-active-bg);
+  color:var(--chip-active-fg);
+  border-color:transparent;
+  box-shadow:0 8px 18px rgba(16,58,138,.25);
+}
+
+/* Count bubble */
+.chip .count{
+  opacity:.75;
+  margin-left:6px;
+  font-weight:800;
+}
+
+/* Compact on small screens */
+@media (max-width:520px){
+  .chip{ font-size:13px; padding:7px 10px; }
+}
+
+/* =====================
+   Dark mode adjustments
+   ===================== */
+[data-theme="dark"] .chip{
+  border-color:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  color:var(--text, #f1f5f9);
+}
+[data-theme="dark"] .chip:hover{
+  background:rgba(255,255,255,.08);
+}
+[data-theme="dark"] .chip.active{
+  background:var(--blue, #103a8a);
+  color:#fff;
+  box-shadow:0 10px 20px rgba(0,0,0,.35);
+}

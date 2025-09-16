@@ -1,0 +1,1 @@
+# Football — training basics\nWarm-up, ball mastery, passing patterns, small-sided games, recovery days. No medical advice provided; practice safely.\n

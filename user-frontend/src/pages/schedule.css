@@ -1,0 +1,815 @@
+/* src/pages/schedule.css  — modern alignment + card grid + transitions */
+
+/* neat width on all content */
+.sched-wrap{
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+/* hero */
+.sched-hero{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  padding: 10px 4px 0;
+}
+.sched-hero h1{ margin:0; font-size: clamp(26px, 4.6vw, 44px); font-weight: 900; color: var(--text); }
+.sched-hero p{ margin: 6px 0 0; color: var(--muted); }
+
+/* controls */
+.sched-controls{
+  position: sticky;
+  top: var(--header-h, 64px);
+  z-index: 2;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0 14px;
+}
+.tabs{ display:flex; gap:8px; margin-bottom: 10px; align-items:center; }
+.tab{
+  height: 34px; padding: 0 14px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--surface-2);
+  color: var(--text); font-weight:700; transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.tab.active{ background: var(--blue); color:#fff; border-color: var(--blue); }
+
+.date-rail{
+  display:flex; gap:8px; overflow-x:auto; padding: 4px 0 8px;
+  align-items:center; scrollbar-width: thin;
+}
+.date-pill{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:2px; height: 52px; min-width: 78px;
+  border-radius: 14px; border:1px solid var(--border);
+  background: var(--surface); color: var(--text); font-weight: 800;
+}
+.date-pill .dow{ font-size: 10px; letter-spacing: .6px; opacity:.7; }
+.date-pill .dl{ font-size: 13px; }
+.date-pill.active{ background: var(--blue); color:#fff; border-color: var(--blue); }
+
+/* chips */
+.chipbar{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top: 8px; }
+.chip-label{ color: var(--muted); font-weight: 800; margin-right: 2px; }
+.chip{
+  height:28px; padding:0 12px; border-radius:999px;
+  background: var(--surface-2); border:1px solid var(--border); color: var(--text);
+  font-weight:700; transition: background .15s, color .15s, border-color .15s;
+}
+.chip.on{ background: rgba(47,114,255,.10); border-color: rgba(47,114,255,.28); color: var(--blue); }
+.chip-rail{ display:flex; gap:6px; overflow-x:auto; align-items:center; }
+.chip-split{ display:flex; align-items:center; gap:8px; }
+
+/* grouped list */
+.sched-group{ display:grid; gap:14px; margin-top: 12px; }
+.group-title{ margin:0; font-size: 18px; font-weight:900; color: var(--text); }
+
+/* responsive card grid */
+.group-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* card */
+.schedule-card{
+  display:flex; flex-direction:column; overflow:hidden;
+  background: var(--surface);
+  border:1px solid var(--border);
+  border-radius:18px;
+  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.schedule-card:hover{
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.12);
+}
+
+/* card header with soft gradient */
+.card-head{
+  position: relative;
+  height: 110px;
+  background: linear-gradient(135deg, rgba(47,114,255,.10), rgba(0,0,0,.03));
+}
+.schedule-card.sport-cricket .card-head{
+  background: linear-gradient(135deg, rgba(0,160,90,.18), rgba(47,114,255,.10));
+}
+.schedule-card.sport-football .card-head{
+  background: linear-gradient(135deg, rgba(31,76,255,.14), rgba(0,0,0,.04));
+}
+.schedule-card.sport-basketball .card-head{
+  background: linear-gradient(135deg, rgba(255,136,0,.16), rgba(31,76,255,.08));
+}
+.schedule-card.sport-tennis .card-head{
+  background: linear-gradient(135deg, rgba(14,165,233,.18), rgba(31,76,255,.08));
+}
+
+.league-pill{
+  position:absolute; top:10px; left:10px;
+  background:#fff; color: var(--blue); border:1px solid rgba(47,114,255,.28);
+  border-radius:999px; height:24px; padding:0 10px; display:inline-grid; place-items:center;
+  font-size:12px; font-weight:800;
+}
+.live-dot{
+  position:absolute; top:12px; right:12px;
+  width:10px; height:10px; border-radius:50%; background:#16a34a; box-shadow:0 0 0 3px rgba(22,163,74,.18);
+}
+.ft{
+  position:absolute; top:10px; right:10px;
+  color: var(--muted); font-weight:900; font-size:12px; background:#fff; padding:2px 6px; border-radius:8px; border:1px solid var(--border);
+}
+
+/* body */
+.card-body{ display:grid; gap:10px; padding: 12px; }
+.card-time{
+  width:max-content; height:28px; display:grid; place-items:center;
+  padding: 0 12px; border-radius:10px; background: var(--surface-2); border:1px solid var(--border);
+  font-weight:900; color: var(--text);
+}
+.card-title{ margin:0; font-size:16px; color: var(--text); }
+.card-meta{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{
+  background: var(--surface-2); border:1px solid var(--border); color: var(--muted);
+}
+
+/* CTAs must stay side-by-side */
+.cta-row{ display:flex; gap:12px; white-space:nowrap; }
+.cta-row .btn{ width:auto; }
+@media (max-width: 560px){
+  .cta-row .btn{ padding:0 14px; }
+}
+
+/* dark mode polish */
+[data-theme="dark"] .schedule-card{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+[data-theme="dark"] .league-pill{ background: rgba(255,255,255,.92); }
+/* src/pages/schedule.css  — tidy alignment + card grid + pinned CTAs */
+
+.sched-wrap{ max-width:1120px; margin:0 auto; padding:0 10px; }
+
+/* hero */
+.sched-hero{ display:flex; align-items:flex-end; justify-content:space-between; padding:10px 4px 0; }
+.sched-hero h1{ margin:0; font-size:clamp(26px,4.6vw,44px); font-weight:900; color:var(--text); }
+.sched-hero p{ margin:6px 0 0; color:var(--muted); }
+
+/* controls */
+.sched-controls{ position:sticky; top:var(--header-h,64px); z-index:2; background:var(--bg);
+  border-bottom:1px solid var(--border); padding:12px 0 14px; }
+.tabs{ display:flex; gap:8px; margin-bottom:10px; align-items:center; }
+.tab{ height:34px; padding:0 14px; border-radius:999px; border:1px solid var(--border);
+  background:var(--surface-2); color:var(--text); font-weight:700; transition:background .15s,color .15s,border-color .15s; }
+.tab.active{ background:var(--blue); color:#fff; border-color:var(--blue); }
+
+.date-rail{ display:flex; gap:8px; overflow-x:auto; padding:4px 0 8px; align-items:center; scrollbar-width:thin; }
+.date-pill{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; height:52px; min-width:78px;
+  border-radius:14px; border:1px solid var(--border); background:var(--surface); color:var(--text); font-weight:800; }
+.date-pill .dow{ font-size:10px; letter-spacing:.6px; opacity:.7; }
+.date-pill .dl{ font-size:13px; }
+.date-pill.active{ background:var(--blue); color:#fff; border-color:var(--blue); }
+
+/* chips */
+.chipbar{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:8px; }
+.chip-label{ color:var(--muted); font-weight:800; margin-right:2px; }
+.chip{ height:28px; padding:0 12px; border-radius:999px; background:var(--surface-2); border:1px solid var(--border);
+  color:var(--text); font-weight:700; transition:background .15s, color .15s, border-color .15s; }
+.chip.on{ background:rgba(47,114,255,.10); border-color:rgba(47,114,255,.28); color:var(--blue); }
+.chip-rail{ display:flex; gap:6px; overflow-x:auto; align-items:center; }
+.chip-split{ display:flex; align-items:center; gap:8px; }
+
+/* grouped list */
+.sched-group{ display:grid; gap:14px; margin-top:12px; }
+.group-title{ margin:0; font-size:18px; font-weight:900; color:var(--text); }
+
+/* responsive card grid */
+.group-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px; }
+
+/* card */
+.schedule-card{ display:flex; flex-direction:column; overflow:hidden; background:var(--surface); border:1px solid var(--border);
+  border-radius:18px; box-shadow:0 8px 22px rgba(0,0,0,.06); transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.schedule-card:hover{ transform:translateY(-4px); box-shadow:0 18px 40px rgba(0,0,0,.12); }
+
+/* header with soft gradient */
+.card-head{ position:relative; height:110px; background:linear-gradient(135deg, rgba(47,114,255,.10), rgba(0,0,0,.03)); }
+.schedule-card.sport-cricket .card-head{ background:linear-gradient(135deg, rgba(0,160,90,.18), rgba(47,114,255,.10)); }
+.schedule-card.sport-football .card-head{ background:linear-gradient(135deg, rgba(31,76,255,.14), rgba(0,0,0,.04)); }
+.schedule-card.sport-basketball .card-head{ background:linear-gradient(135deg, rgba(255,136,0,.16), rgba(31,76,255,.08)); }
+.schedule-card.sport-tennis .card-head{ background:linear-gradient(135deg, rgba(14,165,233,.18), rgba(31,76,255,.08)); }
+
+.league-pill{ position:absolute; top:10px; left:10px; background:#fff; color:var(--blue); border:1px solid rgba(47,114,255,.28);
+  border-radius:999px; height:24px; padding:0 10px; display:inline-grid; place-items:center; font-size:12px; font-weight:800; }
+.live-dot{ position:absolute; top:12px; right:12px; width:10px; height:10px; border-radius:50%; background:#16a34a; box-shadow:0 0 0 3px rgba(22,163,74,.18); }
+.ft{ position:absolute; top:10px; right:10px; color:var(--muted); font-weight:900; font-size:12px; background:#fff; padding:2px 6px; border-radius:8px; border:1px solid var(--border); }
+
+/* body — make it a column so CTAs can pin to the bottom */
+.card-body{ display:flex; flex-direction:column; gap:10px; padding:12px; min-height: 240px; }
+.card-time{ width:max-content; height:28px; display:grid; place-items:center; padding:0 12px; border-radius:10px;
+  background:var(--surface-2); border:1px solid var(--border); font-weight:900; color:var(--text); }
+.card-title{ margin:0; font-size:16px; color:var(--text); }
+
+/* NEW meta-line like Live cards */
+.meta-line{ display:flex; align-items:center; gap:6px; color:var(--muted); font-weight:800; }
+.meta-line .dot{ opacity:.55; }
+.status-pill{ height:22px; padding:0 10px; border-radius:999px; font-size:12px; display:inline-grid; place-items:center; border:1px solid var(--border); background:var(--surface-2); }
+.status-pill.live{ color:#16a34a; border-color:rgba(22,163,74,.35); background:rgba(22,163,74,.08); }
+.status-pill.finished{ color:#475569; }
+.status-pill.upcoming{ color:var(--blue); border-color:rgba(47,114,255,.28); background:rgba(47,114,255,.10); }
+
+.card-meta{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{ background:var(--surface-2); border:1px solid var(--border); color:var(--muted); }
+
+/* Upcoming message */
+.soon{ margin-top:-2px; color:var(--muted); font-weight:700; }
+
+/* CTAs pinned to bottom-left */
+.cta-row{ margin-top:auto; display:flex; gap:12px; white-space:nowrap; align-items:center; }
+.cta-row .btn{ width:auto; }
+@media (max-width:560px){ .cta-row .btn{ padding:0 14px; } }
+
+/* dark mode polish */
+[data-theme="dark"] .schedule-card{ background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); box-shadow:0 8px 22px rgba(0,0,0,.35); }
+[data-theme="dark"] .league-pill{ background:rgba(255,255,255,.92); }
+/* --- Pin CTAs bottom-left & keep them horizontal --- */
+
+/* Make the card body a grid so we can pin CTAs to the bottom cleanly */
+.schedule-page .schedule-card .card-body{
+  display: grid;
+  grid-template-rows: auto auto auto auto 1fr auto; /* time, title, meta-line, chips, spacer, CTAs */
+  gap: 10px;
+  padding: 12px;
+  min-height: 240px;
+}
+
+/* The row that holds the two buttons */
+.schedule-page .schedule-card .cta-row{
+  /* Grid guarantees side-by-side even if some global flex rule exists */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;  /* buttons size to content */
+  gap: 12px;
+
+  /* pin to bottom-left */
+  align-self: end;
+  justify-self: start;
+
+  /* never wrap into a second line */
+  white-space: nowrap;
+}
+
+/* Ensure buttons don't stretch or collapse */
+.schedule-page .schedule-card .cta-row .btn{
+  width: auto;
+  flex: none;        /* guard against flex-based global rules */
+  display: inline-flex;
+}
+@media (max-width: 560px){
+  .schedule-page .schedule-card .cta-row .btn{ padding: 0 14px; }
+}
+/* responsive card grid */
+.group-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* was 260px */
+  gap: 16px;
+}
+/* ========== Upcoming info modal (same vibe as live modal) ========== */
+.up-modal-overlay{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display: grid; place-items: center;
+  z-index: 60;
+}
+.up-modal{
+  position: relative;
+  width: min(680px, 92vw);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 18px 48px rgba(0,0,0,.26);
+  padding: 18px 18px 20px;
+}
+.up-modal .modal-x{
+  position:absolute; top:10px; right:12px;
+  background:transparent; border:0; font-size:22px; line-height:1;
+  color: var(--muted); cursor:pointer;
+}
+.up-modal .modal-title{ margin:6px 0 8px; font-weight:900; color:var(--text); }
+.up-modal .modal-sub{ color: var(--muted); margin: 4px 0; }
+
+/* ensure grid cards are wide enough so CTAs never clip */
+.group-grid{ grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+/* Modal copy polish */
+.up-modal .modal-sub{
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.up-modal .modal-sub.emphasis{
+  color: var(--text);
+  font-weight: 800;
+}
+.up-modal .modal-sub strong{
+  color: var(--text);
+  font-weight: 900;
+}
+/* ==== Schedule card width + CTA fix (all breakpoints) ==== */
+
+/* Default (desktop) */
+.schedule-page .group-grid{
+  display: grid !important;
+  gap: 16px !important;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)) !important;
+}
+
+.schedule-page .schedule-card{
+  overflow: visible !important;     /* let buttons show fully */
+}
+
+.schedule-page .schedule-card .cta-row{
+  display: grid !important;
+  grid-auto-flow: column !important;
+  grid-auto-columns: max-content !important;
+  gap: 10px !important;             /* a touch tighter so all 3 fit */
+  white-space: nowrap !important;
+  justify-self: start !important;
+}
+
+/* XL desktops */
+@media (min-width: 1440px){
+  .schedule-page .group-grid{
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)) !important;
+  }
+}
+
+/* Large laptops / landscape tablets */
+@media (max-width: 1200px){
+  .schedule-page .group-grid{
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)) !important;
+  }
+}
+
+/* Tablets (portrait / small landscape) */
+@media (max-width: 900px){
+  .schedule-page .group-grid{
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+  }
+}
+
+/* Small phones */
+@media (max-width: 560px){
+  .schedule-page .group-grid{
+    grid-template-columns: 1fr !important;  /* one card per row */
+  }
+  .schedule-page .schedule-card .cta-row{
+    grid-auto-flow: row !important;         /* stack CTAs neatly */
+    white-space: normal !important;
+  }
+  .schedule-page .schedule-card .cta-row .btn{
+    width: 100% !important;                 /* full-width buttons */
+  }
+}
+/* Make cards wider and prevent CTA clipping */
+.sched-group .group-grid{
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 14px;
+}
+
+/* Ensure buttons wrap nicely at the bottom of the card */
+.schedule-card .cta-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.schedule-card .cta-row .btn{ width: auto; }
+/* ---------- FORCE CTA ROW TO STAY INSIDE CARD (with !important) ---------- */
+.schedule-card{
+  overflow: hidden !important;           /* keep shadows/text inside rounded card */
+  box-sizing: border-box !important;
+}
+
+.schedule-card .card-body{
+  display: flex !important;
+  flex-direction: column !important;     /* lets the CTA sit at the bottom */
+  min-height: 260px !important;
+}
+
+.schedule-card .cta-row{
+  display: flex !important;              /* beat any inline grid style */
+  flex-wrap: wrap !important;            /* allow buttons to wrap */
+  gap: 12px !important;
+  width: 100% !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  margin-top: 14px !important;
+  padding-right: 8px !important;         /* tiny buffer from card edge */
+  white-space: normal !important;
+  box-sizing: border-box !important;
+}
+
+.schedule-card .cta-row .btn{
+  flex: 0 0 auto !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+}
+
+/* Give each card a bit more width so 3–4 CTAs fit comfortably */
+.sched-group .group-grid{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)) !important;
+  gap: 20px !important;
+}
+
+/* Responsive: narrower cards on medium, single column on small */
+@media (max-width: 1200px){
+  .sched-group .group-grid{
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)) !important;
+  }
+}
+@media (max-width: 640px){
+  .sched-group .group-grid{ grid-template-columns: 1fr !important; }
+  .schedule-card .cta-row .btn{ flex: 1 1 auto !important; } /* allow equal wrap */
+}
+/* --- Fix: CTA buttons never overflow the card --- */
+.schedule-card .card-body{ min-width:0 !important; }
+
+.schedule-card .cta-row{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  gap:12px !important;
+  margin-top:12px !important;
+}
+
+.schedule-card .cta-row .btn{
+  flex:0 0 auto !important;
+  white-space:nowrap !important;
+  max-width:none !important;
+}
+
+/* Make cards a bit wider so 3–4 buttons fit nicely */
+.group-grid{
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)) !important;
+}
+
+/* Responsive tweaks */
+@media (max-width:1100px){
+  .group-grid{ grid-template-columns: repeat(2, minmax(360px,1fr)) !important; }
+}
+@media (max-width:720px){
+  .group-grid{ grid-template-columns: 1fr !important; }
+  .schedule-card .cta-row .btn{ width:100% !important; }
+}
+
+/* ===== FINAL OVERRIDES (put at the very bottom of schedule.css) ===== */
+
+/* Wider cards so 3–4 CTAs fit without clipping */
+.schedule-page .sched-group .group-grid{
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)) !important;
+  gap: 20px !important;
+}
+@media (max-width: 1200px){
+  .schedule-page .sched-group .group-grid{
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)) !important;
+  }
+}
+@media (max-width: 720px){
+  .schedule-page .sched-group .group-grid{
+    grid-template-columns: 1fr !important;   /* one card per row on small screens */
+  }
+}
+
+/* Keep focus rings / shadows visible and add breathing room on the right */
+.schedule-page .schedule-card{
+  overflow: visible !important;
+}
+.schedule-page .schedule-card .card-body{
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 260px !important;
+  padding: 12px 16px 16px 12px !important;   /* ← extra right padding */
+}
+
+/* Pin CTAs to the bottom-left and allow wrapping instead of overflow */
+.schedule-page .schedule-card .cta-row{
+  margin-top: auto !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  white-space: normal !important;
+  padding-right: 12px !important;            /* keeps the last button inside the border */
+}
+.schedule-page .schedule-card .cta-row .btn{
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+}
+/* ====== Tournament apply sheet ====== */
+.apply-sheet-overlay{
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(13,27,42,.35); backdrop-filter: blur(2px);
+  display: grid; place-items: end center;
+}
+.apply-sheet{
+  width: min(820px, 95vw);
+  max-height: 90vh; overflow: auto;
+  background: var(--bg,#fff); color: var(--text,#0b1620);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -18px 50px rgba(0,0,0,.18);
+  padding: 18px 18px 20px;
+  animation: sheetUp .22s cubic-bezier(.2,.8,.2,1);
+}
+.apply-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.apply-head h3{ margin:0; font-weight:900; }
+.sheet-x{ background:transparent; border:0; font-size:26px; line-height:1; cursor:pointer; }
+
+.apply-grid{ display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:12px; margin-top:12px; }
+.apply-grid .field{ display:flex; flex-direction:column; gap:6px; }
+.apply-grid .field label{ font-weight:800; font-size:14px; }
+.apply-grid .field input,
+.apply-grid .field select{
+  height:40px; padding:0 12px; border:1px solid var(--line,#e6ebf1);
+  border-radius:10px; background:var(--bg,#fff); color:inherit;
+}
+
+.roster-head{ display:flex; align-items:center; justify-content:space-between; margin:14px 2px 8px; }
+.roster-head h4{ margin:0; font-weight:900; }
+.btn.small{ height:34px; padding:0 12px; font-size:14px; }
+
+.roster-table{ border:1px dashed var(--line,#e6ebf1); border-radius:12px; padding:8px; }
+.roster-row{ display:grid; grid-template-columns: 2fr 1.5fr 1fr 1.5fr auto; gap:8px; align-items:center; margin:6px 0; }
+.roster-row.head{ font-weight:800; opacity:.7; }
+.roster-row input, .roster-row select{
+  height:38px; padding:0 10px; border:1px solid var(--line,#e6ebf1); border-radius:10px;
+}
+.link.danger{ background:transparent; border:0; color:#e55252; cursor:pointer; }
+
+.agree{ display:flex; align-items:center; gap:8px; margin:12px 2px; }
+.sheet-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:8px; }
+
+@keyframes sheetUp { from{ transform: translateY(10px); opacity:0; } to{ transform: translateY(0); opacity:1; } }
+
+/* ====== team gate (no team) ====== */
+.team-gate{
+  position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+  z-index: 9997;
+}
+.team-gate .gate-body{
+  background: var(--bg,#fff);
+  color: var(--text,#0b1620);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.16);
+  padding: 14px 16px;
+  min-width: 300px;
+}
+.team-gate h4{ margin: 0 0 4px; font-weight: 900; }
+.team-gate p{ margin: 0 0 10px; opacity: .8; }
+.team-gate .gate-actions{ display:flex; gap:10px; justify-content:flex-end; }
+
+/* ====== tournament card tweak ====== */
+.schedule-card.tour .card-title{ font-weight:900; }
+
+/* empty-state CTAs */
+.empty-card .cta-row{ display:flex; gap:10px; justify-content:center; margin-top:10px; }
+
+/* keep your existing buttons — these use .btn, .blue, .white already in your styles */
+/* Center the team gate like a modal */
+.team-gate{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: rgba(13,27,42,.38);
+  backdrop-filter: blur(2px);
+  animation: modalFade .18s ease-out;
+}
+.team-gate .gate-body{
+  width: min(92vw, 480px);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  animation: modalPop .22s cubic-bezier(.2,.8,.2,1);
+}
+.team-gate .gate-actions{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+/* reuse simple pop/fade animations */
+@keyframes modalPop{ from{ transform:scale(.96); opacity:0 } to{ transform:scale(1); opacity:1 } }
+@keyframes modalFade{ from{ opacity:0 } to{ opacity:1 } }
+/* Center the team gate like a modal (full-viewport overlay) */
+.team-gate{
+  position: fixed;
+  inset: 0;
+  z-index: 100000;              /* above everything */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13,27,42,.38);
+  backdrop-filter: blur(2px);
+  animation: modalFade .18s ease-out;
+}
+.team-gate .gate-body{
+  width: min(92vw, 480px);
+  background: var(--bg);
+  color: var(--text);
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  animation: modalPop .22s cubic-bezier(.2,.8,.2,1);
+}
+.team-gate .gate-actions{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+@keyframes modalPop{ from{ transform:scale(.96); opacity:0 } to{ transform:scale(1); opacity:1 } }
+@keyframes modalFade{ from{ opacity:0 } to{ opacity:1 } }
+/* --- HERO (light text on dark/video background) --- */
+.sched-hero{
+  --hero-blend: #0f213f;             /* tweak to match your video */
+  --hero-fg: #eef4ff;                /* readable light fg */
+  position: relative;
+  background:
+    radial-gradient(1200px 600px at -20% -60%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 60%),
+    var(--hero-blend);
+  border-radius: 20px;
+  padding: clamp(18px, 3vw, 28px);
+  margin-bottom: 18px;
+  overflow: hidden;
+  color: var(--hero-fg);             /* force light text inside hero */
+}
+
+/* optional soft vignette for extra readability on the left */
+.sched-hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(0,0,0,.22), rgba(0,0,0,0) 55%);
+  pointer-events:none;
+}
+
+.sched-hero .hero-grid{
+  display:grid; grid-template-columns: 1.05fr 1fr;
+  align-items:center; gap: clamp(16px,3vw,28px);
+}
+
+.sched-hero .hero-copy h1{
+  margin:0; line-height:1.15; letter-spacing:-.2px;
+  font-size: clamp(24px, 3.2vw, 38px);
+  color:#fff;                          /* hard white for the heading */
+  text-shadow: 0 2px 18px rgba(0,0,0,.35);
+}
+
+.sched-hero .hero-copy p{
+  margin:.55rem 0 0;
+  color: rgba(255,255,255,.92);        /* lighter body text */
+  max-width: 46ch;
+}
+
+.sched-hero .hero-vid{
+  aspect-ratio: 16/9; width: 100%;
+  border-radius: 16px; overflow: hidden;
+  background: rgba(0,0,0,.15);
+  box-shadow: 0 22px 60px rgba(0,0,0,.28), inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.sched-hero .hero-vid video{
+  width:100%; height:100%; object-fit: cover; display:block;
+}
+
+@media (max-width: 860px){
+  .sched-hero .hero-grid{ grid-template-columns: 1fr; }
+  .sched-hero .hero-vid{ order:-1; }
+}
+/* --- HERO (light text + blended bg) --- */
+.sched-hero{
+  --hero-blend:#0f213f;             /* tweak to match your SVG tones */
+  --hero-fg:#eef4ff;
+  position:relative;
+  background:
+    radial-gradient(1200px 600px at -20% -60%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 60%),
+    var(--hero-blend);
+  border-radius:20px;
+  padding:clamp(18px,3vw,28px);
+  margin-bottom:18px;
+  overflow:hidden;
+  color:var(--hero-fg);
+}
+.sched-hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(90deg, rgba(0,0,0,.22), rgba(0,0,0,0) 55%);
+  pointer-events:none;
+}
+.sched-hero .hero-grid{
+  display:grid; grid-template-columns:1.05fr 1fr;
+  align-items:center; gap:clamp(16px,3vw,28px);
+}
+.sched-hero .hero-copy h1{
+  margin:0; line-height:1.15; letter-spacing:-.2px;
+  font-size:clamp(24px,3.2vw,38px);
+  color:#fff;
+  text-shadow:0 2px 18px rgba(0,0,0,.35);
+}
+.sched-hero .hero-copy p{
+  margin:.55rem 0 0;
+  color:rgba(255,255,255,.92);
+  max-width:46ch;
+}
+
+/* right-side media box (now uses <img>) */
+.sched-hero .hero-media{
+  aspect-ratio:16/9;                 /* nice wide card look */
+  width:100%;
+  border-radius:16px; overflow:hidden;
+  background:rgba(0,0,0,.15);
+  display:grid; place-items:center;
+  box-shadow:0 22px 60px rgba(0,0,0,.28), inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.sched-hero .hero-media img{
+  width:100%; height:100%;
+  object-fit:contain;                /* show the whole SVG nicely */
+  display:block;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,.25));
+}
+
+@media (max-width:860px){
+  .sched-hero .hero-grid{ grid-template-columns:1fr; }
+  .sched-hero .hero-media{ order:-1; }
+}
+/* ---- HERO: force light/white background ---- */
+.schedule-page .sched-hero{
+  background: #fff !important;
+}
+
+/* main hero card */
+.schedule-page .sched-hero .hero-grid{
+  background: #fff !important;
+  border: 1px solid var(--card-border, #e8eef5);
+  border-radius: 24px;
+  box-shadow: 0 8px 28px rgba(16,24,40,.06);
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 28px;
+  align-items: center;
+  padding: 42px;
+}
+
+/* right-side artwork panel */
+.schedule-page .sched-hero .hero-vid{
+  background: #fff !important;                 /* image panel is white */
+  border: 1px solid var(--card-border, #e8eef5);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* image sizing */
+.schedule-page .sched-hero .hero-vid img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;                            /* keep inner bg white */
+  display: block;
+}
+
+/* readable copy on light bg */
+.schedule-page .sched-hero .hero-copy h1{
+  color: var(--text, #0f172a) !important;
+}
+.schedule-page .sched-hero .hero-copy p{
+  color: var(--muted, #475569) !important;
+}
+
+/* responsive tweak */
+@media (max-width: 900px){
+  .schedule-page .sched-hero .hero-grid{
+    grid-template-columns: 1fr;
+    padding: 28px;
+  }
+  .schedule-page .sched-hero .hero-vid{ order: -1; }
+}
+/* Force hero copy to black (light + dark modes) */
+.schedule-page .sched-hero .hero-copy h1,
+.schedule-page .sched-hero .hero-copy p{
+  color: #0b1220 !important;  /* near-black */
+  text-shadow: none !important; /* remove glow on dark bg */
+}
+
+/* If your app toggles a dark class/attr, keep it black there too */
+.dark .schedule-page .sched-hero .hero-copy h1,
+.dark .schedule-page .sched-hero .hero-copy p,
+[data-theme="dark"] .schedule-page .sched-hero .hero-copy h1,
+[data-theme="dark"] .schedule-page .sched-hero .hero-copy p{
+  color: #0b1220 !important;
+}

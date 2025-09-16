@@ -1,0 +1,1229 @@
+/* ========== Live page ========== */
+.live-page{
+  display:grid;
+  gap:20px;
+  background: var(--bg);
+  color: var(--text);
+  max-width: 100%;
+  overflow-x: hidden;
+}
+.live-page *{ box-sizing:border-box; min-width:0; }
+
+/* Top strip (ticker) — tight gap under header */
+.live-top{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:8px; }
+
+/* =========================
+   Hero (left copy + right trending)
+   ========================= */
+.hero-grid{
+  display:grid;
+  gap:16px;
+  margin:10px 0 18px;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.9fr);
+}
+.hero-grid > *{ min-width:0; }
+@media (max-width: 1024px){
+  .hero-grid{ grid-template-columns: 1fr; }
+}
+
+.hero-block{
+  background: linear-gradient(135deg, var(--navy, #1b2a3c), #0c1b36);
+  color:#fff;
+  border-radius:20px;
+  padding:28px;
+  display:grid;
+  align-content:center;
+  gap:10px;
+  min-height:240px;
+}
+.hero-block h1{ margin:0; font-size:32px; font-weight:900; }
+.hero-block p{ margin:0 0 6px; opacity:.9; }
+
+/* Use your global .btn.red/.btn.blue for consistency */
+.hero-block .wide{ width:max-content; }
+
+/* Section titles */
+.section-title{ margin:8px 0 10px; font-size:22px; font-weight:900; color:var(--text); }
+
+/* =========================
+   “Live now” fallback grid styles (if used)
+   ========================= */
+.score-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:14px;
+}
+@media (max-width:980px){ .score-grid{ grid-template-columns:1fr; } }
+
+.score-card{
+  display:flex; align-items:center; gap:14px;
+  background: var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px 16px;
+}
+[data-theme="dark"] .score-card{
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.score-card .league{
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:700; letter-spacing:.2px;
+  color:var(--muted);
+  padding:4px 10px; border-radius:999px; background:rgba(0,0,0,.04);
+}
+[data-theme="dark"] .score-card .league{ background:rgba(255,255,255,.08); }
+
+.score-card .teams{ flex:1 1 auto; font-weight:700; color:var(--text); }
+.score-card .score{ font-weight:900; letter-spacing:.3px; color:var(--text); }
+.status-dot{ width:8px; height:8px; border-radius:50%; background:#28c76f; }
+.status-upcoming{ background:#f2a007; }
+.remind-wrap{ margin-left:auto; }
+
+/* =========================
+   Coming up next (generic cards; your UpcomingCarousel has its own CSS)
+   ========================= */
+.coming-next{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:16px; margin-top:12px; }
+@media (max-width:900px){ .coming-next{ grid-template-columns:1fr; } }
+
+.next-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px;
+  display:grid; gap:6px; text-align:center;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.next-card:hover{ transform:translateY(-4px); box-shadow:0 8px 20px rgba(0,0,0,.08); }
+.next-card .sport{ font-size:13px; font-weight:700; color:var(--muted); }
+.next-card .teams{ font-size:16px; font-weight:800; color:var(--text); }
+.next-card .time{ font-size:14px; font-weight:700; color:var(--accent); }
+
+/* =========================
+   Trending (panel has its own CSS; these are safe helpers)
+   ========================= */
+.trending{ margin-top:12px; }
+
+/* =========================
+   Carousels containment (safety)
+   ========================= */
+.score-track,
+.cc-track{
+  overflow-x:auto;
+  max-width:100%;
+}
+.score-track::-webkit-scrollbar,
+.cc-track::-webkit-scrollbar{ height:6px; }
+
+/* Carousel nav buttons are absolutely positioned in their own CSS; just ensure stacking */
+.nav-btn, .cc-nav{ z-index:5; }
+
+/* League grid responsiveness — prevents overflow on small viewports */
+.ls-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap:14px;
+  width:100%;
+}
+
+/* =========================
+   Button aliases for Live page consistency
+   (Maps to your global palette/hover rules)
+   ========================= */
+.btn.btn-watch{
+  background: var(--red, #ff565a);
+  color:#fff;
+  border:1px solid transparent;
+}
+.btn.btn-watch:hover{
+  background:#fff;
+  color:#111;
+  border-color: var(--red, #ff565a);
+  box-shadow:0 6px 16px rgba(0,0,0,.15);
+}
+
+.btn.btn-remind{
+  background: var(--blue, #103a8a);
+  color:#fff;
+  border:1px solid transparent;
+}
+.btn.btn-remind:hover{
+  background:#fff;
+  color:#111;
+  border-color: var(--blue, #103a8a);
+  box-shadow:0 6px 16px rgba(0,0,0,.15);
+}
+
+/* =========================
+   Dark mode alignment
+   ========================= */
+[data-theme="dark"] .hero-block{
+  background: linear-gradient(135deg, #0d1624, #0c1b36);
+  color:#fff;
+}
+[data-theme="dark"] .next-card:hover{ box-shadow:0 10px 24px rgba(0,0,0,.35); }
+
+/* =========================
+   Small utilities
+   ========================= */
+.ticker, .ticker-strip{ font-size:14px; font-weight:800; }
+.ticker .item, .ticker-item{ padding:0 14px; position:relative; }
+.ticker .item::after, .ticker-item::after{ content:"•"; margin-left:14px; opacity:.35; }
+
+/* --- HERO: full-bleed background video --- */
+.hero-block{
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  min-height: 360px;                 /* height thoda badha di; zaroorat ho to adjust */
+  color: #fff;                       /* text har mode me white */
+}
+
+/* video fills entire block */
+.hero-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                 /* fill like background-size: cover */
+  object-position: center;           /* center crop */
+  z-index: 0;
+  pointer-events: none;
+
+  /* --- IMPORTANT ---
+     Agar aapke MP4 me side-permanent black bars hain (pillarboxed),
+     to thoda zoom karke unhein crop kar dein:
+     1.2–1.6 try karke dekhein jab tak bars gayab na ho jayein. */
+  transform: scale(var(--heroZoom, 1.35));
+}
+
+/* motion-sensitive users */
+@media (prefers-reduced-motion: reduce){
+  .hero-video{ display: none; }
+}
+
+/* overlay to keep text readable in light & dark */
+.hero-overlay{
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* light mode: thoda halka, dark mode: thoda zyada dark */
+  background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.55));
+}
+
+/* optional: dark theme me overlay thoda aur strong */
+[data-theme="dark"] .hero-overlay{
+  background: linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.65));
+}
+
+/* put all hero content above video/overlay */
+.hero-block > *:not(.hero-video):not(.hero-overlay){
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,.55);   /* extra readability */
+}
+
+/* headings/para spacing remain neat */
+.hero-block h1{ margin:0; font-size:32px; font-weight:900; }
+.hero-block p{ margin:0 0 6px; opacity:.95; }
+/* --- HERO size controls --- */
+.hero-block{
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  /* ↓↓↓ height yahan control hogi */
+  --heroHeight: 460px;        /* was ~240–360px; increase as you like */
+  min-height: var(--heroHeight);
+  padding: 36px;              /* thoda roomy spacing */
+  color: #fff;
+}
+
+/* bigger on large desktops */
+@media (min-width: 1280px){
+  .hero-block{ --heroHeight: 520px; }
+}
+
+/* smaller on phones */
+@media (max-width: 640px){
+  .hero-block{ --heroHeight: 360px; padding: 24px; }
+}
+
+/* keep video filling the block */
+.hero-video{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
+  z-index: 0; pointer-events: none;
+  transform: scale(var(--heroZoom, 1.35));
+}
+/* Light mode: hero heading & copy should be white */
+:root:not([data-theme="dark"]) .hero-block h1,
+:root:not([data-theme="dark"]) .hero-block p,
+[data-theme="light"] .hero-block h1,
+[data-theme="light"] .hero-block p{
+  color: #fff !important;
+  opacity: 1;
+}
+/* ── Live page • Dark theme polish ─────────────────────────────── */
+[data-theme="dark"] .live-page{
+  /* page-scoped tokens */
+  --live-surface: #0f172a;    /* cards */
+  --live-subtle:  #0b1222;    /* subtle bg */
+  --live-stroke:  #1e2a46;    /* borders */
+  --live-muted:   #9fb0cf;    /* secondary text */
+  --live-white:   #eef3ff;    /* headings/text */
+  --live-pill:    #12223f;    /* chip bg */
+  --live-pill-tx: #cfe2ff;    /* chip text */
+}
+
+/* section headings */
+[data-theme="dark"] .live-page .section-title{ color: var(--live-white); }
+
+/* hero */
+[data-theme="dark"] .live-page .hero-block{
+  background: var(--live-subtle);
+  border: 1px solid var(--live-stroke);
+  border-radius: 18px;
+  overflow: hidden;
+}
+[data-theme="dark"] .live-page .hero-video{
+  filter: saturate(1.05) brightness(.85) contrast(1.05);
+}
+[data-theme="dark"] .live-page .hero-overlay{
+  background: linear-gradient(180deg, rgba(8,12,24,.65), rgba(8,12,24,.35) 40%, rgba(8,12,24,.65));
+}
+[data-theme="dark"] .live-page .hero-block h1,
+[data-theme="dark"] .live-page .hero-block p{
+  color: var(--live-white);
+  text-shadow: 0 2px 14px rgba(0,0,0,.45);
+}
+
+/* buttons on hero/cards */
+[data-theme="dark"] .live-page .btn.ghost{
+  background: transparent;
+  border-color: var(--live-stroke);
+  color: #dbe7ff;
+}
+[data-theme="dark"] .live-page .btn.red{ box-shadow: 0 8px 22px rgba(239,68,68,.22); }
+[data-theme="dark"] .live-page .btn.blue{ box-shadow: 0 8px 22px rgba(59,130,246,.22); }
+
+/* pills & live dot */
+[data-theme="dark"] .live-page .pill{
+  background: var(--live-pill);
+  color: var(--live-pill-tx);
+  border: 1px solid var(--live-stroke);
+}
+[data-theme="dark"] .live-page .live-dot{
+  background:#16a34a;
+  box-shadow:0 0 0 3px rgba(22,163,74,.25);
+}
+
+/* generic cards on the live page (trending, etc.) */
+[data-theme="dark"] .live-page .card{
+  background: var(--live-surface);
+  border-color: var(--live-stroke);
+  box-shadow: 0 10px 28px rgba(0,0,0,.28);
+}
+[data-theme="dark"] .live-page .card .meta,
+[data-theme="dark"] .live-page .card time{
+  color: var(--live-muted);
+}
+
+/* carousel nav buttons */
+[data-theme="dark"] .live-page .score-carousel .nav-btn{
+  background: #0b1324;
+  border: 1px solid var(--live-stroke);
+  color: #e8eeff;
+  box-shadow: 0 6px 18px rgba(0,0,0,.35);
+}
+/* Remove carousel arrows on the Live page entirely */
+.live-page .nav-btn,
+.live-page .score-carousel .nav-btn{
+  display: none !important;
+}
+
+/* Undo the padding we added for arrows */
+.live-page .score-carousel .score-track{
+  padding: 0 !important;
+}
+/* --- fix sticky arrows / bubbles on this page --- */
+.live-page .snap-nav { display: none !important; } /* hide floating bubbles if any */
+.live-page .slick-slider { position: relative; }
+.live-page .slick-prev,
+.live-page .slick-next {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%);
+  z-index: 2;
+  left: 8px;
+}
+.live-page .slick-next { right: 8px; left: auto; }
+
+/* --- trending panel scroll --- */
+.trending-scroll-wrap {
+  max-height: 520px;            /* creates the internal scrollbar */
+  overflow-y: auto;
+}
+
+/* --- Live in Pakistan list --- */
+.pk-live-section { margin-top: 28px; }
+.pk-live-section h2 { margin-bottom: 14px; }
+
+.pk-live-list {
+  display: grid;
+  gap: 14px;
+}
+
+/* flip card */
+.pk-live-card {
+  perspective: 1000px;
+}
+.pk-flip-inner {
+  position: relative;
+  border-radius: 14px;
+  background: var(--card, #fff);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  transition: transform .5s ease;
+  transform-style: preserve-3d;
+  padding: 14px;
+  min-height: 140px;
+}
+.pk-live-card.is-flipped .pk-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.pk-front, .pk-back {
+  position: absolute; inset: 0;
+  padding: 14px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pk-back { transform: rotateY(180deg); }
+
+.pk-meta {
+  display: flex; gap: 10px; flex-wrap: wrap; color: var(--muted);
+  font-size: 14px;
+}
+.pk-league { font-weight: 700; color: var(--text); }
+.pk-loc { opacity: .8; }
+
+.pk-title { font-weight: 800; font-size: 18px; }
+.pk-score { font-weight: 800; font-size: 16px; opacity: .9; }
+
+.pk-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
+
+.pk-back-title { font-weight: 800; }
+.pk-stats { padding-left: 18px; margin: 0; display: grid; gap: 4px; }
+.pk-stats li { line-height: 1.4; }
+/* =========================
+   Live in Pakistan — tweaks
+   ========================= */
+
+/* Make the list scroll within a fixed area */
+.pk-live-section { margin-top: 28px; }
+.pk-live-section h2 { margin-bottom: 14px; }
+
+.pk-live-list{
+  display: grid;
+  gap: 14px;
+  max-height: 520px;          /* <= internal scroll height */
+  overflow-y: auto;           /* <= shows a scrollbar when long */
+  padding-right: 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Pretty scrollbar just for this list */
+.pk-live-list::-webkit-scrollbar{ width: 8px; }
+.pk-live-list::-webkit-scrollbar-track{
+  background: rgba(0,0,0,.04);
+  border-radius: 999px;
+}
+.pk-live-list::-webkit-scrollbar-thumb{
+  background: rgba(0,0,0,.18);
+  border-radius: 999px;
+}
+.pk-live-list:hover::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.28); }
+
+/* Card + flip (kept from earlier; included for completeness) */
+.pk-live-card{ perspective: 1000px; }
+.pk-flip-inner{
+  position: relative;
+  border-radius: 14px;
+  background: var(--card, #fff);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  transition: transform .5s ease;
+  transform-style: preserve-3d;
+  padding: 14px;
+  min-height: 140px;
+}
+.pk-live-card.is-flipped .pk-flip-inner{ transform: rotateY(180deg); }
+
+.pk-front, .pk-back{
+  position: absolute; inset: 0;
+  padding: 14px;
+  backface-visibility: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pk-back{ transform: rotateY(180deg); }
+
+.pk-meta{ display:flex; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:14px; }
+.pk-league{ font-weight:800; color:var(--text); }
+.pk-loc{ opacity:.8; }
+
+.pk-title{ font-weight:900; font-size:18px; }
+.pk-score{ font-weight:900; font-size:16px; opacity:.9; }
+
+/* --- Button polish (pills + lift) --- */
+.pk-actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:auto; }
+
+.pk-actions .btn{
+  height: 36px;
+  line-height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-weight: 900;
+  letter-spacing: .2px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.06);
+  transform: translateY(0);
+  transition: box-shadow .15s ease, transform .15s ease, opacity .15s ease;
+}
+
+.pk-actions .btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0,0,0,.10);
+}
+
+.pk-actions .btn:active{
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0,0,0,.06);
+}
+
+/* Make the ghost button look like a subtle pill */
+.pk-actions .btn.ghost{
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.12);
+  color: var(--text);
+}
+.pk-actions .btn.ghost:hover{
+  border-color: rgba(0,0,0,.18);
+}
+
+/* Details list on the back of the card */
+.pk-back-title{ font-weight: 800; }
+.pk-stats{ padding-left: 18px; margin: 0; display: grid; gap: 4px; }
+.pk-stats li{ line-height: 1.4; }
+/* ---- Fix overflow in Live in Pakistan flip cards ---- */
+
+/* The inner container was too short; give it room + clip bleed */
+.pk-flip-inner{
+  min-height: 220px;              /* more vertical space for buttons */
+  padding: 16px 14px 18px;        /* a bit more bottom padding */
+  overflow: hidden;               /* keep content inside the card */
+}
+
+/* When flipped, the details side needs extra height */
+.pk-live-card.is-flipped .pk-flip-inner{
+  min-height: 260px;
+}
+
+/* Make both faces fill the container height and stack nicely */
+.pk-front, .pk-back{
+  height: 100%;                   /* ensure flex column can push buttons down */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Keep the details list scrollable so buttons stay anchored at bottom */
+.pk-back .pk-stats{
+  max-height: 120px;              /* adjust as you like */
+  overflow-y: auto;
+  margin-bottom: 8px;
+  padding-right: 4px;
+}
+
+/* Slight polish so the bottom action row never wraps outside */
+.pk-actions{
+  margin-top: auto;               /* pins actions to the bottom of the face */
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Optional: a touch more space under the action row */
+.pk-back .pk-actions{ padding-top: 6px; }
+
+/* Responsive bump for very small screens */
+@media (max-width: 520px){
+  .pk-flip-inner{ min-height: 240px; }
+  .pk-live-card.is-flipped .pk-flip-inner{ min-height: 280px; }
+  .pk-back .pk-stats{ max-height: 132px; }
+}
+/* ==== Live in Pakistan flip-card: final, authoritative overrides ==== */
+.pk-live-card { perspective: 1000px; }
+
+/* the 3D stage */
+.pk-flip-inner{
+  position: relative !important;
+  transform-style: preserve-3d !important;
+  transition: transform .5s ease !important;
+  /* spacing so buttons don't spill */
+  min-height: 240px;                 /* room for details + actions */
+  padding: 16px 14px 20px;
+  overflow: hidden;                  /* clip any bleed */
+}
+
+/* flip the stage when "Details" is active */
+.pk-live-card.is-flipped .pk-flip-inner{
+  transform: rotateY(180deg) translateZ(0);   /* translateZ forces GPU, avoids artifacts */
+}
+
+/* the two faces (must be absolutely stacked + hide their back) */
+.pk-front,
+.pk-back{
+  position: absolute !important;
+  inset: 0 !important;
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* critical for mirrored text fixes across browsers */
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+}
+
+/* rotate the back face so it reads normally once the stage flips */
+.pk-back{
+  transform: rotateY(180deg) translateZ(0) !important;
+}
+
+/* keep actions pinned inside; details list scrolls if long */
+.pk-actions{ margin-top: auto; display: flex; gap: 10px; flex-wrap: wrap; }
+.pk-back .pk-stats{
+  max-height: calc(100% - 64px);  /* leave room for buttons */
+  overflow-y: auto;
+  margin-bottom: 8px;
+  padding-right: 4px;
+}
+
+/* (optional) small screens: a touch more room */
+@media (max-width: 520px){
+  .pk-flip-inner{ min-height: 260px; }
+}
+/* ==== Flip fix: rotate faces, not the container (stops mirrored text) ==== */
+
+/* keep 3D context */
+.pk-live-card { perspective: 1000px; }
+.pk-flip-inner{
+  position: relative !important;
+  transform-style: preserve-3d !important;
+  /* make sure it never flips itself */
+  transform: none !important;
+
+  /* space so buttons stay inside */
+  min-height: 240px;
+  padding: 16px 14px 20px;
+  overflow: hidden;
+}
+
+/* faces stacked; each face owns its transform */
+.pk-front,
+.pk-back{
+  position: absolute !important;
+  inset: 0 !important;
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* critical for mirrored-text issues */
+  -webkit-backface-visibility: hidden !important;
+  backface-visibility: hidden !important;
+
+  /* give both faces their own transform so backface works everywhere */
+  transform: rotateY(0deg) translateZ(0) !important;
+  will-change: transform;
+}
+
+/* default: show front, hide back by rotating it 180 */
+.pk-back{
+  transform: rotateY(180deg) translateZ(0) !important;
+}
+
+/* when flipped: swap the faces */
+.pk-live-card.is-flipped .pk-front{
+  transform: rotateY(180deg) translateZ(0) !important;
+}
+.pk-live-card.is-flipped .pk-back{
+  transform: rotateY(0deg) translateZ(0) !important;
+}
+
+/* keep details list scrolling inside the card and actions pinned to bottom */
+.pk-actions{ margin-top: auto; display:flex; gap:10px; flex-wrap:wrap; }
+.pk-back .pk-stats{
+  max-height: calc(100% - 64px);
+  overflow-y: auto;
+  margin-bottom: 8px;
+  padding-right: 4px;
+}
+
+/* small screens: a touch more room */
+@media (max-width:520px){
+  .pk-flip-inner{ min-height: 260px; }
+}
+/* =========================
+   LIVE — Dark mode readability patch
+   (drop-in, high-specificity + !important where needed)
+   ========================= */
+
+[data-theme="dark"] .live-page{
+  --live-bg: #0b1220;
+  --live-surface: #0f172a;
+  --live-stroke: #1e2a46;
+  --live-white: #eaf1ff;
+  --live-muted: #9fb0cf;
+  background: var(--live-bg);
+}
+
+/* Section/heading text */
+[data-theme="dark"] .live-page h1,
+[data-theme="dark"] .live-page h2,
+[data-theme="dark"] .live-page h3,
+[data-theme="dark"] .live-page .section-title{
+  color: var(--live-white) !important;
+  opacity: 1 !important;
+}
+
+/* Generic cards/panels inside Live (Trending, lists, etc.) */
+[data-theme="dark"] .live-page .card,
+[data-theme="dark"] .live-page .panel,
+[data-theme="dark"] .live-page .tile{
+  background: var(--live-surface) !important;
+  border-color: var(--live-stroke) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,.28);
+}
+
+/* Text inside cards/panels */
+[data-theme="dark"] .live-page .card *,
+[data-theme="dark"] .live-page .panel *,
+[data-theme="dark"] .live-page .tile *{
+  color: var(--live-white) !important;
+  opacity: 1 !important;       /* kills any dimmed skeleton styles */
+  filter: none !important;      /* removes accidental brightness filters */
+}
+
+/* Muted/meta lines */
+[data-theme="dark"] .live-page .card .meta,
+[data-theme="dark"] .live-page .panel .meta,
+[data-theme="dark"] .live-page .tile .meta,
+[data-theme="dark"] .live-page time,
+[data-theme="dark"] .live-page .muted{
+  color: var(--live-muted) !important;
+}
+
+/* HERO: guarantee readable copy over video */
+[data-theme="dark"] .live-page .hero-block{ 
+  background: var(--live-surface); 
+  border: 1px solid var(--live-stroke);
+}
+[data-theme="dark"] .live-page .hero-video{
+  filter: saturate(1.05) brightness(.88) contrast(1.05);
+}
+[data-theme="dark"] .live-page .hero-overlay{
+  background: linear-gradient(180deg, rgba(8,12,24,.55), rgba(8,12,24,.35) 40%, rgba(8,12,24,.65)) !important;
+}
+[data-theme="dark"] .live-page .hero-block h1,
+[data-theme="dark"] .live-page .hero-block p{
+  color: var(--live-white) !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,.5);
+}
+
+/* TRENDING: target by name loosely to cover your component classes */
+[data-theme="dark"] .live-page [class*="trending"] .card,
+[data-theme="dark"] .live-page [class*="trending"] .item{
+  background: var(--live-surface) !important;
+  border-color: var(--live-stroke) !important;
+}
+[data-theme="dark"] .live-page [class*="trending"] h3,
+[data-theme="dark"] .live-page [class*="trending"] .title,
+[data-theme="dark"] .live-page [class*="trending"] a{
+  color: var(--live-white) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+[data-theme="dark"] .live-page [class*="trending"] .meta,
+[data-theme="dark"] .live-page [class*="trending"] time{
+  color: var(--live-muted) !important;
+}
+
+/* Live-in-Pakistan titles/scores */
+[data-theme="dark"] .live-page .pk-title,
+[data-theme="dark"] .live-page .pk-score{
+  color: var(--live-white) !important;
+}
+
+/* City/Upcoming carousels (catch-all) */
+[data-theme="dark"] .live-page [class*="carousel"] .card{
+  background: var(--live-surface) !important;
+  border-color: var(--live-stroke) !important;
+}
+/* ===== Live (DARK MODE) – readable text overrides ===== */
+[data-theme="dark"] .live-page {
+  --live-bg: #0c1426;
+  --live-surface: #121b33;
+  --live-stroke: #253255;
+  --live-text: #f6f8ff;
+  --live-sub:  #c8d6ff;
+}
+
+/* Base containers */
+[data-theme="dark"] .live-page .hero-block {
+  background: var(--live-surface);
+  border: 1px solid var(--live-stroke);
+}
+[data-theme="dark"] .live-page .hero-overlay {
+  background: linear-gradient(180deg, rgba(8,12,24,.55), rgba(8,12,24,.75));
+}
+
+/* ---- Trending panel: force strong contrast ---- */
+[data-theme="dark"] .live-page .trending-scroll-wrap {
+  color: var(--live-text);
+}
+
+/* Card shells inside Trending (works with your TrendingPanel markup whether it uses div/li/article) */
+[data-theme="dark"] .live-page .trending-scroll-wrap .card,
+[data-theme="dark"] .live-page .trending-scroll-wrap li,
+[data-theme="dark"] .live-page .trending-scroll-wrap article {
+  background: var(--live-surface) !important;
+  border: 1px solid var(--live-stroke) !important;
+  color: var(--live-text) !important;
+}
+
+/* Titles/links */
+[data-theme="dark"] .live-page .trending-scroll-wrap .title,
+[data-theme="dark"] .live-page .trending-scroll-wrap h3,
+[data-theme="dark"] .live-page .trending-scroll-wrap a {
+  color: var(--live-text) !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Meta rows, time, small labels */
+[data-theme="dark"] .live-page .trending-scroll-wrap .meta,
+[data-theme="dark"] .live-page .trending-scroll-wrap time,
+[data-theme="dark"] .live-page .trending-scroll-wrap .tag,
+[data-theme="dark"] .live-page .trending-scroll-wrap .muted {
+  color: var(--live-sub) !important;
+  opacity: 1 !important;
+}
+
+/* Optional: thumbnails keep some pop without washing text */
+[data-theme="dark"] .live-page .trending-scroll-wrap img {
+  filter: saturate(1.05) brightness(.95);
+}
+
+/* City & Upcoming cards stay readable too */
+[data-theme="dark"] .live-page .card,
+[data-theme="dark"] .live-page .next-card,
+[data-theme="dark"] .live-page .score-card {
+  background: var(--live-surface);
+  border-color: var(--live-stroke);
+  color: var(--live-text);
+}
+[data-theme="dark"] .live-page .next-card .sport,
+[data-theme="dark"] .live-page .score-card .league,
+[data-theme="dark"] .live-page .card .meta {
+  color: var(--live-sub);
+}
+/* ==== LIVE — Final dark-mode readability fix (scoped) ==== */
+
+/* palette for this page */
+[data-theme="dark"] .live-page{
+  --live-bg: #0b1220;
+  --live-surface: #111b33;
+  --live-stroke: #243257;
+  --live-text: #f3f7ff;
+  --live-sub:  #a9bbdf;
+}
+
+/* make sure the page itself is dark */
+[data-theme="dark"] .live-page{ background: var(--live-bg); }
+
+/* --- HERO stays readable over video --- */
+[data-theme="dark"] .live-page .hero-block{
+  background: var(--live-surface);
+  border: 1px solid var(--live-stroke);
+}
+[data-theme="dark"] .live-page .hero-overlay{
+  background: linear-gradient(180deg, rgba(8,12,24,.55), rgba(8,12,24,.35) 40%, rgba(8,12,24,.7)) !important;
+}
+[data-theme="dark"] .live-page .hero-block h1,
+[data-theme="dark"] .live-page .hero-block h2,
+[data-theme="dark"] .live-page .hero-block p{
+  color: var(--live-text) !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,.5);
+}
+
+/* --- TRENDING: kill any fades/filters and force strong contrast --- */
+[data-theme="dark"] .live-page .trending-scroll-wrap{
+  opacity: 1 !important;
+  filter: none !important;
+  color: var(--live-text) !important;
+}
+[data-theme="dark"] .live-page .trending-scroll-wrap .card,
+[data-theme="dark"] .live-page .trending-scroll-wrap li,
+[data-theme="dark"] .live-page .trending-scroll-wrap article{
+  background: var(--live-surface) !important;
+  border: 1px solid var(--live-stroke) !important;
+}
+[data-theme="dark"] .live-page .trending-scroll-wrap *:not(img){
+  color: var(--live-text) !important;
+  opacity: 1 !important;                 /* beats any dim/skeleton states */
+  -webkit-text-fill-color: var(--live-text) !important;
+  filter: none !important;
+}
+[data-theme="dark"] .live-page .trending-scroll-wrap .meta,
+[data-theme="dark"] .live-page .trending-scroll-wrap time,
+[data-theme="dark"] .live-page .trending-scroll-wrap .tag,
+[data-theme="dark"] .live-page .trending-scroll-wrap .muted{
+  color: var(--live-sub) !important;
+}
+
+/* --- Catch unknown “card” UIs from child carousels on this page --- */
+[data-theme="dark"] .live-page [class*="card"]{
+  background: var(--live-surface) !important;
+  border-color: var(--live-stroke) !important;
+}
+[data-theme="dark"] .live-page [class*="card"] *{
+  color: var(--live-text) !important;
+  opacity: 1 !important;
+}
+[data-theme="dark"] .live-page [class*="card"] .meta,
+[data-theme="dark"] .live-page [class*="card"] time,
+[data-theme="dark"] .live-page [class*="card"] .muted{
+  color: var(--live-sub) !important;
+}
+
+/* Optional: keep thumbnails punchy but not washed out */
+[data-theme="dark"] .live-page .trending-scroll-wrap img{
+  opacity: 1 !important;
+  filter: saturate(1.05) brightness(.95) !important;
+}
+/* ==== LIVE • Dark mode pill/ghost readability fix (authoritative) ==== */
+[data-theme="dark"] .live-page .pill,
+[data-theme="dark"] .live-page .chip,
+[data-theme="dark"] .live-page .tag,
+[data-theme="dark"] .live-page .btn.pill,
+[data-theme="dark"] .live-page .btn.ghost,
+[data-theme="dark"] .live-page .btn.light,
+[data-theme="dark"] .live-page .btn.white,
+[data-theme="dark"] .live-page [class*="explore"] .btn,
+[data-theme="dark"] .live-page [class*="city"] .btn,
+[data-theme="dark"] .live-page [class*="carousel"] .btn {
+  /* solid dark “glass” so it contrasts on light gradients */
+  background: rgba(12, 18, 36, 0.86) !important;
+  color: #eaf1ff !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.35) !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,.25) !important;
+}
+
+/* Hover/active states (keep readable) */
+[data-theme="dark"] .live-page .pill:hover,
+[data-theme="dark"] .live-page .chip:hover,
+[data-theme="dark"] .live-page .btn.pill:hover,
+[data-theme="dark"] .live-page .btn.ghost:hover,
+[data-theme="dark"] .live-page .btn.light:hover,
+[data-theme="dark"] .live-page .btn.white:hover {
+  background: rgba(12, 18, 36, 0.94) !important;
+  border-color: rgba(255,255,255,.32) !important;
+}
+
+/* If any pill was forced to white by component CSS, invert it back */
+[data-theme="dark"] .live-page .btn.white,
+[data-theme="dark"] .live-page .btn--white {
+  background: rgba(12, 18, 36, 0.86) !important;
+  color: #eaf1ff !important;
+  border-color: rgba(255,255,255,.22) !important;
+}
+
+/* Ensure all “Explore more →” pills are readable wherever they appear */
+[data-theme="dark"] .live-page .section-title + .btn,
+[data-theme="dark"] .live-page [class*="explore"] .btn {
+  background: rgba(12, 18, 36, 0.86) !important;
+  color: #eaf1ff !important;
+  border-color: rgba(255,255,255,.22) !important;
+}
+/* ===== LIVE — Dark mode pills/ghosts must be readable ===== */
+[data-theme="dark"] .live-page .btn:not(.red):not(.blue),
+[data-theme="dark"] .live-page a.btn:not(.red):not(.blue),
+[data-theme="dark"] .live-page button.btn:not(.red):not(.blue),
+/* City cards & carousels “Explore more in →” */
+[data-theme="dark"] .live-page [class*="city"] .btn,
+[data-theme="dark"] .live-page [class*="City"] .btn,
+[data-theme="dark"] .live-page [class*="carousel"] .btn:not(.red):not(.blue),
+/* Generic pill/ghost/outline tokens */
+[data-theme="dark"] .live-page .pill,
+[data-theme="dark"] .live-page [class*="pill"],
+[data-theme="dark"] .live-page .ghost,
+[data-theme="dark"] .live-page [class*="ghost"],
+[data-theme="dark"] .live-page [class*="outline"] {
+  background: rgba(12, 18, 36, 0.9) !important;   /* dark glass */
+  color: #eaf1ff !important;                      /* bright text */
+  border: 1px solid rgba(255,255,255,.22) !important;
+  border-radius: 999px !important;                /* keep pill shape */
+  text-shadow: 0 1px 2px rgba(0,0,0,.35) !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,.25) !important;
+}
+
+/* Hover state (still readable) */
+[data-theme="dark"] .live-page .btn:not(.red):not(.blue):hover,
+[data-theme="dark"] .live-page [class*="city"] .btn:hover,
+[data-theme="dark"] .live-page [class*="carousel"] .btn:not(.red):not(.blue):hover,
+[data-theme="dark"] .live-page .pill:hover,
+[data-theme="dark"] .live-page [class*="pill"]:hover,
+[data-theme="dark"] .live-page .ghost:hover,
+[data-theme="dark"] .live-page [class*="ghost"]:hover,
+[data-theme="dark"] .live-page [class*="outline"]:hover {
+  background: rgba(12, 18, 36, 0.96) !important;
+  border-color: rgba(255,255,255,.32) !important;
+}
+/* LIVE — fix the remaining pills (white/ghost/disabled) in dark mode */
+[data-theme="dark"] .live-page .btn.white,
+[data-theme="dark"] .live-page .btn.light,
+[data-theme="dark"] .live-page .btn.ghost,
+[data-theme="dark"] .live-page .btn.outline,
+[data-theme="dark"] .live-page .btn:disabled,
+[data-theme="dark"] .live-page button[disabled],
+[data-theme="dark"] .live-page .btn.disabled {
+  background: rgba(12,18,36,.92) !important;  /* dark glass pill */
+  color: #eaf1ff !important;                  /* bright text */
+  border: 1px solid rgba(255,255,255,.24) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.35) !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,.25) !important;
+  opacity: 1 !important;                      /* defeat dimmed disabled style */
+  cursor: not-allowed;                        /* only for :disabled */
+}
+
+/* Optional hover for non-disabled ghost/white pills */
+[data-theme="dark"] .live-page .btn.white:hover,
+[data-theme="dark"] .live-page .btn.light:hover,
+[data-theme="dark"] .live-page .btn.ghost:hover,
+[data-theme="dark"] .live-page .btn.outline:hover {
+  background: rgba(12,18,36,.98) !important;
+  border-color: rgba(255,255,255,.34) !important;
+}
+/* LIVE — last mile: make the “Remind me” pill readable in dark mode */
+
+/* 1) Any white/ghost/disabled pills inside the Live page */
+[data-theme="dark"] .live-page button.btn[disabled],
+[data-theme="dark"] .live-page .btn:disabled,
+[data-theme="dark"] .live-page .btn.disabled,
+[data-theme="dark"] .live-page .btn[aria-disabled="true"],
+[data-theme="dark"] .live-page .btn.white,
+[data-theme="dark"] .live-page .btn.light,
+[data-theme="dark"] .live-page .btn.ghost,
+[data-theme="dark"] .live-page .btn.outline {
+  background: #0f1b33 !important;                    /* dark pill */
+  color: #eaf1ff !important;                          /* bright text */
+  border: 1px solid rgba(255,255,255,.30) !important; /* visible edge */
+  background-image: none !important;                  /* kill gradients */
+  opacity: 1 !important;                              /* defeat global dim */
+  filter: none !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.35) !important;
+}
+
+/* If truly disabled, keep contrast but slightly soften text */
+[data-theme="dark"] .live-page .btn:disabled,
+[data-theme="dark"] .live-page button.btn[disabled] {
+  color: #cfe2ff !important;
+  cursor: not-allowed;
+}
+
+/* 2) Specifically target the middle pill in the Live cards action row
+      (Watch • Remind me • Details), regardless of classes applied */
+[data-theme="dark"] .live-page .pk-actions .btn + .btn {
+  background: #0f1b33 !important;
+  color: #eaf1ff !important;
+  border: 1px solid rgba(255,255,255,.30) !important;
+  opacity: 1 !important;
+}
+[data-theme="dark"] .live-page .pk-actions .btn + .btn:disabled {
+  color: #cfe2ff !important;
+}
+/* LIVE — fix Details pill showing 🚫 cursor in dark mode */
+[data-theme="dark"] .live-page .btn:not(:disabled):not([aria-disabled="true"]),
+[data-theme="dark"] .live-page button.btn:not(.disabled):not([disabled]),
+[data-theme="dark"] .live-page a.btn,
+[data-theme="dark"] .live-page .pk-actions .btn.ghost {
+  cursor: pointer !important;
+  pointer-events: auto !important; /* in case something set none */
+}
+
+/* keep the true disabled look only for actually disabled buttons */
+[data-theme="dark"] .live-page .btn:disabled,
+[data-theme="dark"] .live-page button.btn[disabled],
+[data-theme="dark"] .live-page .btn[aria-disabled="true"]{
+  cursor: not-allowed !important;
+}
+/* Hero media block */
+.hero-block{
+  position: relative;
+  min-height: 260px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:#000;
+}
+.hero-video{
+  width:100%; height:100%;
+  object-fit: cover; display:block; pointer-events:none;
+}
+.hero-overlay{
+  position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(0,0,0,.36), rgba(0,0,0,.08));
+  pointer-events:none;
+}
+.hero-inner{
+  position:absolute; inset:auto 0 0 0;
+  padding: 16px 18px; color:#fff;
+  display:flex; flex-direction:column; gap:8px;
+}
+.hero-cta .btn{ margin-right:8px; }
+
+/* Small top toast for actions */
+.live-toast{
+  position: sticky; top: 12px; z-index: 50;
+  margin: 0 auto 8px; width: fit-content; max-width: min(720px, 90%);
+  border-radius: 12px; padding: 10px 14px; font-weight: 800;
+  color:#fff; box-shadow: 0 16px 28px rgba(0,0,0,.18);
+  background: #1a932e;
+}
+/* Equal columns for hero + trending */
+.hero-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;   /* equal widths */
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* Hero media block */
+.hero-block{
+  position: relative;
+  min-height: 260px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:#000;
+}
+.hero-video{
+  width:100%; height:100%;
+  object-fit: cover; display:block; pointer-events:none;
+}
+.hero-overlay{
+  position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(0,0,0,.36), rgba(0,0,0,.08));
+  pointer-events:none;
+}
+.hero-inner{
+  position:absolute; inset:auto 0 0 0;
+  padding: 16px 18px; color:#fff;
+  display:flex; flex-direction:column; gap:8px;
+}
+.hero-cta .btn{ margin-right:8px; }
+
+/* Top toast: fixed so it ALWAYS shows */
+.live-toast{
+  position: fixed;
+  top: 72px;                      /* sits under your header */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  color:#fff;
+  background: #1a932e;
+  box-shadow: 0 16px 28px rgba(0,0,0,.18);
+}
+
+/* Button styles (kept + new green) */
+.btn{ border:none; border-radius:10px; font-weight:800; padding:9px 12px; cursor:pointer; }
+.btn.red{ background: var(--red,#ff4d4f); color:#fff; }
+.btn.blue{ background: var(--blue,#1f4cff); color:#fff; }
+.btn.ghost{ background: #f5f7ff; color: var(--ink,#0b1221); border:1px solid rgba(0,0,0,.08); }
+
+/* Brand green for Followed */
+:root{
+  --brand-green: #2aab7c;  /* matches your logo hue; adjust if you have a token */
+}
+.btn.success{ background: var(--brand-green); color:#fff; }
+.btn.success.outline{
+  background: transparent; color: var(--brand-green);
+  border: 2px solid var(--brand-green);
+}
+
+/* Live list cards (unchanged basics, included for completeness) */
+.pk-live-section{ margin-top: 18px; }
+.pk-live-list{ display: grid; gap: 12px; }
+.pk-live-card{
+  background: var(--surface,#fff);
+  border: 1px solid var(--border, rgba(0,0,0,.12));
+  border-radius: 16px; padding: 14px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+}
+.pk-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+/* Make hero and trending exactly equal width and prevent min-content squeeze */
+.live-page .hero-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* equal columns, allow shrink */
+  gap: 16px;
+  align-items: stretch;
+}
+
+.live-page .hero-grid > *{
+  min-width: 0;                 /* critical: let each column shrink */
+  width: 100%;
+}
+
+.live-page .hero-block{
+  max-width: none !important;   /* ensure no stray max-width clamps it */
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+}
+
+/* keep the video filling its column */
+.live-page .hero-video{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* LoginGate modal — matches your 1st screenshot design */
+.modal-overlay{
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(13,27,42,.38);
+  backdrop-filter: blur(2px);
+  display: grid; place-items: center;
+  animation: modalFade .18s ease-out;
+}
+.modal-card{
+  width: min(92vw, 420px);
+  background: var(--bg, #fff);
+  color: var(--text, #0f172a);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  padding: 18px 18px 16px;
+  animation: modalPop .22s cubic-bezier(.2,.8,.2,1);
+}
+.modal-head{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.modal-icon{
+  width:36px; height:36px; border-radius:999px; display:grid; place-items:center; color:#fff;
+  background: linear-gradient(135deg, #0d6c9e 0%, #2aab7c 100%);
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+}
+.modal-card h3{ margin:0; font-weight:900; }
+.modal-body{ margin:8px 0 14px; color: var(--muted, #334155); }
+.modal-actions{ display:flex; justify-content:flex-end; gap:10px; }
+
+@keyframes modalPop{ from{ transform:scale(.96); opacity:0 } to{ transform:scale(1); opacity:1 } }
+@keyframes modalFade{ from{ opacity:0 } to{ opacity:1 } }

@@ -1,0 +1,1 @@
+# Cricket — short history\nDeveloped in England; Pakistan is a Test nation with deep domestic and street-cricket culture.\n

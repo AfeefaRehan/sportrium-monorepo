@@ -1,0 +1,1 @@
+# Cricket — training basics\nFielding drills, bowling rhythm, batting against throwdowns, match scenarios. No medical advice provided.\n

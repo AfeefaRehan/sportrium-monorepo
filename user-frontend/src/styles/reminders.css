@@ -1,0 +1,498 @@
+/* ============ Reminders ============ */
+.rem-page{
+  --bg:#0a1224;
+  --panel:#0e1730;
+  --card:#0f1935;
+  --line:rgba(255,255,255,.08);
+  --muted:#90a3c4;
+  --text:#e8eefc;
+  --blue:#3b82f6;
+  --red:#ff565a;
+  --green:#2bb673;
+
+  color:var(--text);
+}
+
+/* hero */
+.rem-hero{
+  background:
+    radial-gradient(900px 420px at -10% -40%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, #0d1b3a 0%, #0a1327 100%);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; margin-bottom:14px;
+}
+.rem-hero h1{ margin:0; font-size:28px; line-height:1.15; font-weight:900; }
+.rem-hero p{ margin:6px 0 0; color:var(--muted); }
+.rem-hero .link-hero{ color:#a3c5ff; font-weight:800; }
+
+.rem-stats{ display:flex; gap:10px; }
+.rem-stats .stat{
+  display:grid; place-items:center; padding:10px 14px;
+  background:var(--card); border:1px solid var(--line); border-radius:12px; min-width:96px;
+}
+.rem-stats .k{ font-size:18px; font-weight:900; line-height:1; }
+.rem-stats .l{ font-size:12px; color:var(--muted); }
+
+/* controls */
+.rem-controls.card{
+  display:flex; align-items:center; gap:14px;
+  background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:12px;
+  margin-bottom:12px;
+}
+.rem-ctrl-spacer{ flex:1; }
+
+/* pretty toggle */
+.rem-toggle{ display:flex; align-items:center; gap:10px; }
+.rem-toggle input{ position:absolute; opacity:0; pointer-events:none; }
+.rem-toggle .track{
+  width:44px; height:24px; background:#102044; border:1px solid var(--line);
+  border-radius:999px; position:relative; transition:.2s ease;
+}
+.rem-toggle .thumb{
+  position:absolute; top:50%; left:2px; width:20px; height:20px; border-radius:999px;
+  background:#d1ddff; transform:translateY(-50%); transition:.2s ease;
+  box-shadow:0 2px 6px rgba(0,0,0,.25);
+}
+.rem-toggle input:checked + .track{ background:rgba(59,130,246,.25); border-color:#3b82f6; }
+.rem-toggle input:checked + .track .thumb{ left:22px; background:#3b82f6; }
+.rem-toggle .tcopy strong{ display:block; font-size:13.5px; }
+.rem-toggle .tcopy em{ display:block; font-size:12px; color:var(--muted); font-style:normal; }
+
+/* sections */
+.rem-group{ margin-top:14px; }
+.group-head{ display:flex; align-items:center; gap:10px; margin:4px 0 8px; }
+.group-head h2{ margin:0; font-size:18px; font-weight:900; }
+.group-head .count{
+  border:1px solid var(--line); background:var(--panel); color:var(--text);
+  font-size:12px; padding:2px 8px; border-radius:999px;
+}
+.group-head .hint{ color:var(--muted); font-size:12.5px; }
+
+/* lists/cards */
+.rem-list{ display:grid; gap:10px; }
+.rem-list.timeline{ position:relative; }
+.rem-list.timeline::before{
+  content:""; position:absolute; left:18px; top:0; bottom:0; width:2px;
+  background:linear-gradient(180deg, rgba(163,197,255,.35), rgba(163,197,255,0));
+  pointer-events:none;
+}
+
+.rem-card{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px;
+  position:relative;
+}
+.rem-card .dot{
+  position:absolute; left:10px; top:16px; width:12px; height:12px; border-radius:999px;
+  background:#a3c5ff; box-shadow:0 0 0 2px #0f1935;
+}
+.rem-card .rem-left{ display:flex; align-items:center; gap:12px; padding-left:12px; }
+.rem-card .rem-time{ min-width:86px; text-align:center; }
+.rem-card .rem-time .t{ font-weight:900; font-size:16px; }
+.rem-card .rem-time .d{ color:var(--muted); font-size:12.5px; }
+.rem-card .rem-title{ font-weight:900; }
+.rem-card .rem-meta{ color:var(--muted); font-size:13px; margin-top:2px; }
+.rem-card .rem-actions{ display:flex; gap:8px; }
+
+/* suggestion chips */
+.badge-sport{
+  display:inline-flex; align-items:center; height:22px; padding:0 8px;
+  border-radius:999px; border:1px solid var(--line); background:#101b39; color:#a3c5ff;
+  font-size:12px; font-weight:800; margin-top:6px; width:max-content;
+}
+
+/* empty state */
+.rem-empty{
+  text-align:center; padding:26px 16px;
+  display:grid; gap:10px; place-items:center;
+  background:var(--panel); border:1px solid var(--line); border-radius:16px; margin-top:10px;
+}
+.empty-emoji{ font-size:34px; line-height:1; opacity:.9; }
+
+/* helpers */
+.card{ background:var(--panel); border:1px solid var(--line); border-radius:16px; }
+
+/* buttons (use existing global .btn styles; only ensure red variant here) */
+.btn.red{
+  background:var(--red); color:#fff; border:1px solid var(--red);
+}
+.btn.red:hover{ filter:brightness(.98); }
+/* ===================== Reminders page (dark = default) ===================== */
+.rem-page{
+  --bg: #0e1626;
+  --card: #0b1a34;
+  --cardElev: #0d2042;
+  --text: #eaf0ff;
+  --muted: #a9b4cf;
+  --line: rgba(255,255,255,.10);
+  --chip: rgba(255,255,255,.06);
+  --accent: #3b82f6;
+  --accent-ink: #ffffff;
+  --red: #ff565a;
+  --shadow: 0 8px 24px rgba(3,10,28,.28), inset 0 0 0 1px var(--line);
+
+  color: var(--text);
+}
+
+.rem-page .btn{ font-weight: 800; border-radius: 10px; height: 40px; padding: 0 14px; }
+.rem-page .btn.blue{ background: var(--accent); color: var(--accent-ink); border: 1px solid var(--accent); }
+.rem-page .btn.white{ background: #fff; color: #0b1324; border: 1px solid #e5e7eb; }
+.rem-page .btn.ghost{ background: transparent; border: 1px dashed var(--line); color: var(--text); }
+.rem-page .btn.btn-danger{ background: var(--red); color:#fff; border:1px solid transparent; }
+
+/* ---------- page blocks ---------- */
+.rem-head{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 12px 0 10px;
+  box-shadow: var(--shadow);
+}
+.rem-head h1{
+  margin: 0 0 6px;
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: .2px;
+}
+.rem-head p{ margin: 0; color: var(--muted); }
+.rem-head .rem-toggles{ display:flex; gap:12px; margin-top:12px; flex-wrap: wrap; }
+
+/* pretty toggle (uses your <label class="toggle"><input/><span>Text</span></label>) */
+.rem-page .toggle{
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--chip); border: 1px solid var(--line);
+  padding: 8px 10px; border-radius: 999px;
+  font-weight: 800; color: var(--text);
+}
+.rem-page .toggle input{
+  appearance: none; -webkit-appearance: none;
+  width: 42px; height: 24px; border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  border: 1px solid var(--line);
+  position: relative; cursor: pointer; outline: none;
+  transition: background .18s ease, border-color .18s ease;
+}
+.rem-page .toggle input::after{
+  content:""; position:absolute; top:2px; left:2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25);
+  transition: transform .18s ease;
+}
+.rem-page .toggle input:checked{
+  background: var(--accent); border-color: var(--accent);
+}
+.rem-page .toggle input:checked::after{ transform: translateX(18px); }
+.rem-page .toggle span{ font-size: 13px; letter-spacing: .2px; }
+
+/* ---------- sections ---------- */
+.rem-group{ margin-top: 14px; }
+.rem-group .group-head{ display:flex; align-items:center; gap:10px; margin: 6px 2px 10px; }
+.rem-group .group-head h2{ margin:0; font-size:18px; letter-spacing:.2px; }
+.rem-group .group-head .count{
+  min-width: 22px; height: 22px; display:inline-grid; place-items:center;
+  padding: 0 6px; border-radius: 999px; background: var(--chip); border: 1px solid var(--line);
+  font-weight: 900; color: var(--text); font-size: 12px;
+}
+
+/* ---------- cards ---------- */
+.rem-list{ display: grid; gap: 10px; }
+
+.rem-card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+.rem-card.rem-suggestion{ background: var(--cardElev); }
+
+.rem-left{ display:flex; align-items:center; gap:14px; min-width: 0; }
+
+.rem-time{
+  min-width: 108px;
+  background: var(--chip);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 10px;
+  text-align: left;
+  line-height: 1.1;
+}
+.rem-time .t{ font-weight: 900; letter-spacing: .3px; }
+.rem-time .d{ margin-top: 4px; font-size: 12px; color: var(--muted); }
+
+.rem-body{ min-width: 0; }
+.rem-title{ font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rem-meta{ color: var(--muted); margin-top: 4px; font-size: 13px; }
+
+/* sport badge */
+.badge-sport{
+  display:inline-block; margin-top:6px;
+  background: var(--chip); border:1px solid var(--line); color: var(--text);
+  font-size: 12px; font-weight: 900;
+  padding: 4px 8px; border-radius: 999px; text-transform: lowercase;
+}
+
+.rem-actions{ display:flex; align-items:center; gap:8px; }
+
+/* ---------- empty state ---------- */
+.rem-empty{
+  background: var(--cardElev);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  color: var(--muted);
+}
+.rem-empty h3{ margin:0 0 6px; color: var(--text); }
+
+/* ======================================================================= */
+/*                               LIGHT THEME                               */
+/* ======================================================================= */
+:root[data-theme="light"] .rem-page{
+  --bg: #f6f8fc;
+  --card: #ffffff;
+  --cardElev: #ffffff;
+  --text: #0b1324;
+  --muted: #52607a;
+  --line: #e5e7eb;
+  --chip: #f3f6ff;
+  --accent: #1f4cff;
+  --accent-ink: #ffffff;
+  --red: #ff4d55;
+  --shadow: 0 8px 28px rgba(12,28,62,.06), inset 0 0 0 1px var(--line);
+}
+
+/* Light tweaks for contrast */
+:root[data-theme="light"] .rem-page .toggle input{
+  background: #e8ecff;
+  border-color: #d9e0ff;
+}
+:root[data-theme="light"] .rem-page .toggle{
+  background: #ffffff;
+}
+
+/* Buttons stay readable in light */
+:root[data-theme="light"] .rem-page .btn.white{
+  background:#fff; border:1px solid var(--line); color: var(--text);
+}
+:root[data-theme="light"] .rem-page .btn.ghost{
+  border-color: var(--line); color: var(--text);
+}
+
+/* Card + time chip */
+:root[data-theme="light"] .rem-page .rem-card{ background:#fff; }
+:root[data-theme="light"] .rem-page .rem-card.rem-suggestion{ background:#fff; }
+:root[data-theme="light"] .rem-page .rem-time{
+  background: #f3f6ff; border-color: var(--line);
+}
+:root[data-theme="light"] .rem-page .badge-sport{
+  background:#f7f9ff; border-color: var(--line); color: #0b1324;
+}
+
+/* Empty card */
+:root[data-theme="light"] .rem-page .rem-empty{ background:#fff; }
+
+/* Small screen polish */
+@media (max-width: 720px){
+  .rem-time{ min-width: 96px; }
+  .rem-title{ white-space: normal; }
+}
+/* ========= Reminders polish (works for both themes) ========= */
+
+/* Head “stats” boxes (Saved / Today / No upcoming) */
+.rem-head .stats {
+  display: grid; grid-auto-flow: column; gap: 10px; margin-top: 10px;
+}
+.rem-head .stat {
+  background: var(--cardElev);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  min-width: 120px; height: 56px;
+  display: grid; place-items: center;
+  box-shadow: var(--shadow);
+}
+.rem-head .stat .n { font-size: 18px; font-weight: 900; }
+.rem-head .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* Top CTA on the right of the toggle row */
+.rem-head .cta-row { display:flex; justify-content:flex-end; margin-top: 10px; }
+.rem-head .cta-row .btn.blue { height: 38px; }
+
+/* “Quick add” header subtler secondary link */
+.rem-group .group-head a {
+  color: var(--muted); font-weight: 700; text-decoration: none;
+}
+.rem-group .group-head a:hover { color: var(--text); }
+
+/* Card hover + focus */
+.rem-card{ transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease; }
+.rem-card:hover{ transform: translateY(-1px); box-shadow: 0 10px 26px rgba(10,31,68,.12); }
+.rem-card:focus-within{ border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 26%, transparent); }
+
+/* Ghost “View” button as subtle outline (like your screenshot) */
+.rem-page .btn.ghost{
+  border-style: dashed;
+  background: transparent;
+  color: var(--text);
+}
+.rem-page .btn.ghost:hover{
+  background: var(--chip);
+}
+
+/* Blue “Add” button hover/active */
+.rem-page .btn.blue:hover{ filter: brightness(.96); }
+.rem-page .btn.blue:active{ transform: translateY(1px); }
+
+/* Small radio dot at far-left of suggestion cards */
+.rem-card .rem-left::before{
+  content:""; width:10px; height:10px; border-radius:50%;
+  border:2px solid var(--accent); background:#fff; flex:0 0 auto;
+  margin-right: 2px; display: none;
+}
+.rem-card.rem-suggestion .rem-left::before{ display:block; }
+
+/* Lighter list separator look */
+.rem-list{ gap: 12px; }
+/* ------------------ Light/Dark theming for top two sections ------------------ */
+/* Dark mode keeps the navy cards (explicitly) */
+:root[data-theme="dark"] .rem-page .rem-hero,
+:root[data-theme="dark"] .rem-page .rem-head {
+  background: #0f1d3b;                  /* deep navy */
+  border: 1px solid rgba(255,255,255,.08);
+  color: #eaf1ff;
+}
+:root[data-theme="dark"] .rem-page .rem-rail,
+:root[data-theme="dark"] .rem-page .rem-toggles {
+  background: #0f1d3b;
+  border: 1px solid rgba(255,255,255,.08);
+  color: #eaf1ff;
+}
+
+/* Light mode uses normal cards (white) like the rest of the page */
+:root[data-theme="light"] .rem-page .rem-hero,
+:root[data-theme="light"] .rem-page .rem-head,
+:root[data-theme="light"] .rem-page .rem-rail,
+:root[data-theme="light"] .rem-page .rem-toggles {
+  background: #ffffff;                  /* same as other cards */
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 18px rgba(10,31,68,.06), 0 2px 4px rgba(10,31,68,.04);
+  color: var(--text);
+}
+
+/* Stats chips inside the header */
+:root[data-theme="light"] .rem-page .rem-hero .stat,
+:root[data-theme="light"] .rem-page .rem-head .stat {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+
+/* Toggle row: make the little switches feel “light” */
+:root[data-theme="light"] .rem-page .switch .track { background: #e5e7eb; }
+:root[data-theme="light"] .rem-page .switch input:checked + .track { background: var(--accent); }
+
+/* Optional: lighten the small helper text under each toggle */
+:root[data-theme="light"] .rem-page .rem-rail .hint,
+:root[data-theme="light"] .rem-page .rem-toggles .hint { color: var(--muted); }
+
+/* Keep buttons consistent */
+:root[data-theme="light"] .rem-page .btn.blue { border-color: var(--accent); }
+/* --- Force the second section (toggle row) to use light skin in light mode --- */
+:root[data-theme="light"] .rem-page .rem-rail,
+:root[data-theme="light"] .rem-page .rem-toggles,
+:root[data-theme="light"] .rem-page .rem-rail.card,
+:root[data-theme="light"] .rem-page .rem-toggles.card {
+  background: #ffffff !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: 0 10px 18px rgba(10,31,68,.06), 0 2px 4px rgba(10,31,68,.04) !important;
+  color: var(--text);
+}
+
+/* labels/help text inside the rail */
+:root[data-theme="light"] .rem-page .rem-rail .label,
+:root[data-theme="light"] .rem-page .rem-rail .hint,
+:root[data-theme="light"] .rem-page .rem-toggles .hint {
+  color: var(--muted);
+}
+
+/* switches in light mode */
+:root[data-theme="light"] .rem-page .rem-rail .switch .track,
+:root[data-theme="light"] .rem-page .rem-toggles .switch .track {
+  background: #e5e7eb;
+}
+:root[data-theme="light"] .rem-page .rem-rail .switch input:checked + .track,
+:root[data-theme="light"] .rem-page .rem-toggles .switch input:checked + .track {
+  background: var(--accent);
+}
+
+/* the 'Browse schedule' button keeps the accent look */
+:root[data-theme="light"] .rem-page .rem-rail .btn.blue,
+:root[data-theme="light"] .rem-page .rem-toggles .btn.blue {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+/* --- Light skin for the second row (toggle rail) --- */
+:root[data-theme="light"] .rem-page .light-ui {
+  background: #fff !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 10px 18px rgba(10,31,68,.06), 0 2px 4px rgba(10,31,68,.04) !important;
+  color: var(--text) !important;
+}
+
+/* text inside the rail */
+:root[data-theme="light"] .rem-page .light-ui .label,
+:root[data-theme="light"] .rem-page .light-ui .hint,
+:root[data-theme="light"] .rem-page .light-ui .toggle span {
+  color: var(--text) !important;
+  opacity: .9;
+}
+:root[data-theme="light"] .rem-page .light-ui .hint,
+:root[data-theme="light"] .rem-page .light-ui small {
+  color: var(--muted) !important;
+}
+
+/* switches */
+:root[data-theme="light"] .rem-page .light-ui .switch .track {
+  background: #e5e7eb !important;
+}
+:root[data-theme="light"] .rem-page .light-ui .switch input:checked + .track {
+  background: var(--accent) !important;
+}
+
+/* the CTA in that row */
+:root[data-theme="light"] .rem-page .light-ui .btn.blue {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #fff !important;
+}
+/* Light skin for the CONTROLS ROW (second section) */
+:root[data-theme="light"] .rem-page .rem-controls.light-ui{
+  background:#fff !important;
+  border:1px solid var(--line) !important;
+  border-radius:14px !important;
+  box-shadow:0 10px 18px rgba(10,31,68,.06), 0 2px 4px rgba(10,31,68,.04) !important;
+  color:var(--text) !important;
+}
+
+/* Text inside that row */
+:root[data-theme="light"] .rem-page .rem-controls.light-ui .tcopy strong{ color:var(--text) !important; }
+:root[data-theme="light"] .rem-page .rem-controls.light-ui .tcopy em{ color:var(--muted) !important; }
+
+/* Pretty switches in light mode */
+:root[data-theme="light"] .rem-page .rem-controls.light-ui .toggle .track{ background:#e5e7eb !important; }
+:root[data-theme="light"] .rem-page .rem-controls.light-ui .toggle input:checked + .track{ background:var(--accent, #1f4cff) !important; }
+:root[data-theme="light"] .rem-page .rem-controls.light-ui .toggle .thumb{ background:#fff !important; }
+
+/* The CTA on the right */
+:root[data-theme="light"] .rem-page .rem-controls.light-ui .btn.blue{
+  background:var(--accent, #1f4cff) !important;
+  border-color:var(--accent, #1f4cff) !important;
+  color:#fff !important;
+}

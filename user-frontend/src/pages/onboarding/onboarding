@@ -1,0 +1,200 @@
+// src/pages/onboarding/Preferences.jsx
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import "../../styles/auth.css";
+import "../schedule.css"; // reuse schedule card styles for the preview
+
+// Same canonical lists you use elsewhere
+const CITIES  = ["Karachi", "Lahore", "Islamabad", "Peshawar"];
+const SPORTS  = ["Cricket", "Football", "Basketball", "Tennis"];
+const MIN_SPORTS = 3;
+const MAX_SPORTS = 5;
+const MAX_CITIES = 3;
+
+/* lite generator to show recommended matches (reuses your Schedule look) */
+const pad = (n) => String(n).padStart(2, "0");
+const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const TEAM_BANK = {
+  Cricket:["Eagles","Sharks","Titans","Kings","Royals","Spartans"],
+  Football:["Falcons","Wolves","Rangers","United","City","Lions"],
+  Basketball:["Dunkers","Ballers","Hoops","Rockets","Giants","Storm"],
+  Tennis:["Aces","Spinners","Topspin","Volley","Slices","Lobs"]
+};
+function pick(arr,i){return arr[i%arr.length]}
+function generateSample(days=10){
+  const out=[]; const base=new Date(); let id=1;
+  for(let d=0; d<days; d++){
+    const date=new Date(base); date.setDate(base.getDate()+d); const dateISO=toISO(date);
+    SPORTS.forEach((sport, sIdx)=>{
+      CITIES.forEach((city, cIdx)=>{
+        for(let k=0;k<1;k++){
+          const A=pick(TEAM_BANK[sport], sIdx+cIdx+k), B=pick(TEAM_BANK[sport], sIdx+cIdx+k+2);
+          const hour=15+((cIdx+k)%5), min=(sIdx*10)%60;
+          out.push({
+            id:id++,
+            dateISO,
+            timeLocal:`${pad(hour)}:${pad(min)}`,
+            league:`${sport} Series`,
+            sport, city, venue:`${city} Dome`,
+            teams:[A,B],
+            status: d===0 && (sIdx+cIdx)%3===0 ? "live" : "upcoming"
+          })
+        }
+      })
+    })
+  }
+  return out;
+}
+const DATA = generateSample(10);
+
+export default function Preferences() {
+  const nav = useNavigate();
+  const [cities, setCities] = useState([]);
+  const [sports, setSports] = useState([]);
+
+  // restore if user came back
+  useEffect(()=>{
+    const raw = localStorage.getItem("sv_prefs");
+    if(raw){
+      const p = JSON.parse(raw);
+      setCities(p.cities || []);
+      setSports(p.sports || []);
+    }
+  },[]);
+
+  const toggle = (list, setList, value, max) => {
+    setList((cur)=>{
+      if (cur.includes(value)) return cur.filter(v=>v!==value);
+      if (cur.length >= max) return cur; // enforce max
+      return [...cur, value];
+    });
+  };
+
+  // recommended matches preview (next 14 days)
+  const recommended = useMemo(()=>{
+    const byCity   = new Set(cities);
+    const bySport  = new Set(sports);
+    const todayISO = toISO(new Date());
+    return DATA
+      .filter(m =>
+        (byCity.size===0  || byCity.has(m.city)) &&
+        (bySport.size===0 || bySport.has(m.sport)) &&
+        m.dateISO >= todayISO
+      )
+      .slice(0, 9);
+  }, [cities, sports]);
+
+  const canFinish =
+    cities.length >= 1 &&
+    cities.length <= MAX_CITIES &&
+    sports.length >= MIN_SPORTS &&
+    sports.length <= MAX_SPORTS;
+
+  const onFinish = () => {
+    if (!canFinish) return;
+    localStorage.setItem("sv_prefs", JSON.stringify({ cities, sports }));
+    localStorage.setItem("sv_profileComplete", "true");
+    nav("/schedule");
+  };
+
+  return (
+    <div className="auth-shell">
+      <div className="onb-wrap">
+        <header className="onb-head">
+          <div>
+            <h1>Tell us what you like</h1>
+            <p>Select your cities and 3–5 sports to personalize your feed.</p>
+          </div>
+          <div className="onb-actions">
+            <Link to="/schedule" className="btn white">Skip for now</Link>
+            <button
+              className={`btn blue ${!canFinish ? "disabled": ""}`}
+              disabled={!canFinish}
+              onClick={onFinish}
+            >
+              Finish setup
+            </button>
+          </div>
+        </header>
+
+        {/* Cities */}
+        <section className="onb-section">
+          <div className="onb-row">
+            <h3>Cities <span className="count">{cities.length}/{MAX_CITIES}</span></h3>
+            <div className="chip-grid">
+              {CITIES.map(c => (
+                <button
+                  key={c}
+                  className={`chip ${cities.includes(c) ? "on":""}`}
+                  onClick={()=>toggle(cities,setCities,c,MAX_CITIES)}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Sports */}
+        <section className="onb-section">
+          <div className="onb-row">
+            <h3>Sports <span className="count">{sports.length}/{MAX_SPORTS}</span></h3>
+            <div className="chip-grid">
+              {SPORTS.map(s => (
+                <button
+                  key={s}
+                  className={`chip ${sports.includes(s) ? "on":""}`}
+                  onClick={()=>toggle(sports,setSports,s,MAX_SPORTS)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+            <p className="hint">Pick at least {MIN_SPORTS} sports (max {MAX_SPORTS}).</p>
+          </div>
+        </section>
+
+        {/* Preview */}
+        <section className="onb-section">
+          <div className="onb-row">
+            <h3>Recommended for you</h3>
+            {recommended.length === 0 ? (
+              <div className="empty-card small">
+                <h4>No matches yet</h4>
+                <p>Try adding another city or one more sport.</p>
+              </div>
+            ) : (
+              <div className="group-grid">
+                {recommended.map(m=>(
+                  <article key={m.id} className={`schedule-card sport-${m.sport.toLowerCase()}`}>
+                    <div className="card-head">
+                      <div className="league-pill">{m.league}</div>
+                      {m.status === "live" && <span className="live-dot" aria-label="Live" />}
+                    </div>
+                    <div className="card-body">
+                      <div className="card-time">{m.timeLocal}</div>
+                      <h4 className="card-title">
+                        <strong>{m.teams[0]}</strong> vs <strong>{m.teams[1]}</strong>
+                      </h4>
+                      <div className="meta-line">
+                        <span className={`status-pill ${m.status}`}>{m.status === "live" ? "LIVE" : "UPCOMING"}</span>
+                        <span className="dot">·</span><span className="sport">{m.sport}</span>
+                        <span className="dot">·</span><span className="city">{m.city}</span>
+                      </div>
+                      <div className="card-meta"><span className="chip">{m.venue}</span></div>
+                      <div className="cta-row">
+                        <button className="btn white" type="button">Get directions</button>
+                        <button className="btn red" type="button">Watch Now</button>
+                        <button className="btn blue" type="button">Remind me</button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

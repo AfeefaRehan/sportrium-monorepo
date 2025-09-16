@@ -1,0 +1,247 @@
+/* =========================
+   Score Carousel
+   ========================= */
+.score-carousel{
+  position: relative;
+  margin: 10px 0 22px;
+  overflow: hidden;                 /* keeps last slide edges tidy */
+}
+
+/* Track: fixed-width slides, horizontal scroll, space for arrows */
+.score-track{
+  display: flex;                    /* final preference: flex row */
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 6px 44px;                /* room for nav arrows */
+  scrollbar-width: thin;            /* Firefox */
+}
+.score-track::-webkit-scrollbar{ height: 8px; }     /* WebKit */
+.score-track::-webkit-scrollbar-thumb{
+  background: var(--border);
+  border-radius: 999px;
+}
+
+/* Slide */
+.score-slide{
+  flex: 0 0 340px;                  /* fixed width card */
+  max-width: 340px;
+  scroll-snap-align: start;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-rows: 160px auto;   /* media height + body */
+}
+
+/* Media */
+.thumb-wrap{
+  position: relative;
+  background: #0b172b;              /* safe fallback behind image */
+}
+.thumb-wrap img{
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  filter: saturate(1.05) contrast(1.02);
+}
+.img-fallback{
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg,#0b172b,#08101f);
+}
+
+/* League pill + live dot */
+.pill{
+  position: absolute; left: 10px; top: 10px;
+  padding: 6px 10px; font-size: 12px; font-weight: 800;
+  background: rgba(255,255,255,.92); color: #0b172b; border-radius: 999px;
+}
+.live-dot{
+  position: absolute; right: 10px; top: 12px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #28c76f; box-shadow: 0 0 0 6px rgba(40,199,111,.18);
+}
+
+/* Body */
+.slide-body{
+  padding: 12px; display: grid; gap: 8px;
+}
+.slide-body .teams{ font-weight: 900; letter-spacing: .2px; }
+
+.meta-row{
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.meta-row .score{ font-weight: 900; font-size: 18px; }
+
+/* Arrows */
+.nav-btn{
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 22px; font-weight: 900; line-height: 0;
+  display: grid; place-items: center; cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+.nav-left{  left: 6px; }
+.nav-right{ right: 6px; }
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 880px){
+  .score-slide{ flex-basis: 300px; max-width: 300px; }
+  .score-slide{ grid-template-rows: 140px auto; }
+}
+/* keep score left and buttons in a single row */
+.meta-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* make score take remaining space */
+.meta-row .score{
+  font-weight: 900;
+  font-size: 18px;
+  flex: 1 1 auto;      /* <-- lets buttons keep their width */
+  min-width: 0;
+}
+
+/* NEW: buttons row stays horizontal */
+.meta-row .btns{
+  display: flex;
+  gap: 12px;
+  white-space: nowrap; /* prevent line wrap of the buttons */
+  flex: 0 0 auto;
+}
+
+/* ensure buttons don’t stretch */
+.meta-row .btns .btn{ width: auto; }
+.score-slide .btn{ padding: 0 16px; }     /* was 18px in base */
+@media (max-width: 920px){
+  .score-slide .btn{ padding: 0 14px; }
+}
+/* ensure image always fills */
+.score-slide .thumb-wrap{ position: relative; height: 180px; background: var(--card, #0f172a); }
+.score-slide .thumb-wrap img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+
+/* buttons don’t overlap & wrap nicely */
+.score-slide .meta-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.score-slide .btns{ display:flex; gap:8px; flex-wrap:wrap; }
+.score-slide .buy-btn{ white-space: nowrap; }
+/* Make each slide a tidy vertical card */
+.score-slide{
+  display:flex; flex-direction:column;
+  background: var(--card, #fff);
+  border: 1px solid var(--border, #e6e8ef);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Image area always filled */
+.score-slide .thumb-wrap{ position: relative; height: 180px; background: #0f172a; }
+.score-slide .thumb-wrap img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Body & rows */
+.score-slide .slide-body{ padding: 12px; background: var(--card, #fff); }
+.score-slide .teams{ font-weight: 700; margin: 2px 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.score-slide .meta-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.score-slide .score{ font-weight: 800; font-size: 16px; }
+
+/* Buttons wrap nicely */
+.score-slide .btns{ display:flex; gap:8px; flex-wrap: wrap; justify-content:flex-end; }
+.score-slide .btns .btn{ white-space: nowrap; }
+/* --- FIX Live now card layout (stack + no clipping) --- */
+
+/* let the carousel show full slide height (no cutting) */
+.score-carousel .score-track{
+  overflow-x: auto;
+  overflow-y: visible;        /* was hiding the bottom of cards */
+  padding-bottom: 8px;        /* room above the scrollbar */
+}
+
+/* slide body as a vertical stack */
+.score-slide .slide-body{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 12px;
+}
+
+/* put SCORE on its own line, above the buttons */
+.score-slide .meta-row{
+  display: grid;              /* break the old side-by-side layout */
+  grid-template-columns: 1fr; /* single column */
+  row-gap: 8px;
+  align-items: start;
+}
+
+/* make score readable & never under buttons */
+.score-slide .score{
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.2;
+  margin: 0;                  /* ensure it's not pushing buttons up/down oddly */
+}
+
+/* buttons wrap nicely and never overflow */
+.score-slide .btns{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;            /* shrink to a new line if needed */
+  justify-content: flex-start;
+  overflow: visible;          /* avoid pill clipping */
+}
+
+.score-slide .btns .btn{
+  white-space: nowrap;        /* keep labels intact (e.g., “Buy tickets”) */
+}
+
+/* image area: always fill (in case not added already) */
+.score-slide .thumb-wrap{ position: relative; height: 180px; background: #0f172a; }
+.score-slide .thumb-wrap img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+/* dark card surfaces inside Live page */
+[data-theme="dark"] .live-page .score-slide{
+  background: var(--live-surface);
+  border-color: var(--live-stroke);
+}
+[data-theme="dark"] .live-page .score-slide .slide-body{ background: transparent; }
+[data-theme="dark"] .live-page .score-slide .teams,
+[data-theme="dark"] .live-page .score-slide .score{ color: var(--live-white); }
+[data-theme="dark"] .live-page .score-slide .thumb-wrap{ background:#0b1222; }
+/* --- Fix: Live page carousel arrows leaking to page edges --- */
+.live-page .score-carousel{ position: relative; }
+
+/* force inside the carousel, not viewport */
+.live-page .score-carousel .nav-btn{
+  position: absolute !important;    /* kill any sticky/fixed from older CSS */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,.28);
+}
+
+/* keep them slightly inside the container */
+.live-page .score-carousel .nav-left{  left: 8px; }
+.live-page .score-carousel .nav-right{ right: 8px; }
+
+/* add space so content doesn't hide under arrows */
+.live-page .score-carousel .score-track{ padding: 0 44px; }
+
+/* optional: hide arrows on small screens or until hover */
+@media (max-width: 900px){
+  .live-page .score-carousel .nav-btn{ display: none; }
+}
+/* or, if you prefer fade-in on hover:
+.live-page .score-carousel .nav-btn{ opacity: 0; transition: opacity .2s; }
+.live-page .score-carousel:hover .nav-btn{ opacity: 1; }
+*/

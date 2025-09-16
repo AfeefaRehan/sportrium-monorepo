@@ -1,0 +1,579 @@
+/* ================================
+   FOOTER — force dark navy in BOTH themes
+   ================================ */
+:root, [data-theme="light"], [data-theme="dark"]{
+  --footer-bg: #0b1f3a;
+  --footer-text: #eaf2ff;
+  --footer-border: rgba(255,255,255,.12);
+}
+
+footer, .site-footer, .app-footer{
+  background: var(--footer-bg) !important;
+  color: var(--footer-text) !important;
+  border-top: 1px solid var(--footer-border) !important;
+}
+footer *, .site-footer *, .app-footer *{
+  color: inherit !important;
+}
+
+/* ➜ "Get Started" text: make readable in BOTH modes even if disabled */
+footer .btn,
+footer button,
+footer a.btn{
+  opacity: 1 !important;
+  color: #0b1f3a !important;                 /* dark text against the white pill */
+  background: #ffffff !important;            /* keep the pill white */
+  border: 1px solid rgba(255,255,255,.22) !important;
+}
+
+/* if it’s disabled/ghost element, keep text visible */
+footer .btn:disabled,
+footer button:disabled,
+footer .is-disabled,
+footer .disabled {
+  opacity: 1 !important;
+  color: #0b1f3a !important;
+  background: #ffffff !important;
+}
+
+/* If the CTA text sits inside a custom pill/div (not a real <button>) */
+footer .cta, footer .cta *{
+  color: #0b1f3a !important;
+}
+
+/* ================================
+   HOME HERO — video must fully cover & content sits above
+   (Add className="home-hero" on the hero wrapper in Home.jsx)
+   ================================ */
+.home-hero{
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+  min-height: 70vh !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  grid-column: 1 / -1 !important;   /* if parent is grid */
+  flex: 1 1 100% !important;        /* if parent is flex */
+}
+
+/* video inside hero */
+.home-hero video,
+.home-hero .hero-video,
+.home-hero .bg-video{
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 1 !important;            /* kill any global fade */
+  transform: none !important;       /* kill any global zoom */
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* optional: readability overlay (if you add <div class="overlay" />) */
+.home-hero .overlay{
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.45)) !important;
+  z-index: 0 !important;
+}
+
+/* content above video/overlay */
+.home-hero > *:not(video):not(.hero-video):not(.bg-video):not(.overlay){
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* light mode: ensure copy is readable on video */
+:root:not([data-theme="dark"]) .home-hero h1,
+:root:not([data-theme="dark"]) .home-hero h2,
+:root:not([data-theme="dark"]) .home-hero p{
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45) !important;
+}
+
+/* ================================
+   DARK MODE — sidebar active link: white pill + black icon
+   (works with NavLink .active and aria-current="page")
+   ================================ */
+[data-theme="dark"] .sidebar a.active,
+[data-theme="dark"] .sidebar a[aria-current="page"],
+[data-theme="dark"] .sidenav .nav-link.active,
+[data-theme="dark"] nav .nav-link.active{
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,.25) !important;
+}
+
+/* icons inside the active item */
+[data-theme="dark"] .sidebar a.active svg,
+[data-theme="dark"] .sidebar a[aria-current="page"] svg,
+[data-theme="dark"] .sidebar .nav-link.active svg,
+[data-theme="dark"] .sidebar a.active i,
+[data-theme="dark"] .sidebar .nav-link.active i {
+  fill: #000 !important;
+  stroke: #000 !important;
+  color: #000 !important;
+}
+/* =========================================================
+   1) HOME HERO — make video full cover & keep content above
+   (Works even if your video class isn't consistent)
+   ========================================================= */
+
+/* Prefer a wrapper class on your hero: <section class="home-hero">… */
+.home-hero{
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+  min-height: 70vh !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  grid-column: 1 / -1 !important;  /* grid parents */
+  flex: 1 1 100% !important;       /* flex parents */
+}
+
+/* Video inside the hero (any class) */
+.home-hero video,
+.home-hero .hero-video,
+.home-hero .bg-video,
+.home-hero .video-wrap > video{
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 1 !important;             /* kill any global fade */
+  transform: none !important;         /* kill any global zoom */
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* Put hero text/buttons above video */
+.home-hero > *:not(video):not(.hero-video):not(.bg-video):not(.overlay){
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Readability overlay if you add <div class="overlay" /> */
+.home-hero .overlay{
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.45)) !important;
+  z-index: 0 !important;
+}
+
+/* If you CANNOT add .home-hero, this fallback fixes any section with a video on Home */
+main:not(.auth-shell) section:has(video){
+  position: relative !important;
+  overflow: hidden !important;
+}
+main:not(.auth-shell) section:has(video) > video{
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important; height: 100% !important;
+  object-fit: cover !important;
+  opacity: 1 !important; transform: none !important;
+  pointer-events: none !important; z-index: 0 !important;
+}
+
+/* Light mode hero copy readable */
+:root:not([data-theme="dark"]) .home-hero h1,
+:root:not([data-theme="dark"]) .home-hero h2,
+:root:not([data-theme="dark"]) .home-hero p{
+  color: #fff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,.45) !important;
+}
+
+
+/* =========================================================
+   2) SIDEBAR (DARK MODE) — active link = white pill + BLACK icon
+   ========================================================= */
+
+/* White pill + black text for the active item */
+[data-theme="dark"] .sidebar a.active,
+[data-theme="dark"] .sidebar a[aria-current="page"],
+[data-theme="dark"] .sidenav .nav-link.active{
+  background: #fff !important;
+  color: #000 !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(0,0,0,.08) !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,.25) !important;
+}
+
+/* Make sure icons INSIDE the active link turn black no matter what */
+[data-theme="dark"] .sidebar a.active svg,
+[data-theme="dark"] .sidebar a.active svg *,
+[data-theme="dark"] .sidebar a.active .icon,
+[data-theme="dark"] .sidebar a.active i,
+[data-theme="dark"] .sidebar a[aria-current="page"] svg,
+[data-theme="dark"] .sidebar a[aria-current="page"] svg *{
+  color: #000 !important;
+  fill: #000 !important;
+  stroke: #000 !important;
+}
+
+/* If your icons use mask-image/currentColor tricks, this forces currentColor to black */
+[data-theme="dark"] .sidebar a.active { --icon-color: #000 !important; }
+
+
+/* =========================================================
+   3) FOOTER — dark navy + “Get Started” text visible in BOTH modes
+   ========================================================= */
+:root, [data-theme="light"], [data-theme="dark"]{
+  --footer-bg: #0b1f3a;
+  --footer-text: #eaf2ff;
+  --footer-border: rgba(255,255,255,.12);
+}
+
+footer, .site-footer, .app-footer{
+  background: var(--footer-bg) !important;
+  color: var(--footer-text) !important;
+  border-top: 1px solid var(--footer-border) !important;
+}
+footer *, .site-footer *, .app-footer *{
+  color: inherit !important;
+}
+
+/* “Get Started” pill/text — visible even if disabled */
+footer .btn,
+footer button,
+footer a.btn,
+footer input[type="button"],
+footer .cta .btn,
+footer .cta button,
+footer .cta a.btn{
+  background: #ffffff !important;     /* white pill */
+  color: #0b1f3a !important;          /* dark navy text */
+  border: 1px solid rgba(255,255,255,.22) !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+}
+
+/* If it’s rendered as a disabled element */
+footer .btn:disabled,
+footer button:disabled,
+footer .disabled,
+footer .is-disabled{
+  background: #ffffff !important;
+  color: #0b1f3a !important;
+  opacity: 1 !important;
+  cursor: default !important;
+}
+/* =========================================================
+   FOOTER — dark navy + "Get Started" readable (both modes)
+   ========================================================= */
+:root, [data-theme="light"], [data-theme="dark"]{
+  --footer-bg:#0b1f3a; --footer-text:#eaf2ff; --footer-border:rgba(255,255,255,.12);
+}
+footer, .site-footer, .app-footer{
+  background:var(--footer-bg)!important; color:var(--footer-text)!important;
+  border-top:1px solid var(--footer-border)!important;
+}
+footer *, .site-footer *, .app-footer *{ color:inherit!important; }
+
+/* "Get Started" pill/button (covers button, anchor, inputs, custom cta) */
+footer .btn, footer button, footer a.btn, footer input[type="button"],
+footer input[type="text"], footer input[type="search"],
+footer .cta .btn, footer .cta button, footer .cta a.btn{
+  background:#fff!important; color:#0b1f3a!important;
+  border:1px solid rgba(255,255,255,.22)!important; opacity:1!important; font-weight:700!important;
+}
+footer input::placeholder{ color:#0b1f3a!important; opacity:1!important; }
+footer .btn:disabled, footer button:disabled, footer input:disabled,
+footer .disabled, footer .is-disabled{
+  background:#fff!important; color:#0b1f3a!important; opacity:1!important; cursor:default!important;
+}
+
+/* =========================================================
+   HOME — keep hero video as a RIGHT CARD (not full-bleed)
+   Works whether the video is a direct child or inside .media
+   ========================================================= */
+
+/* 2-column hero layout (safe on mobile) */
+.home-hero.two-col{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;
+  gap:24px!important; align-items:start!important; margin-top:8px;
+}
+@media (max-width:1024px){ .home-hero.two-col{ grid-template-columns:1fr!important; } }
+
+/* Right card wrapper (if present) */
+.home-hero .media{
+  background:#0e1f32; border-radius:18px; overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+  aspect-ratio:16/9; max-height:420px;
+}
+
+/* 🔒 Cancel ANY global "absolute/cover" rules for hero videos */
+.home-hero.two-col > video,
+.home-hero .media > video,
+.page .home-hero .media > video,
+main:not(.auth-shell) .home-hero .media > video{
+  position:static!important; inset:auto!important;
+  width:100%!important; height:100%!important;
+  object-fit:cover!important; object-position:center!important;
+  transform:none!important; opacity:1!important; pointer-events:auto!important;
+  border-radius:18px!important; /* card feel even when direct child */
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+
+/* If you have a named class on the video (e.g. .hero-clip), include it too */
+.home-hero.two-col .hero-clip{ position:static!important; }
+
+/* keep left copy normal color in light mode */
+.home-hero.two-col .copy{ color:inherit; }
+
+/* =========================================================
+   SIDEBAR (DARK MODE) — active link = white pill + BLACK icon
+   ========================================================= */
+[data-theme="dark"] .sidebar :is(a,button,[role="button"]).active,
+[data-theme="dark"] .sidebar :is(a,button,[role="button"])[aria-current="page"]{
+  background:#fff!important; color:#000!important;
+  border-radius:14px!important; border:1px solid rgba(0,0,0,.08)!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.25)!important;
+}
+
+/* SVG + IMG icons inside the active pill -> black */
+[data-theme="dark"] .sidebar :is(a,button,[role="button"]).active :is(svg,svg *,i,.icon){ 
+  color:#000!important; fill:#000!important; stroke:#000!important;
+}
+[data-theme="dark"] .sidebar :is(a,button,[role="button"]).active img{
+  filter:brightness(0) saturate(100%) contrast(110%)!important; /* force black for PNG/SVG img */
+}
+/* If your icon uses currentColor */
+[data-theme="dark"] .sidebar :is(a,button,[role="button"]).active{ --icon-color:#000!important; }
+/* Nudge the hero text a little to the right (works with or without a .copy wrapper) */
+.home-hero .copy,
+.home-hero .hero-overlay .hero-inner,
+.home-hero .content,
+.home-hero .hero-text,
+.home-hero > :not(video):not(.bg-video):not(.overlay):first-child{
+  padding-left: clamp(16px, 3vw, 56px) !important;  /* tweak the max if you want more/less */
+}
+
+@media (max-width: 640px){
+  .home-hero .copy,
+  .home-hero .hero-overlay .hero-inner,
+  .home-hero .content,
+  .home-hero .hero-text,
+  .home-hero > :not(video):not(.bg-video):not(.overlay):first-child{
+    padding-left: 14px !important;  /* gentle on small screens */
+  }
+}
+/* HERO KPI cards — ALWAYS white text (light + dark) */
+.home-hero :is(.stat-card, .stat, .metric-card, .metric, .kpi, .kpi-card, .summary-card){
+  /* same dark navy look in both themes so white text pops */
+  background: #0e1f32 !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  color: #fff !important;
+}
+
+/* Make every bit of text inside those cards white */
+.home-hero :is(.stat-card, .stat, .metric-card, .metric, .kpi, .kpi-card, .summary-card) *{
+  color: #fff !important;
+  opacity: 1 !important;   /* kill any muted/secondary opacity */
+}
+
+/* Optional: slightly dim the small label line only */
+.home-hero :is(.stat-card, .stat, .metric-card, .metric, .kpi, .kpi-card, .summary-card) .label{
+  color: rgba(255,255,255,.85) !important;
+}
+/* === Home hero title: bigger + a bit lower === */
+
+/* make the big heading larger */
+.home-hero .copy h1,
+.home-hero .hero-text h1,
+.home-hero h1.hero-title,
+.home-hero > h1:first-of-type {
+  font-size: clamp(42px, 6.2vw, 86px) !important; /* bigger */
+  line-height: 1.05 !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 900 !important;
+}
+
+/* nudge the whole text block slightly down */
+.home-hero .copy,
+.home-hero .hero-text,
+.home-hero > :not(video):not(.bg-video):not(.overlay):first-child {
+  padding-top: clamp(12px, 3vh, 36px) !important; /* a little lower */
+}
+
+/* optional: on very small screens, keep it tidy */
+@media (max-width: 560px){
+  .home-hero .copy h1,
+  .home-hero .hero-text h1,
+  .home-hero h1.hero-title,
+  .home-hero > h1:first-of-type {
+    font-size: clamp(34px, 8vw, 48px) !important;
+  }
+  .home-hero .copy,
+  .home-hero .hero-text,
+  .home-hero > :not(video):not(.bg-video):not(.overlay):first-child {
+    padding-top: 14px !important;
+  }
+}
+/* === HERO KPI: 3 cards in one row on desktop ===================== */
+/* If you have a wrapper around the cards (common names tried here) */
+.home-hero :is(.stats-row, .kpi-row, .metrics, .hero-stats){
+  display: flex !important;
+  gap: 16px !important;
+  flex-wrap: nowrap !important;       /* keep in one line */
+}
+
+/* children = your three cards */
+.home-hero :is(.stats-row, .kpi-row, .metrics, .hero-stats) > *{
+  flex: 0 0 clamp(220px, 28%, 320px) !important;  /* 3 fit nicely */
+}
+
+/* Fallback when there is NO known wrapper: make cards inline */
+.home-hero :is(.stat-card, .metric-card, .kpi-card, .summary-card){
+  display: inline-flex !important;
+  vertical-align: top !important;
+  flex-direction: column;
+  width: clamp(220px, 28%, 320px) !important;
+  margin-right: 16px !important;
+  margin-top: 12px !important;
+  float: none !important;
+  clear: none !important;
+}
+
+/* Responsive: stack on tablets/phones */
+@media (max-width: 1024px){
+  .home-hero :is(.stats-row, .kpi-row, .metrics, .hero-stats){
+    flex-wrap: wrap !important;
+  }
+  .home-hero :is(.stats-row, .kpi-row, .metrics, .hero-stats) > *,
+  .home-hero :is(.stat-card, .metric-card, .kpi-card, .summary-card){
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+}
+/* =========================================================
+   1) FOOTER — dark navy in both themes + "Get Started" readable
+   ========================================================= */
+:root, [data-theme="light"], [data-theme="dark"]{
+  --footer-bg: #0b1f3a;
+  --footer-text: #eaf2ff;
+  --footer-border: rgba(255,255,255,.12);
+}
+footer, .site-footer, .app-footer{
+  background: var(--footer-bg) !important;
+  color: var(--footer-text) !important;
+  border-top: 1px solid var(--footer-border) !important;
+}
+footer *, .site-footer *, .app-footer *{ color: inherit !important; }
+
+/* "Get Started" pill/text should stay visible even if disabled */
+footer .btn,
+footer button,
+footer a.btn{
+  background: #fff !important;
+  color: #0b1f3a !important;
+  border: 1px solid rgba(255,255,255,.22) !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+}
+footer .btn:disabled,
+footer button:disabled,
+footer .disabled,
+footer .is-disabled{
+  background:#fff !important;
+  color:#0b1f3a !important;
+  opacity:1 !important;
+}
+
+/* =========================================================
+   2) SIDEBAR (DARK MODE) — active link: white pill + black icon
+   ========================================================= */
+[data-theme="dark"] .sidebar :is(a,button,[role="button"]).active,
+[data-theme="dark"] .sidebar :is(a,button,[role="button"])[aria-current="page"]{
+  background:#fff !important;
+  color:#000 !important;
+  border-radius:14px !important;
+  border:1px solid rgba(0,0,0,.08) !important;
+  box-shadow:0 8px 18px rgba(0,0,0,.25) !important;
+}
+[data-theme="dark"] .sidebar :is(a,button,[role="button"]).active :is(svg,svg *,i,.icon){
+  color:#000 !important; fill:#000 !important; stroke:#000 !important;
+}
+[data-theme="dark"] .sidebar :is(a,button,[role="button"]).active img{
+  filter: brightness(0) saturate(100%) contrast(110%) !important; /* make PNG/SVG img icons black */
+}
+
+/* =========================================================
+   3) HOME HERO — title bigger + slightly lower; copy nudged right
+   (Only affects elements inside .home-hero)
+   ========================================================= */
+.home-hero .copy h1,
+.home-hero .hero-text h1,
+.home-hero h1.hero-title,
+.home-hero > h1:first-of-type{
+  font-size: clamp(42px, 6.2vw, 86px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 900 !important;
+}
+.home-hero .copy,
+.home-hero .hero-text,
+.home-hero > :not(video):not(.bg-video):not(.overlay):first-child{
+  padding-top: clamp(12px, 3vh, 36px) !important;  /* a bit lower */
+  padding-left: clamp(16px, 3vw, 56px) !important; /* a bit to the right */
+}
+
+/* =========================================================
+   4) HOME HERO — KPI cards: same row on desktop + white text
+   ========================================================= */
+/* 👉 Recommended: wrap the three KPI cards in a parent with class="kpi-row" */
+.home-hero .kpi-row{
+  display:flex !important;
+  gap:16px !important;
+  flex-wrap:nowrap !important;         /* force one line on desktop */
+  margin-top: 12px;
+}
+.home-hero .kpi-row > *{
+  flex:0 0 clamp(220px, 28%, 320px) !important;   /* 3 fit nicely */
+}
+
+/* Card look + always white text (light & dark) */
+.home-hero .kpi-row > *,
+.home-hero :is(.stat-card, .metric-card, .kpi-card, .summary-card){
+  background:#0e1f32 !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  color:#fff !important;
+}
+.home-hero .kpi-row > * *,
+.home-hero :is(.stat-card, .metric-card, .kpi-card, .summary-card) *{
+  color:#fff !important; opacity:1 !important;
+}
+
+/* Fallback: if you DON'T have a wrapper, try to inline known KPI classes */
+.home-hero :is(.stat-card, .metric-card, .kpi-card, .summary-card){
+  display:inline-flex !important;
+  vertical-align:top !important;
+  flex-direction:column;
+  width:clamp(220px, 28%, 320px) !important;
+  margin-right:16px !important;
+  margin-top:12px !important;
+}
+
+/* Responsive stacking on tablets/phones */
+@media (max-width:1024px){
+  .home-hero .kpi-row{ flex-wrap:wrap !important; }
+  .home-hero .kpi-row > *,
+  .home-hero :is(.stat-card, .metric-card, .kpi-card, .summary-card){
+    flex:1 1 100% !important;
+    width:100% !important;
+    margin-right:0 !important;
+  }
+}
+/* Use the home-page red everywhere AFTER login */
+[data-auth="true"]{
+  --red: var(--brand-red);
+  --accent: var(--brand-red);
+}

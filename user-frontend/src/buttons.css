@@ -1,0 +1,70 @@
+/* Brand fallbacks (do not redefine --bg/--text here) */
+:root{
+  --brand-blue: #1f4cff;
+  --brand-red:  #ff4d4f;
+  --ink:        #0b1221;
+
+  --btn-blue: var(--blue, var(--brand-blue));
+  --btn-red:  var(--red,  var(--brand-red));
+}
+
+/* Base */
+.btn{
+  --btn-radius: 12px;
+  --btn-h: 44px;
+  --btn-pad-x: 18px;
+  --btn-fw: 700;
+
+  display:inline-flex; align-items:center; justify-content:center;
+  height:var(--btn-h); padding:0 var(--btn-pad-x);
+  border-radius:var(--btn-radius); border:0; outline:none;
+  font-weight:var(--btn-fw); line-height:1; text-decoration:none;
+  cursor:pointer; user-select:none;
+  transition:transform .06s ease, box-shadow .2s ease, color .15s ease,
+             background-color .15s ease, border-color .15s ease;
+  box-shadow:0 6px 16px rgba(0,0,0,.06);
+}
+.btn:hover{ transform: translateY(-1px); }
+.btn:active{ transform: translateY(1px); }
+.btn.wide{ width:100%; }
+
+/* Red (Watch) */
+.btn.red, .btn.btn-watch{
+  background:var(--btn-red); color:#fff; border:1px solid transparent;
+}
+.btn.red:hover, .btn.btn-watch:hover{
+  background:#fff; color:var(--ink); border-color:var(--btn-red);
+  box-shadow:0 8px 22px rgba(255,77,79,.25);
+}
+
+/* Blue (Remind/Log in) */
+.btn.blue, .btn.btn-remind{
+  background:var(--btn-blue); color:#fff; border:1px solid transparent;
+}
+.btn.blue:hover, .btn.btn-remind:hover{
+  background:#fff; color:var(--ink); border-color:var(--btn-blue);
+  box-shadow:0 8px 22px rgba(31,76,255,.25);
+}
+
+/* White CTA */
+.btn.white{
+  background:#fff; color:var(--ink);
+  border:1px solid rgba(0,0,0,.06);
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+.btn.white:hover{
+  background:var(--btn-blue); color:#fff; border-color:var(--btn-blue);
+}
+
+/* Ghost */
+.btn.ghost{
+  background:transparent; color:var(--ink);
+  border:1px solid rgba(42,55,90,.5);
+}
+.btn.ghost:hover{ background:#fff; color:#111; }
+
+/* Dark tweak */
+[data-theme="dark"] .btn.white{
+  border-color: rgba(255,255,255,.12);
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+}

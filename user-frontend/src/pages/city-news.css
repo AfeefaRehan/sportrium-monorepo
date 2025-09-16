@@ -1,0 +1,149 @@
+/* =========================================
+   CityPage + NewsPage shared styles
+   Uses your global CSS variables and .btns
+   ========================================= */
+
+/* Container */
+.page{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Slim info bar for guest mode CTA */
+.callout{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  color: var(--text);
+  margin: 8px 0 16px;
+  font-weight: 600;
+}
+
+/* Page heading */
+.page h1{
+  margin: 0 0 12px;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+/* Generic list layout (cards stack on mobile) */
+.list{
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1024px){ .list{ grid-template-columns: repeat(8, 1fr); } }
+@media (max-width: 768px){  .list{ grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 520px){  .list{ grid-template-columns: repeat(1, 1fr); } }
+
+/* Card */
+.list-card{
+  grid-column: span 6 / span 6; /* 2-up on desktop */
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: grid;
+  gap: 6px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.list-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0,0,0,.12);
+  border-color: color-mix(in srgb, var(--border) 60%, transparent);
+}
+@media (max-width: 1024px){ .list-card{ grid-column: span 8 / span 8; } }
+@media (max-width: 768px){  .list-card{ grid-column: span 4 / span 4; } }
+@media (max-width: 520px){  .list-card{ grid-column: span 1 / span 1; } }
+
+.list-card h3{
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--text);
+}
+.list-card p{
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Actions row uses your global .btn classes/colors */
+.list-card .actions{
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Safety: never let these pages cause horizontal scroll */
+html, body, .page{ max-width: 100%; overflow-x: hidden; }
+
+/* =========================
+   NewsPage specifics
+   ========================= */
+.muted{
+  color: var(--muted);
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.news-img{
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  margin: 8px 0 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+.news-bullets{
+  margin: 10px 0 0 18px;
+  padding: 0;
+}
+.news-bullets li{
+  margin: 6px 0;
+  color: var(--text);
+}
+
+/* Related section */
+.related{
+  margin-top: 20px;
+}
+.related h3{
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text);
+}
+.related ul{
+  margin: 0;
+  padding-left: 18px;
+}
+.related li{ margin: 6px 0; }
+
+/* =========================
+   Dark mode depth
+   ========================= */
+[data-theme="dark"] .list-card{
+  background: rgba(255,255,255,.04);
+  border-color: rgba(255,255,255,.10);
+  box-shadow: 0 8px 22px rgba(0,0,0,.35);
+}
+[data-theme="dark"] .news-img{
+  box-shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .list-card{ transition: none; }
+  .list-card:hover{ transform: none; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+}
