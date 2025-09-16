@@ -25,3 +25,23 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/
 .idea/
+# Python
+__pycache__/
+*.py[cod]
+
+# Node
+node_modules/
+
+# Envs / secrets
+*.env
+backend/.env
+user-frontend/.env
+admin-frontend/.env
+
+# Firebase / service accounts
+*.json
+!backend/assistant_rules.json   # keep this one
+
+# OS/IDE noise
+.DS_Store
+.vscode/

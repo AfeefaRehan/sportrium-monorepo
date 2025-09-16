@@ -1,0 +1,54 @@
+{
+  "login_gate_reply": "Chat use karne ke liye please login karein.",
+  "no_data_city": "Is waqt iss city ke liye koi match listed nahin mil rahi. Aap nearby city ya date change karke try karen? Main aapko update bhi kar sakta hoon jab nayi fixture aaye.",
+  "results_line": "{title} • {city} • {venue} • {when}",
+  "intents": {
+    "greet": {
+      "patterns": ["\\b(salam|assalam|hi|hello|hey)\\b"],
+      "reply": "Welcome to Sportrium! 😊 Main madad karun?",
+      "followup": "City ya sport bata dein, main matches dhoondh dun."
+    },
+    "how_use": {
+      "patterns": ["(app|website).*(kaise|use|istemal)", "how to use"],
+      "reply": "Simple: 1) Login karein. 2) Home par city choose ya search karein. 3) Schedule par upcoming matches dekhein. 4) 'Create a Team' se team join/banayein.",
+      "followup": "Aap konse city/sport ke matches dekhna chahte hain?"
+    },
+    "purpose": {
+      "patterns": ["(point|faida|purpose)"],
+      "reply": "Sportrium se aap nearby matches dekh sakte, teams follow/create kar sakte, aur reminders/tickets handle kar sakte — sab aik jaga par.",
+      "followup": "Kis sport me interest hai?"
+    },
+    "match_search": {
+      "patterns": [
+        "(karachi|lahore|islamabad|peshawar|multan).*(match|fixture|game|cricket|football|basketball|badminton|tennis)",
+        "(match|fixture|game).*(karachi|lahore|islamabad|peshawar|multan)"
+      ],
+      "reply": "Yeh options milay:",
+      "followup": "Details ‘Schedule’ page par. Date specify karna chahenge (aaj/kal/is week)?"
+    },
+    "ticket": {
+      "patterns": ["ticket|entry|price|fee|kitne"],
+      "reply": "Agar event ne price share ki hai to yahan dikhay ga; warna 'Ticket info TBA' hota hai. Details ke liye Schedule page check karein.",
+      "followup": "Kis match ka price dekhna chahte hain?"
+    },
+    "distance": {
+      "patterns": ["\\bdistance\\b|kitn[ae] (door|km)|raasta"],
+      "reply": "Theek hai. Aap approx area/landmark batayenge (jaise 'Gulshan-e-Iqbal')? Ya location share kar den? Phir main distance aur Google Maps link de dunga."
+    },
+    "history": {
+      "patterns": ["history|tareekh"],
+      "reply": "Football: 19th c Europe. Basketball: 1891 Naismith (US). Cricket: 16–17th c England (Test/ODI/T20). Badminton: UK/Poona roots. Tennis: 1870s UK/France."
+    },
+    "training": {
+      "patterns": ["training|practice|drill"],
+      "reply": "Basic, non-medical tips: skill blocks chhote rakho, game-like practice karo, sahi equipment use karo. Main medical advice nahi deta/deti."
+    },
+    "apply": {
+      "patterns": ["tournament|apply|registration"],
+      "reply": "Tournament card me Apply button hota hai. Team choose karen, short form submit, organizer confirm. Login required hota hai."
+    },
+    "fallback": {
+      "reply": "Samajh nahi aya — city/sport/date bata dein, main matches dhoondh dun (e.g., 'Lahore me is week cricket')."
+    }
+  }
+}

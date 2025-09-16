@@ -1,6 +1,12 @@
+# backend/wsgi.py
 import os
+import sys
+
+# make repo root importable (one level above /backend)
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
 from flask_cors import CORS
-from api import create_app  # your existing app factory
+from backend import create_app
 
 def _allowed_origins():
     origins = set()
@@ -30,9 +36,8 @@ CORS(
     max_age=86400,
 )
 
-# Attach /api/health and /api/chat
 try:
-    from patch_chat import patch_app
+    from .patch_chat import patch_app  # optional
     patch_app(app)
 except Exception as e:
     print(f"[wsgi] patch_chat not applied: {e}")
