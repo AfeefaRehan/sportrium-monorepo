@@ -220,7 +220,7 @@ def _parse_when_from_text(text: str, today: Optional[date] = None) -> Optional[T
 # =========================================================
 
 def _query_api_games(city: str, sport: Optional[str], d_from: date, d_to: date, limit: int = 5) -> List[Dict]:
-    url = f"{PUBLIC_API_BASE}/api/games"
+    url = f"{PUBLIC_API_BASE}/api/events"
     params = {
         "city": city,
         "status": "upcoming",
