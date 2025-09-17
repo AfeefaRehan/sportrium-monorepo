@@ -1,3 +1,5 @@
+# backend/api/extensions.py
+import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
@@ -31,8 +33,17 @@ def init_extensions(app):
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    # allow dev origins
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    # Allow dev frontend origin(s)
+    CORS(
+        app,
+        resources={r"/api/*": {
+            "origins": os.getenv("CORS_ALLOW_ORIGINS", "http://localhost:5173").split(",")
+        }},
+        supports_credentials=True,
+        allow_headers=["Content-Type", "Authorization"],
+        methods=["GET", "POST", "OPTIONS"],
+        max_age=86400,
+    )
 
     if mail:
         mail.init_app(app)
