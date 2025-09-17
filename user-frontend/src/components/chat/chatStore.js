@@ -1,6 +1,6 @@
 // user-frontend/src/components/chat/chatStore.js
 import { nanoid } from "nanoid";
-import { sendChat } from "@/lib/chatApi";
+import { sendChat } from "./chatApi.js";
 
 function createStore() {
   const state = {
@@ -15,7 +15,6 @@ function createStore() {
   const notify = () => listeners.forEach((fn) => fn());
 
   return {
-    // subscriptions
     subscribe(fn) {
       listeners.add(fn);
       return () => listeners.delete(fn);
@@ -24,10 +23,9 @@ function createStore() {
       return { ...state, messages: [...state.messages] };
     },
 
-    // ui setters
     setOpen(v) {
       state.open = v;
-      if (v) this.greet(); // greet on open
+      if (v && state.messages.length === 0) this.greet();
       notify();
     },
     setInput(v) {
@@ -53,7 +51,6 @@ function createStore() {
       const text = state.input.trim();
       if (!text || state.loading) return;
 
-      // push user bubble
       state.messages.push({ id: nanoid(), role: "user", text });
       state.input = "";
       state.loading = true;
@@ -61,25 +58,14 @@ function createStore() {
       notify();
 
       try {
-        const json = await sendChat(text, user);
-        const replies = json?.responses?.length
-          ? json.responses
-          : [{ type: "text", text: json?.text || "Okay." }];
-
-        for (const r of replies) {
-          if (r.type === "text") {
-            state.messages.push({
-              id: nanoid(),
-              role: "assistant",
-              text: r.text,
-            });
-          } else if (r.type === "match") {
-            const line = `${r.title} • ${r.city}${
-              r.venue ? " • " + r.venue : ""
-            }${r.when ? " • " + r.when : ""}`;
-            state.messages.push({ id: nanoid(), role: "assistant", text: line });
-          }
-        }
+        // Convert to LLM-style messages + new user turn
+        const llmMsgs = state.messages.map((m) => ({
+          role: m.role,
+          content: m.text,
+        }));
+        const json = await sendChat(llmMsgs, user?.id);
+        const reply = json?.reply || "Okay.";
+        state.messages.push({ id: nanoid(), role: "assistant", text: reply });
       } catch (e) {
         state.error = e.message || "Failed to reach assistant";
         state.messages.push({

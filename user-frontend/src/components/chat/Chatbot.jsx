@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { sendChat } from "./chatApi.js"; // ← .js extension IMPORTANT
+import { sendChat } from "./chatApi.js";
 
 export default function Chatbot({ userId }) {
   const [messages, setMessages] = useState([
-    { role: "assistant", content: "Hi! I'm Sportrium's assistant. Ask me about matches, teams, or events." },
+    {
+      role: "assistant",
+      content:
+        "Hi! I'm Sportrium's assistant. Matches, teams ya events pooch sakte hain. 😊",
+    },
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -20,19 +24,16 @@ export default function Chatbot({ userId }) {
 
     setError(null);
     setBusy(true);
+
     const next = [...messages, { role: "user", content }];
     setMessages(next);
     setInput("");
 
     try {
       const res = await sendChat(next, userId);
-      const reply =
-        typeof res === "object" && res
-          ? res.reply || res.message?.content || JSON.stringify(res)
-          : String(res);
-      setMessages([...next, { role: "assistant", content: reply }]);
+      setMessages([...next, { role: "assistant", content: res.reply }]);
     } catch (e) {
-      setError(e.message);
+      setError(e.message || "Failed to reach assistant");
       setMessages(next);
     } finally {
       setBusy(false);
@@ -47,7 +48,10 @@ export default function Chatbot({ userId }) {
     <div style={S.wrapper}>
       <div style={S.thread}>
         {messages.map((m, i) => (
-          <div key={i} style={{ ...S.msg, ...(m.role === "user" ? S.user : S.assistant) }}>
+          <div
+            key={i}
+            style={{ ...S.msg, ...(m.role === "user" ? S.user : S.assistant) }}
+          >
             <div style={S.role}>{m.role}</div>
             <div>{m.content}</div>
           </div>
@@ -74,10 +78,11 @@ export default function Chatbot({ userId }) {
           <strong>Request failed:</strong>
           <pre style={S.pre}>{error}</pre>
           <p>
-            Causes:
-            <br />• 404 → backend route not found (<code style={S.code}>POST /api/chat</code>)
+            Common causes:
+            <br />• 404 → backend route missing (<code style={S.code}>POST
+            /api/chat</code>)
             <br />• CORS → allow <code style={S.code}>http://localhost:5173</code> in backend
-            <br />• 500 → model keys/files missing (we’ll fix next)
+            <br />• 500 → model keys/files missing
           </p>
         </div>
       )}
@@ -109,7 +114,13 @@ const S = {
   role: { fontFamily: "ui-monospace, Menlo, monospace", fontSize: 12, color: "#666" },
   user: { background: "#eef6ff", border: "1px solid #d6e6ff" },
   assistant: { background: "#f3f3f3", border: "1px solid #e8e8e8" },
-  busy: { padding: 8, borderRadius: 8, background: "#fff7e6", border: "1px solid #ffe0a6", width: "fit-content" },
+  busy: {
+    padding: 8,
+    borderRadius: 8,
+    background: "#fff7e6",
+    border: "1px solid #ffe0a6",
+    width: "fit-content",
+  },
   row: { display: "flex", gap: 8, marginTop: 4 },
   input: { flex: 1, padding: "10px 12px", borderRadius: 12, border: "1px solid #ddd" },
   btn: { padding: "10px 14px", borderRadius: 12, border: "1px solid #ddd", cursor: "pointer" },

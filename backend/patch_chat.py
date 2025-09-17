@@ -1,3 +1,4 @@
+# backend/patch_chat.py
 import json
 import os
 import re
@@ -19,10 +20,28 @@ CIRCUIT_COOLDOWN = int(os.getenv("LLM_CIRCUIT_COOLDOWN_SEC", "300"))
 PUBLIC_API_BASE = os.getenv("PUBLIC_API_BASE", "").strip() or f"http://127.0.0.1:{os.getenv('PORT','5000')}"
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+SYSTEM_PROMPT_FILE = os.getenv("ASSISTANT_SYSTEM_PROMPT_FILE", "backend/prompt_playbook_ur.txt")
 
 MATCH_WORDS = r"(match|matches|fixture|fixtures|game|games|schedule)"
-# NEW: questions that mean “not asking for matches right now”
-NON_MATCH_Q = r"(kya kaam|kaise|kyun|kya hota|what is|how (do|does)|help|explain|kuch aur|or puch)"
+
+# ===== NEW: TensorFlow intent router (best-effort) =====
+try:
+    from .nlp.router import IntentRouter  # when used as package
+except Exception:
+    try:
+        from backend.nlp.router import IntentRouter  # when imported from app root
+    except Exception:
+        IntentRouter = None  # type: ignore
+
+_ROUTER = None
+if IntentRouter:
+    try:
+        _ROUTER = IntentRouter()
+    except Exception:
+        _ROUTER = None
+
+INTENT_THRESH = 0.55  # below this → ask clarifying question / slots
+
 
 # =========================================================
 # Entities: config-driven with hot reload + fuzzy
@@ -59,7 +78,6 @@ class Entities:
                 if re.search(rf"\b{re.escape(w.lower())}\b", s):
                     return canonical
         canon_list = list(ents.keys())
-        # fuzzy against the first alpha chunk in the string
         m = get_close_matches(next((w for w in re.findall(r"[a-z]+", s)), ""), canon_list, n=1, cutoff=0.90)
         return m[0] if m else None
 
@@ -135,10 +153,6 @@ def _mirror_language(user_text: str) -> str:
         return "ur"
     return "en"
 
-def _looks_nonmatch(text: str) -> bool:
-    """Detect general/product/help questions that are NOT about fixtures."""
-    s = text.lower()
-    return (re.search(NON_MATCH_Q, s) is not None) and (re.search(MATCH_WORDS, s) is None)
 
 # =========================================================
 # Natural date parsing (Urdu/Roman-Urdu + English)
@@ -165,27 +179,20 @@ def _parse_explicit_date(text: str) -> Optional[date]:
     m = re.search(r"\b(\d{1,2})\s+([a-z]{3,9})\s+(\d{4})\b", s)
     if m and m.group(2) in MONTHS:
         d, mon, y = int(m.group(1)), MONTHS[m.group(2)], int(m.group(3))
-        try:
-            return date(y, mon, d)
-        except:
-            pass
+        try: return date(y, mon, d)
+        except: pass
     m = re.search(r"\b([a-z]{3,9})\s+(\d{1,2})\s+(\d{4})\b", s)
     if m and m.group(1) in MONTHS:
         mon, d, y = MONTHS[m.group(1)], int(m.group(2)), int(m.group(3))
-        try:
-            return date(y, mon, d)
-        except:
-            pass
+        try: return date(y, mon, d)
+        except: pass
     m = re.search(r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})\b", s)
     if m:
         a, b, c = int(m.group(1)), int(m.group(2)), int(m.group(3))
-        if c < 100:
-            c += 2000
+        if c < 100: c += 2000
         for dd, mm in [(a, b), (b, a)]:
-            try:
-                return date(c, mm, dd)
-            except:
-                pass
+            try: return date(c, mm, dd)
+            except: pass
     return None
 
 def _parse_when_from_text(text: str, today: Optional[date] = None) -> Optional[Tuple[date, date, str]]:
@@ -265,25 +272,18 @@ def _summarize_games(games: List[Dict], lang: str, label: str, city: str, sport:
     return f"In {city}, {label} I found:\n{bullets}\nCheck the Schedule page for details."
 
 def _auto_expand_if_empty(city: str, sport: Optional[str], d_from: date, d_to: date, lang: str) -> Tuple[List[Dict], str, Tuple[date, date]]:
-    # Try same day → +1 day → full week
     games = _query_api_games(city, sport, d_from, d_to)
     if games:
         return games, "aaj", (d_from, d_to)
-
-    # +1 day
     g2 = _query_api_games(city, sport, d_from + timedelta(days=1), d_to + timedelta(days=1))
     if g2:
         lbl = "kal" if lang == "ur" else "tomorrow"
         return g2, lbl, (d_from + timedelta(days=1), d_to + timedelta(days=1))
-
-    # this week
     start = d_from - timedelta(days=d_from.weekday()); end = start + timedelta(days=6)
     g3 = _query_api_games(city, sport, start, end)
     if g3:
         lbl = "is haftay" if lang == "ur" else "this week"
         return g3, lbl, (start, end)
-
-    # still empty → dummy for UX
     return _dummy_games(city, sport), "suggested", (d_from, d_to)
 
 
@@ -300,8 +300,7 @@ class Breaker:
         if cls.tripped_at and (time.time() - cls.tripped_at) < CIRCUIT_COOLDOWN:
             return True
         if cls.tripped_at and (time.time() - cls.tripped_at) >= CIRCUIT_COOLDOWN:
-            cls.errors = 0
-            cls.tripped_at = 0.0
+            cls.errors = 0; cls.tripped_at = 0.0
         return False
 
     @classmethod
@@ -312,18 +311,56 @@ class Breaker:
 
     @classmethod
     def ok(cls):
-        cls.errors = 0
-        cls.tripped_at = 0.0
+        cls.errors = 0; cls.tripped_at = 0.0
 
 
-def _maybe_gemini_reply(messages: List[Dict]) -> Tuple[Optional[str], Optional[str]]:
+def _read_system_prompt() -> str:
+    try:
+        with open(SYSTEM_PROMPT_FILE, "r", encoding="utf-8") as f:
+            return f.read().strip()
+    except Exception:
+        return (
+            "You are Sportrium Assistant. Reply in short Roman Urdu (1–3 lines). "
+            "Primary tasks: find local matches (city/sport/date), tickets, reminders, how-to. "
+            "If logged out: reply only 'Chat use karne ke liye please login karein.' "
+            "Never repeat your previous reply; answer the current question. "
+            "If data fetch fails say it's a temporary issue and suggest trying another city/date."
+        )
+
+
+def _make_single_turn_messages(user_text: str, state_summary: str) -> List[Dict]:
+    """OpenAI-style messages with a system + single user turn."""
+    system = _read_system_prompt()
+    user = (
+        f"User message: {user_text}\n"
+        f"Known state: {state_summary}\n"
+        "Respond briefly in Roman Urdu. If slots missing, ask for them. "
+        "If backend returns no data or times out, say it's a temporary issue and offer nearby city/date. "
+        "Do not reuse your previous wording."
+    )
+    return [{"role": "system", "content": system}, {"role": "user", "content": user}]
+
+
+def _maybe_gemini_reply(messages: List[Dict], system: Optional[str] = None) -> Tuple[Optional[str], Optional[str]]:
     api_key = os.getenv("GOOGLE_API_KEY", "").strip() or os.getenv("GEMINI_API_KEY", "").strip()
     if not api_key or Breaker.tripped():
         return None, None
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={api_key}"
-    contents = [{"role": "user" if m["role"] == "user" else "model",
-                 "parts": [{"text": m["content"]}]} for m in messages]
-    payload = {"contents": contents, "generationConfig": {"temperature": 0.3, "maxOutputTokens": 300}}
+    # Convert OpenAI-style messages to Gemini content
+    contents = []
+    sys_text = system or _read_system_prompt()
+    system_instruction = {"parts": [{"text": sys_text}]}
+
+    for m in messages:
+        role = m["role"]
+        parts = [{"text": m["content"]}]
+        contents.append({"role": "user" if role == "user" else "model", "parts": parts})
+
+    payload = {
+        "systemInstruction": system_instruction,
+        "contents": contents,
+        "generationConfig": {"temperature": 0.4, "topP": 0.9, "presencePenalty": 0.6, "frequencyPenalty": 0.6, "maxOutputTokens": 320}
+    }
     try:
         r = requests.post(url, json=payload, timeout=LLM_TIMEOUT)
         r.raise_for_status()
@@ -332,9 +369,7 @@ def _maybe_gemini_reply(messages: List[Dict]) -> Tuple[Optional[str], Optional[s
         cand = (data.get("candidates") or [{}])[0]
         parts = (cand.get("content") or {}).get("parts") or []
         for p in parts:
-            t = p.get("text")
-            if t:
-                text += t
+            t = p.get("text");  text += (t or "")
         text = (text or "").strip()
         if text: Breaker.ok()
         return (text, None) if text else (None, "empty_text")
@@ -349,8 +384,13 @@ def _maybe_openai_reply(messages: List[Dict]) -> Tuple[Optional[str], Optional[s
     try:
         from openai import OpenAI
         client = OpenAI(api_key=api_key)
-        msgs = [{"role": m["role"], "content": m["content"]} for m in messages]
-        resp = client.chat.completions.create(model=MODEL_NAME, messages=msgs, temperature=0.3, max_tokens=350, timeout=LLM_TIMEOUT)
+        resp = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=messages,
+            temperature=0.4, top_p=0.9,
+            presence_penalty=0.6, frequency_penalty=0.6,
+            max_tokens=350, timeout=LLM_TIMEOUT
+        )
         text = (resp.choices[0].message.content or "").strip()
         if text: Breaker.ok()
         return (text, None) if text else (None, "empty_text")
@@ -363,13 +403,12 @@ def _maybe_openai_reply(messages: List[Dict]) -> Tuple[Optional[str], Optional[s
 # Router
 # =========================================================
 
-def _collect_context(messages: List[Dict], user_id: Optional[str]) -> Tuple[Optional[str], Optional[str], Tuple[date, date, str], bool, str]:
+def _collect_context(messages: List[Dict], user_id: Optional[str]) -> Tuple[Optional[str], Optional[str], Tuple[date, date, str], str]:
     today = date.today()
     mem = Memory.get(user_id)
     city = mem.get("city")
     sport = mem.get("sport")
     when = mem.get("when")            # tuple or None
-    asked = False
     lang = "en"
 
     for m in reversed(messages):
@@ -379,8 +418,6 @@ def _collect_context(messages: List[Dict], user_id: Optional[str]) -> Tuple[Opti
         if not text:
             continue
         lang = _mirror_language(text)
-        if re.search(MATCH_WORDS, text.lower()):
-            asked = True
         if city is None:
             c = Entities.resolve_city(text)
             if c: city = c
@@ -390,7 +427,6 @@ def _collect_context(messages: List[Dict], user_id: Optional[str]) -> Tuple[Opti
         if when is None:
             parsed = _parse_when_from_text(text, today=today)
             if parsed: when = parsed
-
         if city and sport is not None and when:
             break
 
@@ -398,68 +434,108 @@ def _collect_context(messages: List[Dict], user_id: Optional[str]) -> Tuple[Opti
         when = (today, today, "aaj")
 
     Memory.set(user_id, city=city, sport=sport, when=when)
-    return city, sport, when, asked, lang
+    return city, sport, when, lang
 
 
 def _choose_and_generate(messages: List[Dict], user_id: Optional[str]) -> Tuple[str, str]:
     user_text = _last_user_text(messages)
-    city, sport, (d_from, d_to, label), asked, lang = _collect_context(messages, user_id)
+    city, sport, (d_from, d_to, label), lang = _collect_context(messages, user_id)
 
-    # --- NEW: if last message looks like a non-match question, route to LLM regardless of saved city ---
-    if _looks_nonmatch(user_text):
-        if os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY"):
-            text, err = _maybe_gemini_reply(messages)
-            if text: return text, "gemini"
-            if err:  return f"Shukriya! (dev-mode) Aap ne kaha: {user_text[:300]} [note: {err}]", "gemini"
-        if os.getenv("OPENAI_API_KEY"):
-            text, err = _maybe_openai_reply(messages)
-            if text: return text, "openai"
-            if err:  return f"Shukriya! (dev-mode) Aap ne kaha: {user_text[:300]} [note: {err}]", "openai"
-        return f"Shukriya! (dev-mode) Aap ne kaha: {user_text[:300]}", "mock"
+    # ----- NEW: classify intent with TensorFlow router (or regex fallback) -----
+    intent, conf = ("fallback", 0.0)
+    if _ROUTER:
+        try:
+            intent, conf = _ROUTER.classify(user_text)
+        except Exception:
+            intent, conf = ("fallback", 0.0)
 
-    # Trigger local search only if:
-    #   (a) matches were asked anywhere, or
-    #   (b) last message looks like a follow-up (city/sport/date), or
-    #   (c) last message itself includes match words
-    last = user_text.lower()
-    looks_followup = bool(_parse_when_from_text(last) or Entities.resolve_city(last) or Entities.resolve_sport(last))
-    wants_matches_now = bool(re.search(MATCH_WORDS, last))
-    if asked or looks_followup or wants_matches_now:
+    # Build a state summary for single-turn LLM when needed
+    state_summary = f"city={city or '∅'} | sport={sport or '∅'} | date_label={label}"
+
+    # ---------- Routing ----------
+    # Low-confidence: ask for slots instead of repeating anything
+    if conf < INTENT_THRESH and intent != "chitchat":
+        if not city:
+            return ("City bata dein (e.g., Karachi/Lahore/Islamabad), main results turant dikha dun."
+                    if lang == "ur" else
+                    "Please tell me the city (e.g., Karachi/Lahore/Islamabad) and I’ll show the fixtures."), "clarify"
+        if sport is None:
+            return ("Kis sport ke matches? (football/cricket/basketball/badminton/tennis)"
+                    if lang == "ur" else
+                    "Which sport? (football/cricket/basketball/badminton/tennis)"), "clarify"
+
+    if intent == "find_matches":
         if not city:
             return ("City bata dein (e.g., Karachi/Lahore/Islamabad), main results turant dikha dun."
                     if lang == "ur" else
                     "Please tell me the city (e.g., Karachi/Lahore/Islamabad) and I’ll show the fixtures."), "local-matches"
-
-        # main search with auto-expand
         games, lbl, (df, dt) = _auto_expand_if_empty(city, sport, d_from, d_to, lang)
-        # store updated window
         Memory.set(user_id, when=(df, dt, lbl))
-
         reply = _summarize_games(games, lang, lbl, city, sport)
-
-        # --- NEW: de-dupe same reply for same filters ---
+        # de-dupe for identical filters
         mem = Memory.get(user_id)
         search_key = (city.lower(), sport or "", df.isoformat(), dt.isoformat())
-        last_key = mem.get("last_key"); last_reply = mem.get("last_reply")
-        if last_key == search_key and last_reply == reply:
-            alt = ("Yehi filters pe check ho chuka hai. Kya main kisi aur city/date (e.g., Islamabad / weekend) try karu, "
-                   "ya sport change karun?"
+        if mem.get("last_key") == search_key and mem.get("last_reply") == reply:
+            alt = ("Yehi filters pe check ho chuka hai. Kya main kisi aur city/date (e.g., Islamabad / weekend) try karu, ya sport change karun?"
                    if lang == "ur" else
                    "We already checked these filters. Want me to try another city/date (e.g., Islamabad / weekend) or a different sport?")
             return alt, "local-matches-suggest"
-
         Memory.set(user_id, last_key=search_key, last_reply=reply)
         return reply, "local-matches"
 
-    # Generic chat → LLM → fallback
+    if intent == "ticket_price":
+        msg = ("Kis match ka ticket price dekhna chahenge? Event card par 'Ticket info' ya 'TBA' likha hota hai."
+               if lang == "ur" else
+               "Which match’s ticket price? The event card shows 'Ticket info' or 'TBA'.")
+        return msg, "ticket-price"
+
+    if intent == "purpose":
+        msg = ("Sportrium ka goal hai **local sports ko asaan banana**: matches dekhna, teams follow/banani, reminders & tickets — sab ek jaga."
+               if lang == "ur" else
+               "Sportrium helps you discover local matches, follow/create teams, and manage reminders & tickets in one place.")
+        return msg, "purpose"
+
+    if intent == "how_to_use":
+        msg = ("Simple: 1) Schedule par city/sport/date select karein. 2) Match card khol kar details dekhein. 3) 'Remind me' ya 'Buy tickets'. 4) 'Create a Team' se apna event host kar sakte hain."
+               if lang == "ur" else
+               "Easy: 1) Go to Schedule → choose city/sport/date, 2) open a match card, 3) use 'Remind me' or 'Buy tickets', 4) 'Create a Team' to host events.")
+        return msg, "how-to"
+
+    if intent == "distance":
+        msg = ("Approx area/landmark (e.g., Gulshan-e-Iqbal) batayen ya location share karein — main distance aur Google Maps link de dunga."
+               if lang == "ur" else
+               "Tell me your area/landmark or share location — I’ll give distance and a Google Maps link.")
+        return msg, "distance"
+
+    if intent == "reminder":
+        msg = ("Reminder lagane ke liye login chahiye. Login karun?"
+               if lang == "ur" else
+               "You need to be logged in to set a reminder. Want to log in?")
+        return msg, "reminder"
+
+    if intent == "history":
+        msg = ("Modern football 1800s Europe me organize hua; aaj duniya ka sab se popular khel hai. Kisi aur sport ki history chahiye?"
+               if lang == "ur" else
+               "Modern football organized in 19th-century Europe; today it’s the most popular sport. Want another sport’s history?")
+        return msg, "history"
+
+    if intent == "training":
+        msg = ("Basic, non-medical tips: chhoti regular practice, skill drills (e.g., passing/rallies), small-sided games, roles clear. Coach se guidance behtar."
+               if lang == "ur" else
+               "Basic, non-medical tips: short regular practice, simple skill drills, small-sided games, clear roles. Get a coach when possible.")
+        return msg, "training"
+
+    # chitchat / fallback → single-turn LLM with guardrails
+    single_turn = _make_single_turn_messages(user_text, state_summary)
     if os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY"):
-        text, err = _maybe_gemini_reply(messages)
+        text, err = _maybe_gemini_reply(single_turn, system=_read_system_prompt())
         if text: return text, "gemini"
-        if err:  return f"Shukriya! (dev-mode) Aap ne kaha: {user_text[:300]} [note: {err}]", "gemini"
+        if err:  return f"Sorry, abhi reply nahi bana saka. Thori der baad koshish karein 🙏 ({err})", "gemini"
+
     if os.getenv("OPENAI_API_KEY"):
-        text, err = _maybe_openai_reply(messages)
+        text, err = _maybe_openai_reply(single_turn)
         if text: return text, "openai"
-        if err:  return f"Shukriya! (dev-mode) Aap ne kaha: {user_text[:300]} [note: {err}]", "openai"
+        if err:  return f"Sorry, abhi reply nahi bana saka. Thori der baad koshish karein 🙏 ({err})", "openai"
 
     return f"Shukriya! (dev-mode) Aap ne kaha: {user_text[:300]}", "mock"
 

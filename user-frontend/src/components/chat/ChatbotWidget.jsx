@@ -1,3 +1,4 @@
+//src/components/chat/ChatbotWidget
 import { useEffect, useRef, useState } from "react";
 // IMPORTANT: include the .jsx extension so Vite resolves it reliably
 import Chatbot from "./Chatbot.jsx"; 
